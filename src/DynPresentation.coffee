@@ -17,14 +17,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-exec = require('child_process').exec
+params = window.location.search.substring(1).split("&")
+importExternalJS param for param in params when param.indexOf("p=") == 0 && param.length > 2
 
-task 'build', ->
-  exec 'mkdir -p build', (err) ->
-    console.log err if err
-  exec 'rm -rf build/*', (err) ->
-    console.log err if err
-  exec 'coffee -o build -j Presentz.js -c src/Html5.coffee src/Presentz.coffee src/Video.coffee src/Vimeo.coffee', (err) ->
-    console.log err if err
-  exec 'coffee -o build -j DynPresentation.js -c src/DynPresentation.coffee', (err) ->
-    console.log err if err
+importExternalJS = (param) ->
+  scriptUrl = param.substr(2)
+
+  script = document.createElement('script')
+  script.type = 'text/javascript'
+  script.src = scriptUrl
+
+  scripts = $("script")
+  $(scripts[scripts.length - 1]).append(script);

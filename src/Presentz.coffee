@@ -87,4 +87,3 @@ class Presentz
   changeSlide: (slideData) ->
     $("#slideContainer").empty()
     $("#slideContainer").append("<img width='100%' heigth='100%' src='" + slideData.url + "'>")
-
