@@ -1,6 +1,3 @@
-params = window.location.search.substring(1).split("&")
-importExternalJS param for param in params when param.indexOf("p=") == 0 && param.length > 2
-
 importExternalJS = (param) ->
   scriptUrl = param.substr(2)
 
@@ -9,4 +6,7 @@ importExternalJS = (param) ->
   script.src = scriptUrl
 
   scripts = $("script")
-  $(scripts[scripts.length - 1]).append(script);
+  $(scripts[scripts.length - 1]).append(script)
+
+params = window.location.search.substring(1).split("&")
+importExternalJS param for param in params when param.indexOf("p=") == 0 && param.length > 2
