@@ -4,9 +4,9 @@ class Video
   
   handleEvent: (id, event) ->
     if event == @playState
-      startTimeChecker()
+      @presentz.startTimeChecker()
     else if event == @pauseState or event == @finishState
-      stopTimeChecker()
+      @presentz.stopTimeChecker()
       
-    if event == @finishState and chapter < (howManyChapters - 1)
-      changeChapter(chapter + 1, true)
+    if event == @finishState and @presentz.currentChapterIndex < (@presentz.howManyChapters - 1)
+      @presentz.changeChapter(chapter + 1, true)

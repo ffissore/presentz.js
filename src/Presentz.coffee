@@ -2,7 +2,7 @@ class Presentz
 
   constructor: () ->
     @videoPlugins = [new Vimeo]
-    @defaultVideoPlugin = new Html5Video
+    @defaultVideoPlugin = new Html5Video(this)
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
@@ -21,20 +21,11 @@ class Presentz
     $("#agendaContainer").html(agenda)
     $("#agendaContainer div[title]").tooltip( {effect : "fade", opacity : 0.7})
 
-    videoPlugin = (plugin for plugin in @videoPlugins when plugin.handle(@presentation))[0]
-    if videoPlugin.length > 0
-      @videoPlugin = videoPlugin
+    videoPlugins = (plugin for plugin in @videoPlugins when plugin.handle(@presentation))
+    if videoPlugins.length > 0
+      @videoPlugin = videoPlugins[0]
     else
       @videoPlugin = @defaultVideoPlugin
-
-    firstChapter = presentation.chapters[0];
-    firstVideoUrl = firstChapter.media.video.url.toLowerCase()
-    if firstVideoUrl.indexOf("http://youtu.be") != -1
-      @video = new YouTube
-    else if firstVideoUrl.indexOf("http://vimeo.com") != -1
-      @video = new Vimeo
-    else
-      @video = new Html5Video
 
   computeBarWidths: (max) ->
     chapterIndex = 0
@@ -70,5 +61,14 @@ class Presentz
   changeSlide: (slideData) ->
     $("#slideContainer").empty()
     $("#slideContainer").append("<img width='100%' heigth='100%' src='" + slideData.url + "'>")
+
+  startTimeChecker: () ->
+    clearInterval(@interval)
+    @intervalSet = true;
+    @interval = setInterval(update_properties, 1000);
+
+  stopTimeChecker: () ->
+    clearInterval(@interval)
+    @intervalSet = false;
 
 window.Presentz = Presentz
