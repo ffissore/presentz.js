@@ -6,6 +6,7 @@ class Presentz
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
+    return
 
   init: (@presentation) ->
     @howManyChapters = @presentation.chapters.length
@@ -26,6 +27,8 @@ class Presentz
       @videoPlugin = videoPlugins[0]
     else
       @videoPlugin = @defaultVideoPlugin
+
+    return
 
   computeBarWidths: (max) ->
     chapterIndex = 0
@@ -50,25 +53,51 @@ class Presentz
         chapterIndex++
     
     widths[maxIndex] = widths[maxIndex] - (sumOfWidths - (max - 1));
-    widths;
+    return widths;
 
   changeChapter: (chapterIndex, play) ->
     @currentChapterIndex = chapterIndex
     currentMedia = @presentation.chapters[@currentChapterIndex].media
     @changeSlide(currentMedia.slides[0].slide)
     @videoPlugin.changeVideo(currentMedia.video, play)
+    return
 
   changeSlide: (slideData) ->
     $("#slideContainer").empty()
     $("#slideContainer").append("<img width='100%' heigth='100%' src='" + slideData.url + "'>")
+    return
+
+  checkSlideChange: (currentTime) ->
+    slides = @presentation.chapters[chapter].media.slides
+    candidateSlide = undefined
+    for slide in slides
+      if slide.time < currentTime
+        candidateSlide = slide
+
+    if candidateSlide.url != $("#slideContainer > img")[0].src
+      @changeSlide(candidateSlide)
+
+    return
 
   startTimeChecker: () ->
+    console.log(@checkState)
     clearInterval(@interval)
-    @intervalSet = true;
-    @interval = setInterval(update_properties, 1000);
+    @intervalSet = true
+    caller = this
+    eventHandler = `function() {
+      caller.checkState();
+    }`
+    @interval = setInterval(eventHandler, 1000);
+    return
 
   stopTimeChecker: () ->
     clearInterval(@interval)
-    @intervalSet = false;
+    @intervalSet = false
+    return
+
+  checkState: () ->
+    console.debug(@videoPlugin.currentTime())
+    @checkSlideChange(@videoPlugin.currentTime())
+    return
 
 window.Presentz = Presentz

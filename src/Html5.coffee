@@ -1,20 +1,25 @@
-class Html5Video extends Video
+class Html5Video
 
   constructor: (presentz) ->
-    super "play", "pause", "ended", presentz
+    @video = new Video "play", "pause", "ended", presentz
 
   changeVideo: (videoData, play) ->
     if $("#videoContainer").children().length == 0
       videoHtml = "<video controls preload='none' src='#{ videoData.url }' width='100%' heigth='100%'></video>"
       $("#videoContainer").append(videoHtml)
 
+      caller = this
+      eventHandler = `function(event) {
+        caller.video.handleEvent(event.type);
+      }`
       video = $("#videoContainer > video")[0]
-      video.addEventListener("play", @handleEvent, false)
-      video.addEventListener("pause", @handleEvent, false)
-      video.addEventListener("ended", @handleEvent, false)
+      video.onplay = eventHandler
+      video.onpause = eventHandler
+      video.onended = eventHandler
     else
       video = $("#videoContainer > video")[0]
       video.setAttribute("src", videoData.url)
+    return
 
-  handleEvent: (event) ->
-    super event.type
+  currentTime: () ->
+    return $("#videoContainer > video")[0].currentTime
