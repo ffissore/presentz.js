@@ -63,31 +63,33 @@ class Presentz
     return
 
   changeSlide: (slideData) ->
-    $("#slideContainer").empty()
-    $("#slideContainer").append("<img width='100%' heigth='100%' src='" + slideData.url + "'>")
+    if $("#slideContainer img").length == 0
+      $("#slideContainer").empty()
+      $("#slideContainer").append("<img width='100%' heigth='100%' src='" + slideData.url + "'>")
+    else
+      $("#slideContainer img")[0].setAttribute("src", slideData.url)
     return
 
   checkSlideChange: (currentTime) ->
-    slides = @presentation.chapters[chapter].media.slides
+    slides = @presentation.chapters[@currentChapterIndex].media.slides
     candidateSlide = undefined
     for slide in slides
-      if slide.time < currentTime
-        candidateSlide = slide
+      if slide.slide.time < currentTime
+        candidateSlide = slide.slide
 
-    if candidateSlide.url != $("#slideContainer > img")[0].src
+    if candidateSlide != undefined and candidateSlide.url != $("#slideContainer > img")[0].src
       @changeSlide(candidateSlide)
 
     return
 
   startTimeChecker: () ->
-    console.log(@checkState)
     clearInterval(@interval)
     @intervalSet = true
     caller = this
     eventHandler = `function() {
       caller.checkState();
     }`
-    @interval = setInterval(eventHandler, 1000);
+    @interval = setInterval(eventHandler, 500);
     return
 
   stopTimeChecker: () ->
@@ -96,7 +98,6 @@ class Presentz
     return
 
   checkState: () ->
-    console.debug(@videoPlugin.currentTime())
     @checkSlideChange(@videoPlugin.currentTime())
     return
 
