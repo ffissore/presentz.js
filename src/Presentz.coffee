@@ -58,7 +58,7 @@ class Presentz
   changeChapter: (chapterIndex, play) ->
     @currentChapterIndex = chapterIndex
     currentMedia = @presentation.chapters[@currentChapterIndex].media
-    @changeSlide(currentMedia.slides[0].slide)
+    @changeSlide(currentMedia.slides[0])
     @videoPlugin.changeVideo(currentMedia.video, play)
     return
 
@@ -74,8 +74,8 @@ class Presentz
     slides = @presentation.chapters[@currentChapterIndex].media.slides
     candidateSlide = undefined
     for slide in slides
-      if slide.slide.time < currentTime
-        candidateSlide = slide.slide
+      if slide.time < currentTime
+        candidateSlide = slide
 
     if candidateSlide != undefined and candidateSlide.url != $("#slideContainer > img")[0].src
       @changeSlide(candidateSlide)
