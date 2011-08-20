@@ -12,23 +12,22 @@ class Html5Video
       eventHandler = `function(event) {
         caller.video.handleEvent(event.type);
       }`
-      video = $("#videoContainer > video")[0]
-      video.onplay = eventHandler
-      video.onpause = eventHandler
-      video.onended = eventHandler
+      @player = $("#videoContainer > video")[0]
+      @player.onplay = eventHandler
+      @player.onpause = eventHandler
+      @player.onended = eventHandler
     else
-      video = $("#videoContainer > video")[0]
-      video.setAttribute("src", videoData.url)
+      @player.setAttribute("src", videoData.url)
 
-    video.load()
+    @player.load()
 
     if play
       if not @presentz.intervalSet
         @presentz.startTimeChecker()
         
-      video.play()
+      @player.play()
 
     return
 
   currentTime: () ->
-    return $("#videoContainer > video")[0].currentTime
+    return presentz.videoPlugin.player.currentTime

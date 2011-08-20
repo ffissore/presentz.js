@@ -1,12 +1,13 @@
 class ImgSlide
   
   changeSlide: (slide) ->
-    if $("#slideContainer img").length == 0
+    if @slide == undefined
       $("#slideContainer").empty()
       $("#slideContainer").append("<img width='100%' heigth='100%' src='" + slide.url + "'>")
+      @slide = $("#slideContainer img")[0]
     else
-      $("#slideContainer img")[0].setAttribute("src", slide.url)
+      @slide.setAttribute("src", slide.url)
     return
     
   isCurrentSlideDifferentFrom: (slide) ->
-    slide.url != $("#slideContainer > img")[0].src
+    @slide.src.lastIndexOf(slide.url) == -1

@@ -1,7 +1,7 @@
 class SlideShare
 
   constructor: () ->
-    @slideShareInit = false
+    @currentSlide = 0
   
   handle: (presentation) ->
     presentation.chapters[0].media.slides[0].url.toLowerCase().indexOf("http://www.slideshare.net") != -1
@@ -19,21 +19,20 @@ class SlideShare
         rel: 0
       
       swfobject.embedSWF("http://static.slidesharecdn.com/swf/ssplayer2.swf", "slidesharecontainer", "598", "480", "8", null, flashvars, params, atts);
+      @currentSlide = 0
     else
-    	player = $("#slideshareplayer")[0]
-    	nextSlide = slideNumber(slide)
-    	currentSlide = player.getCurrentSlide()
-    	if nextSlide == (currentSlide + 1)
-    		player.next()
-    	else
-    		player.jumpTo(slideNumber(slide))
+      player = $("#slideshareplayer")[0]
+      nextSlide = slideNumber(slide)
+      currentSlide = player.getCurrentSlide()
+      if nextSlide == (currentSlide + 1)
+        player.next()
+      else
+        player.jumpTo(slideNumber(slide))
+      @currentSlide = player.getCurrentSlide()
     return
     
   isCurrentSlideDifferentFrom: (slide) ->
-    player = $("#slideshareplayer")[0]
-    if player.getCurrentSlide
-      return slideNumber(slide) != player.getCurrentSlide()
-    return false
+    return slideNumber(slide) != @currentSlide
     
   slideNumber= (slide) ->
     parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1))
