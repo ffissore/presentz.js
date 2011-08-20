@@ -23,10 +23,10 @@ class Html5Video
     video.load()
 
     if play
-    	if not @presentz.intervalSet
-    		@presentz.startTimeChecker()
-    		
-    	video.play()
+      if not @presentz.intervalSet
+        @presentz.startTimeChecker()
+        
+      video.play()
 
     return
 

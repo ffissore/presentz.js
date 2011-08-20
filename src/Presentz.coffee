@@ -12,7 +12,7 @@ class Presentz
     @howManyChapters = @presentation.chapters.length
     console.log @presentation.title
     if @presentation.title
-    	document.title = @presentation.title
+      document.title = @presentation.title
     
     @currentChapterIndex = 0
 
