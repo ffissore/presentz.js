@@ -2,10 +2,16 @@ class Presentz
 
   constructor: () ->
     @videoPlugins = [new Vimeo(this), new Youtube(this)]
+    @slidePlugins = []
     @defaultVideoPlugin = new Html5Video(this)
+    @defaultSlidePlugin = new ImgSlide()
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
+    return
+
+  registerSlidePlugin: (plugin) ->
+    @slidePlugins.push(plugin)
     return
 
   init: (@presentation) ->
@@ -31,6 +37,12 @@ class Presentz
       @videoPlugin = videoPlugins[0]
     else
       @videoPlugin = @defaultVideoPlugin
+
+    slidePlugins = (plugin for plugin in @slidePlugins when plugin.handle(@presentation))
+    if slidePlugins.length > 0
+      @slidePlugin = slidePlugins[0]
+    else
+      @slidePlugin = @defaultSlidePlugin
 
     return
 
@@ -62,16 +74,8 @@ class Presentz
   changeChapter: (chapterIndex, play) ->
     @currentChapterIndex = chapterIndex
     currentMedia = @presentation.chapters[@currentChapterIndex].media
-    @changeSlide(currentMedia.slides[0])
+    @slidePlugin.changeSlide(currentMedia.slides[0])
     @videoPlugin.changeVideo(currentMedia.video, play)
-    return
-
-  changeSlide: (slideData) ->
-    if $("#slideContainer img").length == 0
-      $("#slideContainer").empty()
-      $("#slideContainer").append("<img width='100%' heigth='100%' src='" + slideData.url + "'>")
-    else
-      $("#slideContainer img")[0].setAttribute("src", slideData.url)
     return
 
   checkSlideChange: (currentTime) ->
@@ -82,7 +86,7 @@ class Presentz
         candidateSlide = slide
 
     if candidateSlide != undefined and candidateSlide.url != $("#slideContainer > img")[0].src
-      @changeSlide(candidateSlide)
+      @slidePlugin.changeSlide(candidateSlide)
 
     return
 
