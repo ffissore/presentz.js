@@ -1,7 +1,7 @@
 class Html5Video
 
-  constructor: (presentz) ->
-    @video = new Video "play", "pause", "ended", presentz
+  constructor: (@presentz) ->
+    @video = new Video "play", "pause", "ended", @presentz
 
   changeVideo: (videoData, play) ->
     if $("#videoContainer").children().length == 0
@@ -19,6 +19,15 @@ class Html5Video
     else
       video = $("#videoContainer > video")[0]
       video.setAttribute("src", videoData.url)
+
+    video.load()
+
+    if play
+    	if not @presentz.intervalSet
+    		@presentz.startTimeChecker()
+    		
+    	video.play()
+
     return
 
   currentTime: () ->

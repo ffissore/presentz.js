@@ -1,7 +1,7 @@
 class Vimeo
 
-  constructor: (presentz) ->
-    @video = new Video "play", "pause", "finish", presentz
+  constructor: (@presentz) ->
+    @video = new Video "play", "pause", "finish", @presentz
     @wouldPlay = false
     @currentTimeInSeconds = 0.0
 
@@ -53,6 +53,13 @@ class Vimeo
     video.addEvent("playProgress", `function(data) {
       caller.currentTimeInSeconds = data.seconds;
     }`)
+    
+    if @wouldPlay
+      @wouldPlay = false
+      if not @presentz.intervalSet
+        @presentz.startTimeChecker()
+      video.api("play")
+
     return
 
   currentTime: () ->
