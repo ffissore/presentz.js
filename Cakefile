@@ -44,7 +44,7 @@ task "build", ->
   command = [
     "mkdir -p build"
     "rm -rf build/*"
-    "coffee -o build -j PresentzTmp -c src/Video.coffee src/Html5.coffee src/Vimeo.coffee src/Youtube.coffee src/ImgSlide.coffee src/Presentz.coffee"
+    "coffee -o build -j PresentzTmp -c src/Video.coffee src/Html5.coffee src/Vimeo.coffee src/Youtube.coffee src/ImgSlide.coffee src/SlideShare.coffee src/Presentz.coffee"
     "coffee -o build -j DynPresentationTmp -c src/DynPresentation.coffee"
     ]
 

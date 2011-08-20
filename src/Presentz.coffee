@@ -2,7 +2,7 @@ class Presentz
 
   constructor: () ->
     @videoPlugins = [new Vimeo(this), new Youtube(this)]
-    @slidePlugins = []
+    @slidePlugins = [new SlideShare()]
     @defaultVideoPlugin = new Html5Video(this)
     @defaultSlidePlugin = new ImgSlide()
 
@@ -16,7 +16,6 @@ class Presentz
 
   init: (@presentation) ->
     @howManyChapters = @presentation.chapters.length
-    console.log @presentation.title
     if @presentation.title
       document.title = @presentation.title
     
@@ -85,7 +84,7 @@ class Presentz
       if slide.time < currentTime
         candidateSlide = slide
 
-    if candidateSlide != undefined and candidateSlide.url != $("#slideContainer > img")[0].src
+    if candidateSlide != undefined and @slidePlugin.isCurrentSlideDifferentFrom(candidateSlide)
       @slidePlugin.changeSlide(candidateSlide)
 
     return

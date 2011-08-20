@@ -15,8 +15,6 @@ class Youtube
         id : "ytplayer"
       
       swfobject.embedSWF(movieUrl, "youtubecontainer", "425", "356", "8", null, null, params, atts);
-      
-      #$("#videoContainer").css("padding", "0px")
     else
       video = $("#ytplayer")[0]
       video.cueVideoByUrl(movieUrl)
