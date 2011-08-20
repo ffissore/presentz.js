@@ -5,7 +5,7 @@ class Html5Video
 
   changeVideo: (videoData, play) ->
     if $("#videoContainer").children().length == 0
-      videoHtml = "<video controls preload='none' src='#{ videoData.url }' width='100%' heigth='100%'></video>"
+      videoHtml = "<video controls preload='none' src='#{ videoData.url }' width='100%'></video>"
       $("#videoContainer").append(videoHtml)
 
       caller = this

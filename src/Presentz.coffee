@@ -1,7 +1,7 @@
 class Presentz
 
   constructor: () ->
-    @videoPlugins = [new Vimeo(this)]
+    @videoPlugins = [new Vimeo(this), new Youtube(this)]
     @defaultVideoPlugin = new Html5Video(this)
 
   registerVideoPlugin: (plugin) ->
