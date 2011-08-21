@@ -22,12 +22,13 @@ class Presentz
     @currentChapterIndex = 0
 
     #agenda
-    @totalDuration += parseInt(chapter.duration) for chapter in @presentation.chapters
-    widths = @computeBarWidths(100, true)
+    totalDuration = 0
+    totalDuration += parseInt(chapter.duration) for chapter in @presentation.chapters
+    widths = computeBarWidths(totalDuration, $("#agendaContainer").width(), @presentation.chapters)
     agenda = ''
     for chapterIndex in [0..@presentation.chapters.length-1]
-      agenda += "<div title='#{ @presentation.chapters[chapterIndex].title }' style='width: #{ widths[chapterIndex] }%' onclick='changeChapter(#{ chapterIndex }, true);'>&nbsp;</div>"
-    
+      agenda += "<div title='#{ @presentation.chapters[chapterIndex].title }' style='width: #{ widths[chapterIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, true);'></div>"
+
     $("#agendaContainer").html(agenda)
     $("#agendaContainer div[title]").tooltip( {effect : "fade", opacity : 0.7})
 
@@ -45,36 +46,18 @@ class Presentz
 
     return
 
-  computeBarWidths: (max) ->
-    chapterIndex = 0
-    widths = []
-    sumOfWidths = 0
-    
-    chapterIndex = 0
-    for chapter in @presentation.chapters
-      width = chapter.durationmax / @totalDuration
-      if width == 0
-        width = 1
-      widths[chapterIndex] = width
-      sumOfWidths += width
-      chapterIndex++
-    
-    maxIndex = 0
-    if sumOfWidths > (max - 1)
-      chapterIndex = 0
-      for chapter in @presentation.chapters
-        if widths[chapterIndex] > widths[maxIndex]
-          maxIndex = chapterIndex;
-        chapterIndex++
-    
-    widths[maxIndex] = widths[maxIndex] - (sumOfWidths - (max - 1));
-    return widths;
+  computeBarWidths= (duration, maxWidth, chapters) ->
+  	((chapter.duration * maxWidth / duration) - 10 for chapter in chapters)
 
   changeChapter: (chapterIndex, play) ->
     @currentChapterIndex = chapterIndex
     currentMedia = @presentation.chapters[@currentChapterIndex].media
     @slidePlugin.changeSlide(currentMedia.slides[0])
     @videoPlugin.changeVideo(currentMedia.video, play)
+    for index in [1..$("#agendaContainer div").length]
+    	$("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
+    $("#agendaContainer div:nth-child(#{chapterIndex + 1})").addClass("agendaselected")
+
     return
 
   checkSlideChange: (currentTime) ->
