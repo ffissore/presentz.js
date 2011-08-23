@@ -47,7 +47,7 @@ class Presentz
     return
 
   computeBarWidths= (duration, maxWidth, chapters) ->
-  	((chapter.duration * maxWidth / duration) - 10 for chapter in chapters)
+    ((chapter.duration * maxWidth / duration) - 10 for chapter in chapters)
 
   changeChapter: (chapterIndex, play) ->
     @currentChapterIndex = chapterIndex
@@ -55,7 +55,7 @@ class Presentz
     @slidePlugin.changeSlide(currentMedia.slides[0])
     @videoPlugin.changeVideo(currentMedia.video, play)
     for index in [1..$("#agendaContainer div").length]
-    	$("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
+      $("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
     $("#agendaContainer div:nth-child(#{chapterIndex + 1})").addClass("agendaselected")
 
     return

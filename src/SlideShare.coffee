@@ -23,12 +23,13 @@ class SlideShare
     else
       player = $("#slideshareplayer")[0]
       nextSlide = slideNumber(slide)
-      currentSlide = player.getCurrentSlide()
-      if nextSlide == (currentSlide + 1)
-        player.next()
-      else
-        player.jumpTo(slideNumber(slide))
-      @currentSlide = player.getCurrentSlide()
+      if player.getCurrentSlide
+        currentSlide = player.getCurrentSlide()
+        if nextSlide == (currentSlide + 1)
+          player.next()
+        else
+          player.jumpTo(slideNumber(slide))
+          @currentSlide = player.getCurrentSlide()
     return
     
   isCurrentSlideDifferentFrom: (slide) ->
