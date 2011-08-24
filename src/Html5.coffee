@@ -45,9 +45,6 @@ class Html5Video
 
   adjustVideoSize: () ->
     if presentz.videoPlugin.player.height < $("#html5player").height()
-      console.log $("#html5player").height()
-      console.log $("#html5player").width()
-      console.log $(".mejs-container").height()
       newHeight = $("#html5player").height()
       $("#videoContainer").height(newHeight)
       $(".mejs-container").height(newHeight)
