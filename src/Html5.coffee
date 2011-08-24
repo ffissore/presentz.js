@@ -5,19 +5,23 @@ class Html5Video
 
   changeVideo: (videoData, play) ->
     if $("#videoContainer").children().length == 0
-      videoHtml = "<video controls preload='none' src='#{ videoData.url }' width='100%'></video>"
+      availableWidth = $("#videoContainer").width()
+      videoHtml = "<video id='html5player' controls preload='none' src='#{ videoData.url }' width='#{availableWidth}'></video>"
       $("#videoContainer").append(videoHtml)
-
+      
       caller = this
-      eventHandler = `function(event) {
-        caller.video.handleEvent(event.type);
+      successHandler = `function(me, a, b, c) {
+        caller.onPlayerLoaded(me);
       }`
-      @player = $("#videoContainer > video")[0]
-      @player.onplay = eventHandler
-      @player.onpause = eventHandler
-      @player.onended = eventHandler
+
+      playerOptions =
+        enableAutosize: false
+        timerRate: 500
+        success: successHandler
+
+      @player = new MediaElementPlayer("#html5player", playerOptions)
     else
-      @player.setAttribute("src", videoData.url)
+      $("#html5player")[0].src = videoData.url
 
     @player.load()
 
@@ -28,6 +32,27 @@ class Html5Video
       @player.play()
 
     return
+    
+  onPlayerLoaded: (player) ->
+    caller = this
+    eventHandler = `function(event) {
+      caller.adjustVideoSize()
+      caller.video.handleEvent(event.type);
+    }`
+    player.addEventListener('play', eventHandler, false);
+    player.addEventListener('pause', eventHandler, false);
+    player.addEventListener('ended', eventHandler, false);
+
+  adjustVideoSize: () ->
+    if presentz.videoPlugin.player.height < $("#html5player").height()
+      console.log $("#html5player").height()
+      console.log $("#html5player").width()
+      console.log $(".mejs-container").height()
+      newHeight = $("#html5player").height()
+      $("#videoContainer").height(newHeight)
+      $(".mejs-container").height(newHeight)
+      presentz.videoPlugin.player.height = newHeight
 
   currentTime: () ->
-    return presentz.videoPlugin.player.currentTime
+    presentz.videoPlugin.adjustVideoSize()
+    return presentz.videoPlugin.player.getCurrentTime()

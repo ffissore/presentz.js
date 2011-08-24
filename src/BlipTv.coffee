@@ -2,7 +2,7 @@ class BlipTv
 
   constructor: (@presentz) ->
     @video = new Video 1, 2, 0, @presentz
-    PokkariPlayerOptions.showPlayerOptions.playerUrl = "https://blip.tv/scripts/flash/stratos.swf"
+    #PokkariPlayerOptions.showPlayerOptions.playerUrl = "https://blip.tv/scripts/flash/stratos.swf"
 
   changeVideo: (videoData, @wouldPlay) ->
     if $("#videoContainer").children().length == 0
