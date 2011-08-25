@@ -2,7 +2,7 @@ class Presentz
 
   constructor: () ->
     @videoPlugins = [new Vimeo(this), new Youtube(this), new BlipTv(this)]
-    @slidePlugins = [new SlideShare()]
+    @slidePlugins = [new SlideShare(), new SwfSlide()]
     @defaultVideoPlugin = new Html5Video(this)
     @defaultSlidePlugin = new ImgSlide()
 
