@@ -38,12 +38,6 @@ class Presentz
     else
       @videoPlugin = @defaultVideoPlugin
 
-    slidePlugins = (plugin for plugin in @slidePlugins when plugin.handle(@presentation))
-    if slidePlugins.length > 0
-      @slidePlugin = slidePlugins[0]
-    else
-      @slidePlugin = @defaultSlidePlugin
-
     return
 
   computeBarWidths= (duration, maxWidth, chapters) ->
@@ -52,7 +46,7 @@ class Presentz
   changeChapter: (chapterIndex, play) ->
     @currentChapterIndex = chapterIndex
     currentMedia = @presentation.chapters[@currentChapterIndex].media
-    @slidePlugin.changeSlide(currentMedia.slides[0])
+    @changeSlide(currentMedia.slides[0])
     @videoPlugin.changeVideo(currentMedia.video, play)
     for index in [1..$("#agendaContainer div").length]
       $("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
@@ -67,11 +61,24 @@ class Presentz
       if slide.time < currentTime
         candidateSlide = slide
 
-    if candidateSlide != undefined and @slidePlugin.isCurrentSlideDifferentFrom(candidateSlide)
-      @slidePlugin.changeSlide(candidateSlide)
+    if candidateSlide != undefined and @isCurrentSlideDifferentFrom(candidateSlide)
+      @changeSlide(candidateSlide)
 
     return
 
+  isCurrentSlideDifferentFrom: (slide) ->
+    @currentSlide.url != slide.url
+    
+  changeSlide: (slide) ->
+    @currentSlide = slide
+    @findSlidePlugin(slide).changeSlide(slide)
+    
+  findSlidePlugin: (slide) ->
+    slidePlugins = (plugin for plugin in @slidePlugins when plugin.handle(slide))
+    if slidePlugins.length > 0
+      return slidePlugins[0]
+    return @defaultSlidePlugin
+    
   startTimeChecker: () ->
     clearInterval(@interval)
     @intervalSet = true

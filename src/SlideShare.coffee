@@ -3,8 +3,8 @@ class SlideShare
   constructor: () ->
     @currentSlide = 0
   
-  handle: (presentation) ->
-    presentation.chapters[0].media.slides[0].url.toLowerCase().indexOf("http://www.slideshare.net") != -1
+  handle: (slide) ->
+    slide.url.toLowerCase().indexOf("http://www.slideshare.net") != -1
     
   changeSlide: (slide) ->
     if $("#slideContainer").children().length == 0

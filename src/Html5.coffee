@@ -10,14 +10,12 @@ class Html5Video
       $("#videoContainer").append(videoHtml)
       
       caller = this
-      successHandler = `function(me, a, b, c) {
-        caller.onPlayerLoaded(me);
-      }`
-
       playerOptions =
         enableAutosize: false
         timerRate: 500
-        success: successHandler
+        success: (me) ->
+          caller.onPlayerLoaded me
+          return
 
       @player = new MediaElementPlayer("#html5player", playerOptions)
     else
@@ -35,10 +33,10 @@ class Html5Video
     
   onPlayerLoaded: (player) ->
     caller = this
-    eventHandler = `function(event) {
+    eventHandler = (event) ->
       caller.adjustVideoSize()
-      caller.video.handleEvent(event.type);
-    }`
+      caller.video.handleEvent event.type
+      return
     player.addEventListener('play', eventHandler, false);
     player.addEventListener('pause', eventHandler, false);
     player.addEventListener('ended', eventHandler, false);
