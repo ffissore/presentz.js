@@ -72,6 +72,7 @@ class Presentz
   changeSlide: (slide) ->
     @currentSlide = slide
     @findSlidePlugin(slide).changeSlide(slide)
+    return
     
   findSlidePlugin: (slide) ->
     slidePlugins = (plugin for plugin in @slidePlugins when plugin.handle(slide))
@@ -83,9 +84,9 @@ class Presentz
     clearInterval(@interval)
     @intervalSet = true
     caller = this
-    eventHandler = `function() {
-      caller.checkState();
-    }`
+    eventHandler = () ->
+      caller.checkState()
+      return
     @interval = setInterval(eventHandler, 500);
     return
 

@@ -25,9 +25,9 @@ class Vimeo
       $("#videoContainer").append(videoHtml)
       iframe = $("#videoContainer iframe")[0]
       caller = this
-      onReady = `function(id) {
-        caller.onReady(id);
-      }`
+      onReady = (id) ->
+        caller.onReady(id)
+        return
       $f(iframe).addEvent("ready", onReady)
     else
       iframe = $("#videoContainer iframe")[0]
@@ -41,18 +41,21 @@ class Vimeo
   onReady: (id) ->
     video = $f(id)
     caller = this
-    video.addEvent("play", `function() {
-      caller.video.handleEvent("play");
-    }`)
-    video.addEvent("pause", `function() {
-      caller.video.handleEvent("pause");
-    }`)
-    video.addEvent("finish", `function() {
-      caller.video.handleEvent("finish");
-    }`)
-    video.addEvent("playProgress", `function(data) {
-      caller.currentTimeInSeconds = data.seconds;
-    }`)
+    video.addEvent("play", () ->
+      caller.video.handleEvent("play")
+      return
+    )
+    video.addEvent("pause", () ->
+      caller.video.handleEvent("pause")
+      return
+    )
+    video.addEvent("finish", () ->
+      caller.video.handleEvent("finish")
+      return
+    )
+    video.addEvent("playProgress", (data) ->
+      caller.currentTimeInSeconds = data.seconds
+    )
     
     if @wouldPlay
       @wouldPlay = false
