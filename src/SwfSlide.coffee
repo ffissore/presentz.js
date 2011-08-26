@@ -20,8 +20,8 @@ class SwfSlide
   adjustSlideSize= () ->
     newWidth = $("#slideContainer").width()
     currentSlide = $("#swfslide")[0]
-    if currentSlide.width != newWidth
+    if currentSlide and currentSlide.width != newWidth
       newHeight = newWidth * (currentSlide.height / currentSlide.width)
-      $("#swfslide")[0].width = newWidth;
-      $("#swfslide")[0].height = newHeight
+      currentSlide.width = newWidth
+      currentSlide.height = newHeight
 

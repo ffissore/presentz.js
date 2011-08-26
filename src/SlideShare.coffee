@@ -30,6 +30,8 @@ class SlideShare
         else
           player.jumpTo(slideNumber(slide))
           @currentSlide = player.getCurrentSlide()
+    
+    adjustSlideSize()
     return
     
   isCurrentSlideDifferentFrom: (slide) ->
@@ -37,4 +39,12 @@ class SlideShare
     
   slideNumber= (slide) ->
     parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1))
+
+  adjustSlideSize= () ->
+    newWidth = $("#slideContainer").width()
+    currentSlide = $("#slideshareplayer")[0]
+    if currentSlide and currentSlide.width != newWidth
+      newHeight = newWidth * (currentSlide.height / currentSlide.width)
+      currentSlide.width = newWidth
+      currentSlide.height = newHeight
 
