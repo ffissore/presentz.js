@@ -3,27 +3,25 @@ class Html5Video
   constructor: (@presentz) ->
     @video = new Video "play", "pause", "ended", @presentz
 
-  changeVideo: (videoData, play) ->
-    if $("#videoContainer").children().length == 0
-      availableWidth = $("#videoContainer").width()
-      videoHtml = "<video id='html5player' controls preload='none' src='#{ videoData.url }' width='#{availableWidth}'></video>"
-      $("#videoContainer").append(videoHtml)
-      
-      caller = this
-      playerOptions =
-        enableAutosize: false
-        timerRate: 500
-        success: (me) ->
-          caller.onPlayerLoaded me
-          return
+  changeVideo: (videoData, @wouldPlay) ->
+    $("#videoContainer").empty()
+    availableWidth = $("#videoContainer").width()
+    videoHtml = "<video id='html5player' controls preload='none' src='#{ videoData.url }' width='#{availableWidth}'></video>"
+    $("#videoContainer").append(videoHtml)
+    
+    caller = this
+    playerOptions =
+      enableAutosize: false
+      timerRate: 500
+      success: (me) ->
+        caller.onPlayerLoaded me
+        return
 
-      @player = new MediaElementPlayer("#html5player", playerOptions)
-    else
-      $("#html5player")[0].src = videoData.url
+    @player = new MediaElementPlayer("#html5player", playerOptions)
 
     @player.load()
 
-    if play
+    if @wouldPlay
       if not @presentz.intervalSet
         @presentz.startTimeChecker()
         
@@ -40,6 +38,10 @@ class Html5Video
     player.addEventListener('play', eventHandler, false);
     player.addEventListener('pause', eventHandler, false);
     player.addEventListener('ended', eventHandler, false);
+    if  @wouldPlay
+      if not @presentz.intervalSet
+        @presentz.startTimeChecker()
+      @player.play()
 
   adjustVideoSize: () ->
     if presentz.videoPlugin.player.height < $("#html5player").height()
