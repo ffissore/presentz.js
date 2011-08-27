@@ -17,39 +17,32 @@ class Html5Video
         caller.onPlayerLoaded me
         return
 
-    @player = new MediaElementPlayer("#html5player", playerOptions)
+    new MediaElementPlayer("#html5player", playerOptions)
+    return
+    
+  onPlayerLoaded: (@player) ->
+    caller = this
+    eventHandler = (event) ->
+      #caller.adjustVideoSize()
+      caller.video.handleEvent event.type
+      return
+    player.addEventListener("play", eventHandler, false);
+    player.addEventListener("pause", eventHandler, false);
+    player.addEventListener("ended", eventHandler, false);
 
     @player.load()
 
-    if @wouldPlay
-      if not @presentz.intervalSet
-        @presentz.startTimeChecker()
-        
-      @player.play()
-
-    return
-    
-  onPlayerLoaded: (player) ->
-    caller = this
-    eventHandler = (event) ->
-      caller.adjustVideoSize()
-      caller.video.handleEvent event.type
-      return
-    player.addEventListener('play', eventHandler, false);
-    player.addEventListener('pause', eventHandler, false);
-    player.addEventListener('ended', eventHandler, false);
     if  @wouldPlay
       if not @presentz.intervalSet
         @presentz.startTimeChecker()
       @player.play()
 
   adjustVideoSize: () ->
-    if presentz.videoPlugin.player.height < $("#html5player").height()
+    if @player.height < $("#html5player").height()
       newHeight = $("#html5player").height()
       $("#videoContainer").height(newHeight)
       $(".mejs-container").height(newHeight)
-      presentz.videoPlugin.player.height = newHeight
+      @player.height = newHeight
 
   currentTime: () ->
-    presentz.videoPlugin.adjustVideoSize()
-    return presentz.videoPlugin.player.getCurrentTime()
+    return @player.currentTime
