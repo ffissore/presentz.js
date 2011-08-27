@@ -23,7 +23,6 @@ class Html5Video
   onPlayerLoaded: (@player) ->
     caller = this
     eventHandler = (event) ->
-      #caller.adjustVideoSize()
       caller.video.handleEvent event.type
       return
     player.addEventListener("play", eventHandler, false);
@@ -38,11 +37,12 @@ class Html5Video
       @player.play()
 
   adjustVideoSize: () ->
-    if @player.height < $("#html5player").height()
+    if @player.height != $("#html5player").height()
       newHeight = $("#html5player").height()
       $("#videoContainer").height(newHeight)
       $(".mejs-container").height(newHeight)
       @player.height = newHeight
 
   currentTime: () ->
+    @adjustVideoSize()
     return @player.currentTime

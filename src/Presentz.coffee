@@ -27,10 +27,9 @@ class Presentz
     widths = computeBarWidths(totalDuration, $("#agendaContainer").width(), @presentation.chapters)
     agenda = ''
     for chapterIndex in [0..@presentation.chapters.length-1]
-      agenda += "<div title='#{ @presentation.chapters[chapterIndex].title }' style='width: #{ widths[chapterIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, true);'></div>"
+      agenda += "<div style='width: #{ widths[chapterIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, true);'><div class='progress'></div><div class='info'>#{ @presentation.chapters[chapterIndex].title }</div></div>"
 
     $("#agendaContainer").html(agenda)
-    $("#agendaContainer div[title]").tooltip( {effect : "fade", opacity : 0.7})
 
     videoPlugins = (plugin for plugin in @videoPlugins when plugin.handle(@presentation))
     if videoPlugins.length > 0
@@ -41,7 +40,7 @@ class Presentz
     return
 
   computeBarWidths= (duration, maxWidth, chapters) ->
-    ((chapter.duration * maxWidth / duration) - 10 for chapter in chapters)
+    ((chapter.duration * maxWidth / duration) - 1 for chapter in chapters)
 
   changeChapter: (chapterIndex, play) ->
     @currentChapterIndex = chapterIndex
