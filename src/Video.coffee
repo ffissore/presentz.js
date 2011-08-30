@@ -9,6 +9,6 @@ class Video
       @presentz.stopTimeChecker()
       
     if event == @finishState and @presentz.currentChapterIndex < (@presentz.howManyChapters - 1)
-      @presentz.changeChapter(@presentz.currentChapterIndex + 1, true)
+      @presentz.changeChapter(@presentz.currentChapterIndex + 1, 0, true)
 
     return

@@ -5,6 +5,7 @@ class Presentz
     @slidePlugins = [new SlideShare(), new SwfSlide()]
     @defaultVideoPlugin = new Html5Video(this)
     @defaultSlidePlugin = new ImgSlide()
+    @currentChapterIndex = -1
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
@@ -18,16 +19,15 @@ class Presentz
     @howManyChapters = @presentation.chapters.length
     if @presentation.title
       document.title = @presentation.title
-    
-    @currentChapterIndex = 0
 
     #agenda
     totalDuration = 0
-    totalDuration += parseInt(chapter.duration) for chapter in @presentation.chapters
+    totalDuration += Math.round(chapter.duration) for chapter in @presentation.chapters
     widths = computeBarWidths(totalDuration, $("#agendaContainer").width(), @presentation.chapters)
     agenda = ''
-    for chapterIndex in [0..@presentation.chapters.length-1]
-      agenda += "<div style='width: #{ widths[chapterIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, true);'><div class='progress'></div><div class='info'>#{ @presentation.chapters[chapterIndex].title }</div></div>"
+    for chapterIndex in [0..widths.length-1]
+      for slideIndex in [0..widths[chapterIndex].length-1]
+        agenda += "<div style='width: #{ widths[chapterIndex][slideIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, #{ slideIndex }, true);'><div class='progress'></div><div class='info'>#{ @presentation.chapters[chapterIndex].media.slides[slideIndex].title }</div></div>"
 
     $("#agendaContainer").html(agenda)
 
@@ -40,16 +40,33 @@ class Presentz
     return
 
   computeBarWidths= (duration, maxWidth, chapters) ->
-    ((chapter.duration * maxWidth / duration) - 1 for chapter in chapters)
+    widths = new Array()
+    chapterIndex = 0
+    for chapter in chapters
+      widths[chapterIndex] = new Array()
+      clength = Math.round((chapter.duration * maxWidth / duration) - 1)
+      slideWidthSum = 0
+      slides = chapter.media.slides
+      for slideIndex in [1..slides.length-1]
+        slideWidth = Math.round(clength * slides[slideIndex].time / chapter.duration - slideWidthSum) - 1
+        slideWidth = if slideWidth > 0 then slideWidth else 1
+        slideWidthSum += slideWidth + 1
+        widths[chapterIndex][slideIndex - 1] = slideWidth
+      widths[chapterIndex][slides.length - 1] = clength - slideWidthSum
+      chapterIndex++
+    return widths
 
-  changeChapter: (chapterIndex, play) ->
-    @currentChapterIndex = chapterIndex
-    currentMedia = @presentation.chapters[@currentChapterIndex].media
-    @changeSlide(currentMedia.slides[0])
-    @videoPlugin.changeVideo(currentMedia.video, play)
-    for index in [1..$("#agendaContainer div").length]
-      $("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
-    $("#agendaContainer div:nth-child(#{chapterIndex + 1})").addClass("agendaselected")
+  changeChapter: (chapterIndex, slideIndex, play) ->
+    currentMedia = @presentation.chapters[chapterIndex].media
+    currentSlide = currentMedia.slides[slideIndex]
+    if chapterIndex != @currentChapterIndex or @videoPlugin.skipTo(currentSlide.time)
+      @changeSlide(currentSlide)
+      if chapterIndex != @currentChapterIndex
+        @videoPlugin.changeVideo(currentMedia.video, play)
+      @currentChapterIndex = chapterIndex
+      for index in [1..$("#agendaContainer div").length]
+        $("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
+      $("#agendaContainer div:nth-child(#{chapterIndex + slideIndex + 1})").addClass("agendaselected")
 
     return
 

@@ -69,4 +69,10 @@ class Vimeo
     return
 
   currentTime: () ->
-    return @currentTimeInSeconds
+    @currentTimeInSeconds
+    
+  skipTo: (time) ->
+    $f($("#videoContainer iframe")[0]).api("seekTo", time)
+    console.log time
+    console.log @currentTimeInSeconds
+    return true
