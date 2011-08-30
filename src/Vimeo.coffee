@@ -18,10 +18,13 @@ class Vimeo
     videoData.url.substr(videoData.url.lastIndexOf("/") + 1)
 
   receiveVideoInfo: (data) ->
-    movieUrl = "http://player.vimeo.com/video/#{ videoId(@videoData) }?api=1&player_id=player_1"
+    movieUrl = "http://player.vimeo.com/video/#{ videoId(@videoData) }?api=1&player_id=vimeoPlayer"
 
     if $("#videoContainer").children().length == 0
-      videoHtml = "<iframe id='player_1' src='#{ movieUrl }' width='100%' height='#{ data[0].height }' frameborder='0'></iframe>"
+      width = $("#videoContainer").width()
+      height = (width / data[0].width) * data[0].height
+        
+      videoHtml = "<iframe id='vimeoPlayer' src='#{ movieUrl }' width='#{ width }' height='#{ height }' frameborder='0'></iframe>"
       $("#videoContainer").append(videoHtml)
       iframe = $("#videoContainer iframe")[0]
       caller = this
