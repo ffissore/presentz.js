@@ -27,7 +27,11 @@ class Presentz
     agenda = ''
     for chapterIndex in [0..widths.length-1]
       for slideIndex in [0..widths[chapterIndex].length-1]
-        agenda += "<div style='width: #{ widths[chapterIndex][slideIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, #{ slideIndex }, true);'><div class='progress'></div><div class='info'>#{ @presentation.chapters[chapterIndex].media.slides[slideIndex].title }</div></div>"
+        if @presentation.chapters[chapterIndex].media.slides[slideIndex].title
+          title = @presentation.chapters[chapterIndex].media.slides[slideIndex].title
+        else
+          title = "#{ @presentation.chapters[chapterIndex].title } - Slide #{ slideIndex + 1 }"
+        agenda += "<div style='width: #{ widths[chapterIndex][slideIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, #{ slideIndex }, true);'><div class='progress'></div><div class='info'>#{ title }</div></div>"
 
     $("#agendaContainer").html(agenda)
 
@@ -47,11 +51,13 @@ class Presentz
       clength = Math.round((chapter.duration * maxWidth / duration) - 1)
       slideWidthSum = 0
       slides = chapter.media.slides
-      for slideIndex in [1..slides.length-1]
-        slideWidth = Math.round(clength * slides[slideIndex].time / chapter.duration - slideWidthSum) - 1
-        slideWidth = if slideWidth > 0 then slideWidth else 1
-        slideWidthSum += slideWidth + 1
-        widths[chapterIndex][slideIndex - 1] = slideWidth
+      if slides.length > 1
+        for slideIndex in [1..slides.length - 1]
+          console.log slideIndex
+          slideWidth = Math.round(clength * slides[slideIndex].time / chapter.duration - slideWidthSum) - 1
+          slideWidth = if slideWidth > 0 then slideWidth else 1
+          slideWidthSum += slideWidth + 1
+          widths[chapterIndex][slideIndex - 1] = slideWidth
       widths[chapterIndex][slides.length - 1] = clength - slideWidthSum
       chapterIndex++
     return widths

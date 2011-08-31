@@ -59,6 +59,9 @@ class Vimeo
     video.addEvent("playProgress", (data) ->
       caller.currentTimeInSeconds = data.seconds
     )
+    video.addEvent("loadProgress", (data) ->
+      caller.loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
+    )
     
     if @wouldPlay
       @wouldPlay = false
@@ -72,7 +75,7 @@ class Vimeo
     @currentTimeInSeconds
     
   skipTo: (time) ->
-    $f($("#videoContainer iframe")[0]).api("seekTo", time)
-    console.log time
-    console.log @currentTimeInSeconds
-    return true
+    if time <= @loadedTimeInSeconds
+      $f($("#videoContainer iframe")[0]).api("seekTo", time)
+      return true
+    return false

@@ -46,3 +46,6 @@ class Html5Video
   currentTime: () ->
     @adjustVideoSize()
     return @player.currentTime
+
+  skipTo: (time) ->
+    return false

@@ -52,3 +52,6 @@ class Youtube
 
   currentTime: () ->
     return presentz.videoPlugin.player.getCurrentTime()
+    
+  skipTo: (time) ->
+    return false

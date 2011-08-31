@@ -25,3 +25,6 @@ class BlipTv
 
   currentTime: () ->
     return presentz.videoPlugin.video.currentTime()
+
+  skipTo: (time) ->
+    return false
