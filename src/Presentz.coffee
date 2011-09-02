@@ -51,14 +51,12 @@ class Presentz
       clength = Math.round((chapter.duration * maxWidth / duration) - 1)
       slideWidthSum = 0
       slides = chapter.media.slides
-      if slides.length > 1
-        for slideIndex in [1..slides.length - 1]
-          console.log slideIndex
-          slideWidth = Math.round(clength * slides[slideIndex].time / chapter.duration - slideWidthSum) - 1
-          slideWidth = if slideWidth > 0 then slideWidth else 1
-          slideWidthSum += slideWidth + 1
-          widths[chapterIndex][slideIndex - 1] = slideWidth
-      widths[chapterIndex][slides.length - 1] = clength - slideWidthSum
+      for slideIndex in [1..slides.length - 1] when slides.length > 1
+        slideWidth = Math.round(clength * slides[slideIndex].time / chapter.duration - slideWidthSum) - 1
+        slideWidth = if slideWidth > 0 then slideWidth else 1
+        slideWidthSum += slideWidth + 1
+        widths[chapterIndex][slideIndex - 1] = slideWidth
+      widths[chapterIndex][slides.length - 1] = clength - slideWidthSum - 1
       chapterIndex++
     return widths
 
@@ -66,34 +64,41 @@ class Presentz
     currentMedia = @presentation.chapters[chapterIndex].media
     currentSlide = currentMedia.slides[slideIndex]
     if chapterIndex != @currentChapterIndex or @videoPlugin.skipTo(currentSlide.time)
-      @changeSlide(currentSlide)
+      @changeSlide(currentSlide, chapterIndex, slideIndex)
       if chapterIndex != @currentChapterIndex
         @videoPlugin.changeVideo(currentMedia.video, play)
+        @videoPlugin.skipTo(currentSlide.time)
       @currentChapterIndex = chapterIndex
-      for index in [1..$("#agendaContainer div").length]
-        $("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
-      $("#agendaContainer div:nth-child(#{chapterIndex + slideIndex + 1})").addClass("agendaselected")
-
     return
 
   checkSlideChange: (currentTime) ->
     slides = @presentation.chapters[@currentChapterIndex].media.slides
     candidateSlide = undefined
-    for slide in slides
-      if slide.time < currentTime
-        candidateSlide = slide
+    slideIndex = -1
+    for slide in slides when slide.time < currentTime
+      console.log slide
+      candidateSlide = slide
+      slideIndex++
 
     if candidateSlide != undefined and @isCurrentSlideDifferentFrom(candidateSlide)
-      @changeSlide(candidateSlide)
+      @changeSlide(candidateSlide, @currentChapterIndex, slideIndex)
 
     return
 
   isCurrentSlideDifferentFrom: (slide) ->
     @currentSlide.url != slide.url
     
-  changeSlide: (slide) ->
+  changeSlide: (slide, chapterIndex, slideIndex) ->
     @currentSlide = slide
     @findSlidePlugin(slide).changeSlide(slide)
+    
+    for index in [1..$("#agendaContainer div").length]
+      $("#agendaContainer div:nth-child(#{index})").removeClass("agendaselected")
+    
+    currentSlideIndex = slideIndex
+    for index in [0..chapterIndex-1] when chapterIndex - 1 >= 0  
+      currentSlideIndex += @presentation.chapters[index].media.slides.length
+    $("#agendaContainer div:nth-child(#{currentSlideIndex + 1})").addClass("agendaselected")
     return
     
   findSlidePlugin: (slide) ->

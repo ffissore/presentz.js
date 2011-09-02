@@ -24,7 +24,7 @@ class BlipTv
     presentation.chapters[0].media.video.url.toLowerCase().indexOf("http://blip.tv") != -1
 
   currentTime: () ->
-    return presentz.videoPlugin.video.currentTime()
+    return @video.currentTime()
 
   skipTo: (time) ->
-    return false
+    return @video.skipTo(time)

@@ -32,14 +32,15 @@ class Youtube
     presentation.chapters[0].media.video.url.toLowerCase().indexOf("http://youtu.be") != -1
 
   onYouTubePlayerReady: (id) ->
-    presentz.videoPlugin.playerArray = $("#" + id)
-    presentz.videoPlugin.player = presentz.videoPlugin.playerArray[0]
-    presentz.videoPlugin.player.addEventListener("onStateChange", "presentz.videoPlugin.video.handleEvent")
-    adjustVideoSize(presentz.videoPlugin.playerArray)
-    if presentz.videoPlugin.wouldPlay
+    youTube = presentz.videoPlugin
+    playerArray = $("#" + id)
+    youTube.player = playerArray[0]
+    youTube.player.addEventListener("onStateChange", "presentz.videoPlugin.video.handleEvent")
+    adjustVideoSize(playerArray)
+    if youTube.wouldPlay
       if not presentz.intervalSet
         presentz.startTimeChecker()
-      presentz.videoPlugin.player.playVideo()
+      youTube.player.playVideo()
 
     return
   
@@ -51,7 +52,10 @@ class Youtube
     return
 
   currentTime: () ->
-    return presentz.videoPlugin.player.getCurrentTime()
+    return @player.getCurrentTime()
     
   skipTo: (time) ->
+    if @player
+      @player.seekTo(time, true)
+      return true
     return false
