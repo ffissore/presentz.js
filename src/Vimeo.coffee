@@ -76,6 +76,7 @@ class Vimeo
     
   skipTo: (time) ->
     if time <= @loadedTimeInSeconds
-      $f($("#videoContainer iframe")[0]).api("seekTo", time)
+      player = $f($("#videoContainer iframe")[0])
+      player.api("seekTo", time)
       return true
     return false

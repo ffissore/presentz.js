@@ -76,7 +76,6 @@ class Presentz
     candidateSlide = undefined
     slideIndex = -1
     for slide in slides when slide.time < currentTime
-      console.log slide
       candidateSlide = slide
       slideIndex++
 

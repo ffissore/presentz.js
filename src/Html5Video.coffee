@@ -29,10 +29,6 @@ class Html5Video
     player.addEventListener("pause", eventHandler, false);
     player.addEventListener("ended", eventHandler, false);
     
-    a = (event) ->
-      console.log event
-    player.addEventListener("loadeddata", a, false);
-
     @player.load()
 
     if  @wouldPlay
@@ -52,7 +48,7 @@ class Html5Video
     return @player.currentTime
 
   skipTo: (time) ->
-    if @player
+    if @player and @player.currentTime
       @player.currentTime = time
       return true
     return false
