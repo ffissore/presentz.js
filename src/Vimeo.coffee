@@ -26,6 +26,7 @@ class Vimeo
         
       videoHtml = "<iframe id='vimeoPlayer' src='#{ movieUrl }' width='#{ width }' height='#{ height }' frameborder='0'></iframe>"
       $("#videoContainer").append(videoHtml)
+
       iframe = $("#videoContainer iframe")[0]
       caller = this
       onReady = (id) ->
@@ -80,3 +81,6 @@ class Vimeo
       player.api("seekTo", time)
       return true
     return false
+  
+  adjustSize: () ->
+    return

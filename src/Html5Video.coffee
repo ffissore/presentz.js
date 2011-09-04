@@ -31,12 +31,12 @@ class Html5Video
     
     @player.load()
 
-    if  @wouldPlay
+    if @wouldPlay
       if not @presentz.intervalSet
         @presentz.startTimeChecker()
       @player.play()
 
-  adjustVideoSize: () ->
+  adjustSize: () ->
     if @player.height != $("#html5player").height()
       newHeight = $("#html5player").height()
       $("#videoContainer").height(newHeight)
@@ -44,7 +44,6 @@ class Html5Video
       @player.height = newHeight
 
   currentTime: () ->
-    @adjustVideoSize()
     return @player.currentTime
 
   skipTo: (time) ->

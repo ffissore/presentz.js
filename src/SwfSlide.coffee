@@ -1,5 +1,8 @@
 class SwfSlide
   
+  constructor: () ->
+    @sizer = new Sizer(598, 480, "slideContainer")
+
   handle: (slide) ->
     slide.url.toLowerCase().indexOf(".swf") != -1
     
@@ -13,15 +16,13 @@ class SwfSlide
     else
       swfslide = $("#swfslide")[0]
       swfslide.data = slide.url
-    
-    adjustSlideSize()
+
     return
 
-  adjustSlideSize= () ->
-    newWidth = $("#slideContainer").width()
+  adjustSize: () ->
+    newSize = @sizer.optimalSize()
     currentSlide = $("#swfslide")[0]
-    if currentSlide and currentSlide.width != newWidth
-      newHeight = newWidth * (currentSlide.height / currentSlide.width)
-      currentSlide.width = newWidth
-      currentSlide.height = newHeight
+    if currentSlide and currentSlide.width != newSize.width
+      currentSlide.width = newSize.width
+      currentSlide.height = newSize.height
 

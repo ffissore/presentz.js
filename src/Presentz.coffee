@@ -50,17 +50,15 @@ class Presentz
       candidateSlide = slide
       slideIndex++
 
-    if candidateSlide != undefined and @isCurrentSlideDifferentFrom(candidateSlide)
+    if candidateSlide != undefined and @currentSlide.url != candidateSlide.url
       @changeSlide(candidateSlide, @currentChapterIndex, slideIndex)
 
     return
-
-  isCurrentSlideDifferentFrom: (slide) ->
-    @currentSlide.url != slide.url
     
   changeSlide: (slide, chapterIndex, slideIndex) ->
     @currentSlide = slide
-    @findSlidePlugin(slide).changeSlide(slide)
+    @slidePlugin = @findSlidePlugin(slide)
+    @slidePlugin.changeSlide(slide)
 
     @agenda.select(@presentation, chapterIndex, slideIndex)    
     return
@@ -76,6 +74,8 @@ class Presentz
     @intervalSet = true
     caller = this
     timeChecker = () ->
+      caller.videoPlugin.adjustSize()
+      caller.slidePlugin.adjustSize()
       caller.checkState()
       return
     @interval = setInterval(timeChecker, 500);

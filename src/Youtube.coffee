@@ -2,6 +2,7 @@ class Youtube
 
   constructor: (@presentz) ->
     @video = new Video 1, 2, 0, @presentz
+    @sizer = new Sizer(425, 356, "videoContainer")
     window.onYouTubePlayerReady = @onYouTubePlayerReady
 
   changeVideo: (videoData, @wouldPlay) ->
@@ -14,7 +15,7 @@ class Youtube
       atts = 
         id : "ytplayer"
       
-      swfobject.embedSWF(movieUrl, "youtubecontainer", "425", "356", "8", null, null, params, atts);
+      swfobject.embedSWF(movieUrl, "youtubecontainer", "#{ @sizer.startingWidth }", "#{ @sizer.startingHeight }", "8", null, null, params, atts);
     else
       @player.cueVideoByUrl(movieUrl)
 
@@ -33,22 +34,21 @@ class Youtube
 
   onYouTubePlayerReady: (id) ->
     youTube = presentz.videoPlugin
-    playerArray = $("#" + id)
-    youTube.player = playerArray[0]
+    youTube.id = id
+    youTube.player = $("#" + id)[0]
     youTube.player.addEventListener("onStateChange", "presentz.videoPlugin.video.handleEvent")
-    adjustVideoSize(playerArray)
     if youTube.wouldPlay
       if not presentz.intervalSet
         presentz.startTimeChecker()
       youTube.player.playVideo()
-
     return
   
-  adjustVideoSize = (playerArray) ->
-    newWidth = $("#videoContainer").width() #- ($("#videoContainer").width() / 100 * 20)
-    newHeight = 0.837647059 * newWidth
-    playerArray.width(newWidth)
-    playerArray.height(newHeight)
+  adjustSize: () ->
+    newSize = @sizer.optimalSize()
+    player = $("##{@id}")
+    if player.width() != newSize.width
+      player.width(newSize.width)
+      player.height(newSize.height)
     return
 
   currentTime: () ->
