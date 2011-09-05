@@ -42,6 +42,7 @@ class Html5Video
       $("#videoContainer").height(newHeight)
       $(".mejs-container").height(newHeight)
       @player.height = newHeight
+    return
 
   currentTime: () ->
     return @player.currentTime
