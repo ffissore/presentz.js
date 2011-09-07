@@ -49,6 +49,6 @@ class Html5Video
 
   skipTo: (time) ->
     if @player and @player.currentTime
-      @player.currentTime = time
+      @player.setCurrentTime(time)
       return true
     return false
