@@ -23,6 +23,7 @@ class Vimeo
     if $("#videoContainer").children().length == 0
       width = $("#videoContainer").width()
       height = (width / data[0].width) * data[0].height
+      @sizer = new Sizer(width, height, "videoContainer")
         
       videoHtml = "<iframe id='vimeoPlayer' src='#{ movieUrl }' width='#{ width }' height='#{ height }' frameborder='0'></iframe>"
       $("#videoContainer").append(videoHtml)
@@ -83,4 +84,9 @@ class Vimeo
     return false
   
   adjustSize: () ->
+    newSize = @sizer.optimalSize()
+    iframe = $("#videoContainer iframe")
+    if iframe.width() != newSize.width
+      iframe.width(newSize.width)
+      iframe.height(newSize.height)
     return
