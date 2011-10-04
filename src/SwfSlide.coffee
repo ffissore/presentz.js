@@ -1,15 +1,15 @@
 class SwfSlide
   
-  constructor: () ->
-    @sizer = new Sizer(598, 480, "slideContainer")
+  constructor: (@slideContainer) ->
+    @sizer = new Sizer(598, 480, @slideContainer)
 
   handle: (slide) ->
     slide.url.toLowerCase().indexOf(".swf") != -1
     
   changeSlide: (slide) ->
-    if $("#slideContainer object").length == 0
-      $("#slideContainer").empty()
-      $("#slideContainer").append("<div id='swfslidecontainer'></div>")
+    if $("##{@slideContainer} object").length == 0
+      $("##{@slideContainer}").empty()
+      $("#{@slideContainer}").append("<div id='swfslidecontainer'></div>")
       atts = 
         id : "swfslide"
       swfobject.embedSWF(slide.url, "swfslidecontainer", "598", "480", "8", null, null, null, atts);

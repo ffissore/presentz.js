@@ -1,9 +1,10 @@
 class Agenda
-  
+  constructor: (@agendaContainer) ->
+    
   build: (presentation) ->
     totalDuration = 0
     totalDuration += Math.round(chapter.duration) for chapter in presentation.chapters
-    widths = computeBarWidths(totalDuration, $("#agendaContainer").width(), presentation.chapters)
+    widths = computeBarWidths(totalDuration, $("##{@agendaContainer}").width(), presentation.chapters)
     agenda = ''
     for chapterIndex in [0..widths.length-1]
       for slideIndex in [0..widths[chapterIndex].length-1]
@@ -13,16 +14,16 @@ class Agenda
           title = "#{ presentation.chapters[chapterIndex].title } - Slide #{ slideIndex + 1 }"
         agenda += "<div style='width: #{ widths[chapterIndex][slideIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, #{ slideIndex }, true);'><div class='progress'></div><div class='info'>#{ title }</div></div>"
 
-    $("#agendaContainer").html(agenda)
+    $("##{@agendaContainer}").html(agenda)
     return
     
   select: (presentation, chapterIndex, slideIndex) ->
-    $("#agendaContainer div.agendaselected").removeClass("agendaselected")
+    $("##{@agendaContainer} div.agendaselected").removeClass("agendaselected")
     
     currentSlideIndex = slideIndex
     for index in [0..chapterIndex-1] when chapterIndex - 1 >= 0  
       currentSlideIndex += presentation.chapters[index].media.slides.length
-    $("#agendaContainer div:nth-child(#{currentSlideIndex + 1})").addClass("agendaselected")
+    $("##{@agendaContainer} div:nth-child(#{currentSlideIndex + 1})").addClass("agendaselected")
     return
     
   computeBarWidths= (duration, maxWidth, chapters) ->

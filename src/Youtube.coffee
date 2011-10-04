@@ -1,15 +1,15 @@
 class Youtube
 
-  constructor: (@presentz) ->
+  constructor: (@presentz, @videoContainer) ->
     @video = new Video 1, 2, 0, @presentz
-    @sizer = new Sizer(425, 356, "videoContainer")
+    @sizer = new Sizer(425, 356, @videoContainer)
     window.onYouTubePlayerReady = @onYouTubePlayerReady
 
   changeVideo: (videoData, @wouldPlay) ->
     movieUrl = "http://www.youtube.com/e/#{ videoId(videoData) }?enablejsapi=1&playerapiid=ytplayer"
 
-    if $("#videoContainer").children().length == 0
-      $("#videoContainer").append("<div id='youtubecontainer'></div>")
+    if $("##{@videoContainer}").children().length == 0
+      $("##{@videoContainer}").append("<div id='youtubecontainer'></div>")
       params =
         allowScriptAccess : "always"
       atts = 

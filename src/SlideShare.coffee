@@ -1,15 +1,15 @@
 class SlideShare
 
-  constructor: () ->
+  constructor: (@slideContainer) ->
     @currentSlide = 0
-    @sizer = new Sizer(598, 480, "slideContainer")
+    @sizer = new Sizer(598, 480, @slideContainer)
   
   handle: (slide) ->
     slide.url.toLowerCase().indexOf("http://www.slideshare.net") != -1
     
   changeSlide: (slide) ->
-    if $("#slideContainer").children().length == 0
-      $("#slideContainer").append("<div id='slidesharecontainer'></div>")
+    if $("##{@slideContainer}").children().length == 0
+      $("##{@slideContainer}").append("<div id='slidesharecontainer'></div>")
       docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
       params =
         allowScriptAccess : "always"

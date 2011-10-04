@@ -1,12 +1,12 @@
 class Presentz
 
-  constructor: () ->
-    @videoPlugins = [new Vimeo(this), new Youtube(this), new BlipTv(this)]
-    @slidePlugins = [new SlideShare(), new SwfSlide()]
-    @defaultVideoPlugin = new Html5Video(this)
-    @defaultSlidePlugin = new ImgSlide()
+  constructor: (videoContainer, slideContainer, agendaContainer) ->
+    @videoPlugins = [new Vimeo(this, videoContainer), new Youtube(this, videoContainer), new BlipTv(this, videoContainer)]
+    @slidePlugins = [new SlideShare(slideContainer), new SwfSlide(slideContainer)]
+    @defaultVideoPlugin = new Html5Video(this, videoContainer)
+    @defaultSlidePlugin = new ImgSlide(slideContainer)
     @currentChapterIndex = -1
-    @agenda = new Agenda()
+    @agenda = new Agenda(agendaContainer)
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
