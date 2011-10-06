@@ -6,7 +6,10 @@ class Presentz
     @defaultVideoPlugin = new Html5Video(this, videoContainer)
     @defaultSlidePlugin = new ImgSlide(slideContainer)
     @currentChapterIndex = -1
-    @agenda = new Agenda(agendaContainer)
+    if !agendaContainer?
+      @agenda = new NullAgenda()
+    else
+      @agenda = new Agenda(agendaContainer)
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
