@@ -9,7 +9,7 @@ class SwfSlide
   changeSlide: (slide) ->
     if $("##{@slideContainer} object").length == 0
       $("##{@slideContainer}").empty()
-      $("#{@slideContainer}").append("<div id='swfslidecontainer'></div>")
+      $("##{@slideContainer}").append("<div id='swfslidecontainer'></div>")
       atts = 
         id : "swfslide"
       swfobject.embedSWF(slide.url, "swfslidecontainer", "598", "480", "8", null, null, null, atts);
