@@ -21,16 +21,12 @@ class Presentz
 
   init: (@presentation) ->
     @howManyChapters = @presentation.chapters.length
-    if @presentation.title
+    if @presentation.title?
       document.title = @presentation.title
 
     @agenda.build(@presentation)
 
-    videoPlugins = (plugin for plugin in @videoPlugins when plugin.handle(@presentation))
-    if videoPlugins.length > 0
-      @videoPlugin = videoPlugins[0]
-    else
-      @videoPlugin = @defaultVideoPlugin
+    @videoPlugin = @findVideoPlugin()
 
     return
 
@@ -47,31 +43,32 @@ class Presentz
 
   checkSlideChange: (currentTime) ->
     slides = @presentation.chapters[@currentChapterIndex].media.slides
-    candidateSlide = undefined
-    slideIndex = -1
-    for slide in slides when slide.time < currentTime
+    for slide in slides when slide.time <= currentTime
       candidateSlide = slide
-      slideIndex++
 
-    if candidateSlide != undefined and @currentSlide.url != candidateSlide.url
-      @changeSlide(candidateSlide, @currentChapterIndex, slideIndex)
+    if candidateSlide? and @currentSlide.url != candidateSlide.url
+      @changeSlide(candidateSlide, @currentChapterIndex, slides.indexOf(candidateSlide))
 
     return
-    
+
   changeSlide: (slide, chapterIndex, slideIndex) ->
     @currentSlide = slide
     @slidePlugin = @findSlidePlugin(slide)
     @slidePlugin.changeSlide(slide)
 
-    @agenda.select(@presentation, chapterIndex, slideIndex)    
+    @agenda.select(@presentation, chapterIndex, slideIndex)
     return
-    
+
+  findVideoPlugin: () ->
+    plugins = (plugin for plugin in @videoPlugins when plugin.handle(@presentation))
+    return plugins[0] if plugins.length > 0
+    return @defaultVideoPlugin
+
   findSlidePlugin: (slide) ->
-    slidePlugins = (plugin for plugin in @slidePlugins when plugin.handle(slide))
-    if slidePlugins.length > 0
-      return slidePlugins[0]
+    plugins = (plugin for plugin in @slidePlugins when plugin.handle(slide))
+    return plugins[0] if plugins.length > 0
     return @defaultSlidePlugin
-    
+
   startTimeChecker: () ->
     clearInterval(@interval)
     @intervalSet = true
@@ -94,3 +91,4 @@ class Presentz
     return
 
 window.Presentz = Presentz
+
