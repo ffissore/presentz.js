@@ -1,11 +1,11 @@
 class SwfSlide
-  
+
   constructor: (@slideContainer) ->
     @sizer = new Sizer(598, 480, @slideContainer)
 
   handle: (slide) ->
     slide.url.toLowerCase().indexOf(".swf") != -1
-    
+
   changeSlide: (slide) ->
     if $("##{@slideContainer} object").length == 0
       $("##{@slideContainer}").empty()
@@ -26,3 +26,7 @@ class SwfSlide
       currentSlide.width = newSize.width
       currentSlide.height = newSize.height
 
+  preload: (slide) ->
+    i = new Image()
+    i.src = slide.url
+    return

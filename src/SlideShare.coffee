@@ -43,4 +43,5 @@ class SlideShare
     if currentSlide and currentSlide.width != newSize.width
       currentSlide.width = newSize.width
       currentSlide.height = newSize.height
-
+  
+  preload: () ->

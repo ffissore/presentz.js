@@ -1,6 +1,7 @@
 class ImgSlide
+
   constructor: (@slideContainer) ->
-  
+
   changeSlide: (slide) ->
     if $("##{@slideContainer} img").length == 0
       slideContainer = $("##{@slideContainer}")
@@ -9,9 +10,9 @@ class ImgSlide
     else
       $("##{@slideContainer} img")[0].setAttribute("src", slide.url)
     return
-    
+
   adjustSize: () ->
-    if @sizer == undefined
+    if !@sizer?
       slideContainer = $("##{@slideContainer}")
       @sizer = new Sizer(slideContainer.width(), slideContainer.height(), @slideContainer)
     newSize = @sizer.optimalSize()
@@ -19,3 +20,8 @@ class ImgSlide
     if img.width() != newSize.width
       img[0].setAttribute("width", newSize.width)
       img[0].setAttribute("height", newSize.height)
+
+  preload: (slide) ->
+    i = new Image()
+    i.src = slide.url
+    return

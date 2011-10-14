@@ -56,6 +56,10 @@ class Presentz
     @slidePlugin = @findSlidePlugin(slide)
     @slidePlugin.changeSlide(slide)
 
+    slides = @presentation.chapters[chapterIndex].media.slides
+    slides = slides[(slideIndex + 1)..(slideIndex + 5)]
+    @findSlidePlugin(slide).preload slide for slide in slides
+
     @agenda.select(@presentation, chapterIndex, slideIndex)
     return
 

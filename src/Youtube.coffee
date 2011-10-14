@@ -19,7 +19,7 @@ class Youtube
     else
       @player.cueVideoByUrl(movieUrl)
 
-    if @wouldPlay and @player != undefined
+    if @wouldPlay and @player?
       if not @presentz.intervalSet
         @presentz.startTimeChecker()
       @player.playVideo()
