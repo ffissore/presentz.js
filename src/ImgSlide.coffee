@@ -22,6 +22,6 @@ class ImgSlide
       img[0].setAttribute("height", newSize.height)
 
   preload: (slide) ->
-    i = new Image()
-    i.src = slide.url
+    fakeImage = new Image()
+    fakeImage.src = slide.url
     return

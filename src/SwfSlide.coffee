@@ -27,6 +27,3 @@ class SwfSlide
       currentSlide.height = newSize.height
 
   preload: (slide) ->
-    i = new Image()
-    i.src = slide.url
-    return
