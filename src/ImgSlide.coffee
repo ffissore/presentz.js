@@ -1,6 +1,7 @@
 class ImgSlide
 
   constructor: (@slideContainer) ->
+    @preloadedSlides = []
 
   changeSlide: (slide) ->
     if $("##{@slideContainer} img").length == 0
@@ -21,7 +22,11 @@ class ImgSlide
       img[0].setAttribute("width", newSize.width)
       img[0].setAttribute("height", newSize.height)
 
-  preload: (slide) ->
-    fakeImage = new Image()
-    fakeImage.src = slide.url
-    return
+  preload: (slides) ->
+    images = []
+    for slide in slides when not (slide.url in @preloadedSlides)
+      image = new Image()
+      image.src = slide.url
+      images.push image
+      @preloadedSlides.push slide.url
+    return images

@@ -45,3 +45,4 @@ class SlideShare
       currentSlide.height = newSize.height
   
   preload: () ->
+
