@@ -11,7 +11,7 @@ class Agenda
         if presentation.chapters[chapterIndex].media.slides[slideIndex].title
           title = presentation.chapters[chapterIndex].media.slides[slideIndex].title
         else
-          title = "#{ presentation.chapters[chapterIndex].title } - Slide #{ slideIndex + 1 }"
+          title = "Slide #{ slideIndex + 1 }"
         agenda += "<div style='width: #{ widths[chapterIndex][slideIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, #{ slideIndex }, true);'><div class='progress'></div><div class='info'>#{ title }</div></div>"
 
     $("##{@agendaContainer}").html(agenda)
