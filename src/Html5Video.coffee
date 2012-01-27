@@ -9,21 +9,19 @@ class Html5Video
     videoHtml = "<video id='html5player' controls preload='none' src='#{ videoData.url }' width='#{availableWidth}'></video>"
     $("##{@videoContainer}").append(videoHtml)
     
-    caller = this
     playerOptions =
       enableAutosize: false
       timerRate: 500
-      success: (me) ->
-        caller.onPlayerLoaded me
+      success: (me) =>
+        this.onPlayerLoaded me
         return
 
     new MediaElementPlayer("#html5player", playerOptions)
     return
     
   onPlayerLoaded: (@player) ->
-    caller = this
-    eventHandler = (event) ->
-      caller.video.handleEvent event.type
+    eventHandler = (event) =>
+      this.video.handleEvent event.type
       return
     player.addEventListener("play", eventHandler, false);
     player.addEventListener("pause", eventHandler, false);

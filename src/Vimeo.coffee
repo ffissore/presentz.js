@@ -29,9 +29,8 @@ class Vimeo
       $("##{@videoContainer}").append(videoHtml)
 
       iframe = $("##{@videoContainer} iframe")[0]
-      caller = this
-      onReady = (id) ->
-        caller.onReady(id)
+      onReady = (id) =>
+        this.onReady(id)
         return
       $f(iframe).addEvent("ready", onReady)
     else
@@ -45,24 +44,23 @@ class Vimeo
 
   onReady: (id) ->
     video = $f(id)
-    caller = this
-    video.addEvent("play", () ->
-      caller.video.handleEvent("play")
+    video.addEvent("play", () =>
+      this.video.handleEvent("play")
       return
     )
-    video.addEvent("pause", () ->
-      caller.video.handleEvent("pause")
+    video.addEvent("pause", () =>
+      this.video.handleEvent("pause")
       return
     )
-    video.addEvent("finish", () ->
-      caller.video.handleEvent("finish")
+    video.addEvent("finish", () =>
+      this.video.handleEvent("finish")
       return
     )
-    video.addEvent("playProgress", (data) ->
-      caller.currentTimeInSeconds = data.seconds
+    video.addEvent("playProgress", (data) =>
+      this.currentTimeInSeconds = data.seconds
     )
-    video.addEvent("loadProgress", (data) ->
-      caller.loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
+    video.addEvent("loadProgress", (data) =>
+      this.loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
     )
     
     if @wouldPlay

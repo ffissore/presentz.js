@@ -28,14 +28,14 @@ class SwfSlide
       currentSlide.height = newSize.height
 
   preload: (slides) ->
-    $("#swfpreloadslidecontainer").empty()
     index = 0
     for slide in slides when not (slide.url in @preloadedSlides)
+      $("#swfpreloadslide#{index}").remove()
       $("##{@slideContainer}").append("<div id='swfpreloadslidecontainer#{index}'></div>")
       atts = 
         id : "swfpreloadslide#{index}"
-      caller = this
-      swfobject.embedSWF(slide.url, "swfpreloadslidecontainer#{index}", "1", "1", "8", null, null, null, atts, () ->
-        caller.preloadedSlides.push slide.url
+        style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
+      swfobject.embedSWF(slide.url, "swfpreloadslidecontainer#{index}", "1", "1", "8", null, null, null, atts, () =>
+        this.preloadedSlides.push slide.url
       )
     return

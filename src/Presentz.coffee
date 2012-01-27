@@ -76,11 +76,10 @@ class Presentz
   startTimeChecker: () ->
     clearInterval(@interval)
     @intervalSet = true
-    caller = this
-    timeChecker = () ->
-      caller.videoPlugin.adjustSize()
-      caller.slidePlugin.adjustSize()
-      caller.checkState()
+    timeChecker = () =>
+      this.videoPlugin.adjustSize()
+      this.slidePlugin.adjustSize()
+      this.checkState()
       return
     @interval = setInterval(timeChecker, 500);
     return
