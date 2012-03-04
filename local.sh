@@ -1,2 +1,2 @@
 cake build
-cp build/* ../presentz.org/js/
+cp build/* ../presentz.org/public/assets/javascripts/
