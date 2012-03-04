@@ -21,8 +21,6 @@ class Presentz
 
   init: (@presentation) ->
     @howManyChapters = @presentation.chapters.length
-    if @presentation.title?
-      document.title = @presentation.title
 
     @agenda.build(@presentation)
 
