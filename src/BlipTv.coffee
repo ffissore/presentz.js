@@ -23,13 +23,13 @@ class BlipTv
 
   handle: (presentation) ->
     presentation.chapters[0].media.video.url.toLowerCase().indexOf("http://blip.tv") != -1
-  
+
   adjustSize: () ->
     @video.adjustSize()
     return
-    
+
   currentTime: () ->
     return @video.currentTime()
-    
+
   skipTo: (time) ->
     return @video.skipTo(time)

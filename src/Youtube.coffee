@@ -11,17 +11,18 @@ class Youtube
     if $("##{@videoContainer}").children().length == 0
       $("##{@videoContainer}").append("<div id='youtubecontainer'></div>")
       params =
-        allowScriptAccess : "always"
+        allowScriptAccess: "always"
         allowFullScreen: true
-      atts = 
-        id : "ytplayer"
-      
-      swfobject.embedSWF(movieUrl, "youtubecontainer", "#{ @sizer.startingWidth }", "#{ @sizer.startingHeight }", "8", null, null, params, atts);
+      atts =
+        id: "ytplayer"
+
+      swfobject.embedSWF(movieUrl, "youtubecontainer", "#{ @sizer.startingWidth }", "#{ @sizer.startingHeight }", "8", null, null, params, atts)
+      ;
     else
       @player.cueVideoByUrl(movieUrl)
 
     if @wouldPlay and @player?
-      if not @presentz.intervalSet
+      if !@presentz.intervalSet
         @presentz.startTimeChecker()
       @player.playVideo()
 
@@ -39,11 +40,11 @@ class Youtube
     youTube.player = $("#" + id)[0]
     youTube.player.addEventListener("onStateChange", "presentz.videoPlugin.video.handleEvent")
     if youTube.wouldPlay
-      if not presentz.intervalSet
+      if !presentz.intervalSet
         presentz.startTimeChecker()
       youTube.player.playVideo()
     return
-  
+
   adjustSize: () ->
     newSize = @sizer.optimalSize()
     player = $("##{@id}")
@@ -54,7 +55,7 @@ class Youtube
 
   currentTime: () ->
     return @player.getCurrentTime()
-    
+
   skipTo: (time) ->
     if @player
       @player.seekTo(time, true)

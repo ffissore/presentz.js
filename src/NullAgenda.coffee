@@ -1,5 +1,5 @@
 class NullAgenda
-    
+
   build: () ->
-    
+
   select: () ->

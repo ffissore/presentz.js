@@ -1,7 +1,7 @@
 class Sizer
 
   constructor: (@startingWidth, @startingHeight, @containerName) ->
-    
+
   optimalSize: () ->
     newHeight = $(window).height() - ($("div.container div.header").height() + $("div.container div.controls").height()) * 2
     newWidth = Math.round(@startingWidth / @startingHeight * newHeight)

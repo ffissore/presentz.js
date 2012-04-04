@@ -8,6 +8,6 @@ importExternalJS = (param) ->
 
   $.ajax ajaxCall
   return
-    
+
 params = window.location.search.substring(1).split("&")
 importExternalJS param for param in params when param.indexOf("p=") == 0 && param.length > 2

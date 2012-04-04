@@ -79,7 +79,8 @@ class Presentz
       this.slidePlugin.adjustSize()
       this.checkState()
       return
-    @interval = setInterval(timeChecker, 500);
+    @interval = setInterval(timeChecker, 500)
+    ;
     return
 
   stopTimeChecker: () ->

@@ -46,12 +46,12 @@ task "build", ->
     "rm -rf build/*"
     "coffee -o build -j PresentzTmp -c src/Video.coffee src/Html5Video.coffee src/Vimeo.coffee src/Youtube.coffee src/BlipTv.coffee src/ImgSlide.coffee src/SlideShare.coffee src/SwfSlide.coffee src/Agenda.coffee src/NullAgenda.coffee src/Sizer.coffee src/Presentz.coffee"
     "coffee -o build -j DynPresentationTmp -c src/DynPresentation.coffee"
-    ]
+  ]
 
   sources = ["PresentzTmp", "DynPresentationTmp"]
   targets = ["Presentz", "DynPresentation"]
 
-  for i in [0..sources.length-1]
+  for i in [0..sources.length - 1]
     command.push "echo '#{ header }' > build/#{targets[i]}.js"
     command.push "cat build/#{sources[i]}.js >> build/#{targets[i]}.js"
     command.push "rm build/#{sources[i]}.js"

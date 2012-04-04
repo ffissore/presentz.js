@@ -24,7 +24,7 @@ class ImgSlide
 
   preload: (slides) ->
     images = []
-    for slide in slides when not (slide.url in @preloadedSlides)
+    for slide in slides when !(slide.url in @preloadedSlides)
       image = new Image()
       image.src = slide.url
       images.push image
