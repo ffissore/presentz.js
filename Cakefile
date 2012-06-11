@@ -48,7 +48,7 @@ task "build", ->
   ]
 
   sources = ["PresentzTmp"]
-  targets = ["Presentz"]
+  targets = ["presentz"]
 
   for i in [0..sources.length - 1]
     command.push "echo '#{ header }' > build/#{targets[i]}.js"
