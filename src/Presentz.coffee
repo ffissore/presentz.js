@@ -6,10 +6,8 @@ class Presentz
     @defaultVideoPlugin = new Html5Video(this, videoContainer)
     @defaultSlidePlugin = new ImgSlide(slideContainer)
     @currentChapterIndex = -1
-    if !agendaContainer?
-      @agenda = new NullAgenda()
-    else
-      @agenda = new Agenda(agendaContainer)
+    @listeners =
+      slidechange: []
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
@@ -22,11 +20,12 @@ class Presentz
   init: (@presentation) ->
     @howManyChapters = @presentation.chapters.length
 
-    @agenda.build(@presentation)
-
     @videoPlugin = @findVideoPlugin()
 
     return
+
+  on: (eventType, callback) ->
+    @listeners[eventType].push callback
 
   changeChapter: (chapterIndex, slideIndex, play) ->
     currentMedia = @presentation.chapters[chapterIndex].media
@@ -58,7 +57,8 @@ class Presentz
     slides = slides[(slideIndex + 1)..(slideIndex + 5)]
     @findSlidePlugin(slide).preload slides
 
-    @agenda.select(@presentation, chapterIndex, slideIndex)
+    for listener in @listeners.slidechange
+      listener(slideIndex)
     return
 
   findVideoPlugin: () ->
