@@ -4,10 +4,10 @@ class Html5Video
     @video = new Video "play", "pause", "ended", @presentz
 
   changeVideo: (videoData, @wouldPlay) ->
-    $("##{@videoContainer}").empty()
-    availableWidth = $("##{@videoContainer}").width()
+    $(@videoContainer).empty()
+    availableWidth = $(@videoContainer).width()
     videoHtml = "<video id='html5player' controls preload='none' src='#{ videoData.url }' width='#{availableWidth}'></video>"
-    $("##{@videoContainer}").append(videoHtml)
+    $(@videoContainer).append(videoHtml)
 
     playerOptions =
       enableAutosize: false
@@ -40,7 +40,7 @@ class Html5Video
   adjustSize: () ->
     if @player.height != $("#html5player").height()
       newHeight = $("#html5player").height()
-      $("##{@videoContainer}").height(newHeight)
+      $(@videoContainer).height(newHeight)
       $(".mejs-container").height(newHeight)
       @player.height = newHeight
     return

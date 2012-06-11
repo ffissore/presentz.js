@@ -8,8 +8,8 @@ class SlideShare
     slide.url.toLowerCase().indexOf("http://www.slideshare.net") != -1
 
   changeSlide: (slide) ->
-    if $("##{@slideContainer}").children().length == 0
-      $("##{@slideContainer}").append("<div id='slidesharecontainer'></div>")
+    if $(@slideContainer).children().length == 0
+      $(@slideContainer).append("<div id='slidesharecontainer'></div>")
       docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
       params =
         allowScriptAccess: "always"

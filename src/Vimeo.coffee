@@ -20,21 +20,21 @@ class Vimeo
   receiveVideoInfo: (data) ->
     movieUrl = "http://player.vimeo.com/video/#{ videoId(@videoData) }?api=1&player_id=vimeoPlayer"
 
-    if $("##{@videoContainer}").children().length == 0
-      width = $("##{@videoContainer}").width()
+    if $(@videoContainer).children().length == 0
+      width = $(@videoContainer).width()
       height = (width / data[0].width) * data[0].height
       @sizer = new Sizer(width, height, @videoContainer)
 
       videoHtml = "<iframe id='vimeoPlayer' src='#{ movieUrl }' width='#{ width }' height='#{ height }' frameborder='0'></iframe>"
-      $("##{@videoContainer}").append(videoHtml)
+      $(@videoContainer).append(videoHtml)
 
-      iframe = $("##{@videoContainer} iframe")[0]
+      iframe = $("#{@videoContainer} iframe")[0]
       onReady = (id) =>
         this.onReady(id)
         return
       $f(iframe).addEvent("ready", onReady)
     else
-      iframe = $("##{@videoContainer} iframe")[0]
+      iframe = $("#{@videoContainer} iframe")[0]
       iframe.src = movieUrl
 
     return
@@ -76,14 +76,14 @@ class Vimeo
 
   skipTo: (time) ->
     if time <= @loadedTimeInSeconds
-      player = $f($("##{@videoContainer} iframe")[0])
+      player = $f($("#{@videoContainer} iframe")[0])
       player.api("seekTo", time)
       return true
     return false
 
   adjustSize: () ->
     newSize = @sizer.optimalSize()
-    iframe = $("##{@videoContainer} iframe")
+    iframe = $("#{@videoContainer} iframe")
     if iframe.width() != newSize.width
       iframe.width(newSize.width)
       iframe.height(newSize.height)

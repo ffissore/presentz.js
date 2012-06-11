@@ -4,20 +4,20 @@ class ImgSlide
     @preloadedSlides = []
 
   changeSlide: (slide) ->
-    if $("##{@slideContainer} img").length == 0
-      slideContainer = $("##{@slideContainer}")
+    if $("#{@slideContainer} img").length == 0
+      slideContainer = $(@slideContainer)
       slideContainer.empty()
       slideContainer.append("<img width='100%' height='100%' src='#{slide.url}'>")
     else
-      $("##{@slideContainer} img")[0].setAttribute("src", slide.url)
+      $("#{@slideContainer} img")[0].setAttribute("src", slide.url)
     return
 
   adjustSize: () ->
     if !@sizer?
-      slideContainer = $("##{@slideContainer}")
+      slideContainer = $(@slideContainer)
       @sizer = new Sizer(slideContainer.width(), slideContainer.height(), @slideContainer)
     newSize = @sizer.optimalSize()
-    img = $("##{@slideContainer} img")
+    img = $("#{@slideContainer} img")
     if img.width() != newSize.width
       img[0].setAttribute("width", newSize.width)
       img[0].setAttribute("height", newSize.height)

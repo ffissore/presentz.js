@@ -8,9 +8,9 @@ class SwfSlide
     slide.url.toLowerCase().indexOf(".swf") != -1
 
   changeSlide: (slide) ->
-    if $("##{@slideContainer} object").length == 0
-      $("##{@slideContainer}").empty()
-      $("##{@slideContainer}").append("<div id='swfslidecontainer'></div>")
+    if $("#{@slideContainer} object").length == 0
+      $(@slideContainer).empty()
+      $(@slideContainer).append("<div id='swfslidecontainer'></div>")
       atts =
         id: "swfslide"
       swfobject.embedSWF(slide.url, "swfslidecontainer", "598", "480", "8", null, null, null, atts)
@@ -31,7 +31,7 @@ class SwfSlide
     index = 0
     for slide in slides when !(slide.url in @preloadedSlides)
       $("#swfpreloadslide#{index}").remove()
-      $("##{@slideContainer}").append("<div id='swfpreloadslidecontainer#{index}'></div>")
+      $(@slideContainer).append("<div id='swfpreloadslidecontainer#{index}'></div>")
       atts =
         id: "swfpreloadslide#{index}"
         style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
