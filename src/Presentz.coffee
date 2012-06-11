@@ -80,7 +80,6 @@ class Presentz
       this.checkState()
       return
     @interval = setInterval(timeChecker, 500)
-    ;
     return
 
   stopTimeChecker: () ->

@@ -24,11 +24,8 @@ class Html5Video
       this.video.handleEvent event.type
       return
     player.addEventListener("play", eventHandler, false)
-    ;
     player.addEventListener("pause", eventHandler, false)
-    ;
     player.addEventListener("ended", eventHandler, false)
-    ;
 
     @player.load()
 
