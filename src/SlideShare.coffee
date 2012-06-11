@@ -13,6 +13,7 @@ class SlideShare
       docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
       params =
         allowScriptAccess: "always"
+        wmode: "opaque"
       atts =
         id: "slideshareplayer"
       flashvars =
@@ -20,7 +21,6 @@ class SlideShare
         rel: 0
 
       swfobject.embedSWF("http://static.slidesharecdn.com/swf/ssplayer2.swf", "slidesharecontainer", "598", "480", "8", null, flashvars, params, atts)
-      ;
       @currentSlide = 0
     else
       player = $("#slideshareplayer")[0]

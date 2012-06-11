@@ -13,11 +13,11 @@ class Youtube
       params =
         allowScriptAccess: "always"
         allowFullScreen: true
+        wmode: "opaque"
       atts =
         id: "ytplayer"
 
       swfobject.embedSWF(movieUrl, "youtubecontainer", "#{ @sizer.startingWidth }", "#{ @sizer.startingHeight }", "8", null, null, params, atts)
-      ;
     else
       @player.cueVideoByUrl(movieUrl)
 
