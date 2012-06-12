@@ -2,6 +2,10 @@ class Youtube
 
   constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video 1, 2, 0, @presentz
+    if window.onYouTubePlayerReady
+      errorMessage = "There already is a 'onYouTubePlayerReady' global function defined: presentz.js needs to define its own in order to display this presentation"
+      alert(errorMessage)
+      throw new Error(errorMessage)
     window.onYouTubePlayerReady = @onYouTubePlayerReady
 
   changeVideo: (videoData, @wouldPlay) ->
