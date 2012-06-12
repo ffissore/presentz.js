@@ -1,6 +1,6 @@
 class Vimeo
 
-  constructor: (@presentz, @videoContainer) ->
+  constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video "play", "pause", "finish", @presentz
     @wouldPlay = false
     @currentTimeInSeconds = 0.0
@@ -21,11 +21,11 @@ class Vimeo
     movieUrl = "http://player.vimeo.com/video/#{ videoId(@videoData) }?api=1&player_id=vimeoPlayer"
 
     if $(@videoContainer).children().length == 0
-      width = $(@videoContainer).width()
-      height = (width / data[0].width) * data[0].height
-      @sizer = new Sizer(width, height, @videoContainer)
+      #width = $(@videoContainer).width()
+      #height = (width / data[0].width) * data[0].height
+      #@sizer = new Sizer(width, height, @videoContainer)
 
-      videoHtml = "<iframe id='vimeoPlayer' src='#{ movieUrl }' width='#{ width }' height='#{ height }' frameborder='0'></iframe>"
+      videoHtml = "<iframe id=\"vimeoPlayer\" src=\"#{movieUrl}\" width=\"#{@width}\" height=\"#{@height}\" frameborder=\"0\"></iframe>"
       $(@videoContainer).append(videoHtml)
 
       iframe = $("#{@videoContainer} iframe")[0]
@@ -45,22 +45,22 @@ class Vimeo
   onReady: (id) ->
     video = $f(id)
     video.addEvent("play", () =>
-        this.video.handleEvent("play")
-        return
+      this.video.handleEvent("play")
+      return
     )
     video.addEvent("pause", () =>
-        this.video.handleEvent("pause")
-        return
+      this.video.handleEvent("pause")
+      return
     )
     video.addEvent("finish", () =>
-        this.video.handleEvent("finish")
-        return
+      this.video.handleEvent("finish")
+      return
     )
     video.addEvent("playProgress", (data) =>
-        this.currentTimeInSeconds = data.seconds
+      this.currentTimeInSeconds = data.seconds
     )
     video.addEvent("loadProgress", (data) =>
-        this.loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
+      this.loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
     )
 
     if @wouldPlay

@@ -1,10 +1,12 @@
 class Presentz
 
-  constructor: (videoContainer, slideContainer, agendaContainer) ->
-    @videoPlugins = [new Vimeo(this, videoContainer), new Youtube(this, videoContainer), new BlipTv(this, videoContainer)]
-    @slidePlugins = [new SlideShare(slideContainer), new SwfSlide(slideContainer)]
-    @defaultVideoPlugin = new Html5Video(this, videoContainer)
-    @defaultSlidePlugin = new ImgSlide(slideContainer)
+  constructor: (videoContainer, videoWxH, slideContainer, slideWxH) ->
+    videoWxHParts = videoWxH.split("x")
+    slideWxHParts = slideWxH.split("x")
+    @videoPlugins = [new Vimeo(this, videoContainer, videoWxHParts[0], videoWxHParts[1]), new Youtube(this, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(this, videoContainer, videoWxHParts[0], videoWxHParts[1])]
+    @slidePlugins = [new SlideShare(slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])]
+    @defaultVideoPlugin = new Html5Video(this, videoContainer, videoWxHParts[0], videoWxHParts[1])
+    @defaultSlidePlugin = new ImgSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])
     @currentChapterIndex = -1
     @listeners =
       slidechange: []
@@ -75,8 +77,8 @@ class Presentz
     clearInterval(@interval)
     @intervalSet = true
     timeChecker = () =>
-      this.videoPlugin.adjustSize()
-      this.slidePlugin.adjustSize()
+      #this.videoPlugin.adjustSize()
+      #this.slidePlugin.adjustSize()
       this.checkState()
       return
     @interval = setInterval(timeChecker, 500)

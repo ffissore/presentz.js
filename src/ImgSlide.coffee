@@ -7,7 +7,7 @@ class ImgSlide
     if $("#{@slideContainer} img").length == 0
       slideContainer = $(@slideContainer)
       slideContainer.empty()
-      slideContainer.append("<img width='100%' height='100%' src='#{slide.url}'>")
+      slideContainer.append("<table height=\"100%\"><tr><td valign=\"middle\"><img width=\"100%\" height=\"100%\" src=\"#{slide.url}\"></td></tr></table>")
     else
       $("#{@slideContainer} img")[0].setAttribute("src", slide.url)
     return

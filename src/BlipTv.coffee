@@ -1,7 +1,7 @@
 class BlipTv
 
-  constructor: (@presentz, videoContainer) ->
-    @video = new Html5Video @presentz, videoContainer
+  constructor: (@presentz, videoContainer, width, height) ->
+    @video = new Html5Video @presentz, videoContainer, width, height
 
   changeVideo: (videoData, @wouldPlay) ->
     ajaxCall =

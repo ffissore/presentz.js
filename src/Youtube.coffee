@@ -1,15 +1,14 @@
 class Youtube
 
-  constructor: (@presentz, @videoContainer) ->
+  constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video 1, 2, 0, @presentz
-    @sizer = new Sizer(425, 356, @videoContainer)
     window.onYouTubePlayerReady = @onYouTubePlayerReady
 
   changeVideo: (videoData, @wouldPlay) ->
     movieUrl = "http://www.youtube.com/e/#{ videoId(videoData) }?enablejsapi=1&autohide=1&fs=1&playerapiid=ytplayer"
 
     if $(@videoContainer).children().length == 0
-      $(@videoContainer).append("<div id='youtubecontainer'></div>")
+      $(@videoContainer).append("<div id=\"youtubecontainer\"></div>")
       params =
         allowScriptAccess: "always"
         allowFullScreen: true
@@ -17,7 +16,7 @@ class Youtube
       atts =
         id: "ytplayer"
 
-      swfobject.embedSWF(movieUrl, "youtubecontainer", "#{ @sizer.startingWidth }", "#{ @sizer.startingHeight }", "8", null, null, params, atts)
+      swfobject.embedSWF(movieUrl, "youtubecontainer", @width, @height, "8", null, null, params, atts)
     else
       @player.cueVideoByUrl(movieUrl)
 

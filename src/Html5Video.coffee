@@ -1,12 +1,12 @@
 class Html5Video
 
-  constructor: (@presentz, @videoContainer) ->
+  constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video "play", "pause", "ended", @presentz
 
   changeVideo: (videoData, @wouldPlay) ->
     $(@videoContainer).empty()
-    availableWidth = $(@videoContainer).width()
-    videoHtml = "<video id='html5player' controls preload='none' src='#{ videoData.url }' width='#{availableWidth}'></video>"
+    #availableWidth = $(@videoContainer).width()
+    videoHtml = "<video id=\"html5player\" controls preload=\"none\" src=\"#{ videoData.url }\" width=\"#{@width}\" height=\"#{@height}\"></video>"
     $(@videoContainer).append(videoHtml)
 
     playerOptions =

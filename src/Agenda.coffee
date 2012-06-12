@@ -5,14 +5,14 @@ class Agenda
     totalDuration = 0
     totalDuration += Math.round(chapter.duration) for chapter in presentation.chapters
     widths = computeBarWidths(totalDuration, $("##{@agendaContainer}").width(), presentation.chapters)
-    agenda = ''
+    agenda = ""
     for chapterIndex in [0..widths.length - 1]
       for slideIndex in [0..widths[chapterIndex].length - 1]
         if presentation.chapters[chapterIndex].media.slides[slideIndex].title
           title = presentation.chapters[chapterIndex].media.slides[slideIndex].title
         else
           title = "Slide #{ slideIndex + 1 }"
-        agenda += "<div style='width: #{ widths[chapterIndex][slideIndex] }px' onclick='presentz.changeChapter(#{ chapterIndex }, #{ slideIndex }, true);'><div class='progress'></div><div class='info'>#{ title }</div></div>"
+        agenda += "<div style=\"width: #{ widths[chapterIndex][slideIndex] }px\" onclick=\"presentz.changeChapter(#{ chapterIndex }, #{ slideIndex }, true);\"><div class=\"progress\"></div><div class=\"info\">#{ title }</div></div>"
 
     $("##{@agendaContainer}").html(agenda)
     return
