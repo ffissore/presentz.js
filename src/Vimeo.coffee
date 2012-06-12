@@ -4,12 +4,14 @@ class Vimeo
     @video = new Video "play", "pause", "finish", @presentz
     @wouldPlay = false
     @currentTimeInSeconds = 0.0
+    @vimeoCallbackFunction = "vimeoCallback#{ parseInt(Math.random() * 1000000000) }"
+    window[@vimeoCallbackFunction] = @receiveVideoInfo
 
   changeVideo: (@videoData, @wouldPlay) ->
     ajaxCall =
       url: "http://vimeo.com/api/v2/video/#{ videoId(@videoData) }.json"
       dataType: "jsonp"
-      jsonpCallback: "presentz.videoPlugin.receiveVideoInfo"
+      jsonpCallback: @vimeoCallbackFunction
 
     $.ajax ajaxCall
     return
@@ -17,7 +19,7 @@ class Vimeo
   videoId = (videoData) ->
     videoData.url.substr(videoData.url.lastIndexOf("/") + 1)
 
-  receiveVideoInfo: (data) ->
+  receiveVideoInfo: (data) =>
     movieUrl = "http://player.vimeo.com/video/#{ videoId(@videoData) }?api=1&player_id=vimeoPlayer"
 
     if $(@videoContainer).children().length == 0
