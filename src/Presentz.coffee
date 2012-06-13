@@ -8,6 +8,7 @@ class Presentz
     @defaultVideoPlugin = new Html5Video(this, videoContainer, videoWxHParts[0], videoWxHParts[1])
     @defaultSlidePlugin = new ImgSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])
     @currentChapterIndex = -1
+    @currentSlideIndex = -1
     @listeners =
       slidechange: []
 
@@ -30,13 +31,13 @@ class Presentz
     @listeners[eventType].push callback
 
   changeChapter: (chapterIndex, slideIndex, play) ->
-    currentMedia = @presentation.chapters[chapterIndex].media
-    currentSlide = currentMedia.slides[slideIndex]
-    if chapterIndex != @currentChapterIndex or @videoPlugin.skipTo(currentSlide.time)
-      @changeSlide(currentSlide, chapterIndex, slideIndex)
-      if chapterIndex != @currentChapterIndex
-        @videoPlugin.changeVideo(currentMedia.video, play)
-        @videoPlugin.skipTo(currentSlide.time)
+    targetMedia = @presentation.chapters[chapterIndex].media
+    targetSlide = targetMedia.slides[slideIndex]
+    if chapterIndex isnt @currentChapterIndex or @videoPlugin.skipTo(targetSlide.time)
+      @changeSlide(targetSlide, chapterIndex, slideIndex)
+      if chapterIndex isnt @currentChapterIndex
+        @videoPlugin.changeVideo(targetMedia.video, play)
+        @videoPlugin.skipTo(targetSlide.time)
       @currentChapterIndex = chapterIndex
     return
 
@@ -55,12 +56,15 @@ class Presentz
     @slidePlugin = @findSlidePlugin(slide)
     @slidePlugin.changeSlide(slide)
 
+    previousSlideIndex = @currentSlideIndex
+    @currentSlideIndex = slideIndex
+    
     slides = @presentation.chapters[chapterIndex].media.slides
     slides = slides[(slideIndex + 1)..(slideIndex + 5)]
     @findSlidePlugin(slide).preload slides
 
     for listener in @listeners.slidechange
-      listener(slideIndex)
+      listener(@currentChapterIndex, previousSlideIndex, chapterIndex, slideIndex)
     return
 
   findVideoPlugin: () ->
