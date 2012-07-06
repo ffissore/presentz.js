@@ -3,9 +3,9 @@ class Presentz
   constructor: (videoContainer, videoWxH, slideContainer, slideWxH) ->
     videoWxHParts = videoWxH.split("x")
     slideWxHParts = slideWxH.split("x")
-    @videoPlugins = [new Vimeo(this, videoContainer, videoWxHParts[0], videoWxHParts[1]), new Youtube(this, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(this, videoContainer, videoWxHParts[0], videoWxHParts[1])]
+    @videoPlugins = [new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new Youtube(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])]
     @slidePlugins = [new SlideShare(slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])]
-    @defaultVideoPlugin = new Html5Video(this, videoContainer, videoWxHParts[0], videoWxHParts[1])
+    @defaultVideoPlugin = new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
     @defaultSlidePlugin = new ImgSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])
     @currentChapterIndex = -1
     @currentSlideIndex = -1
@@ -31,18 +31,18 @@ class Presentz
     @listeners[eventType].push callback
 
   changeChapter: (chapterIndex, slideIndex, play) ->
-    targetMedia = @presentation.chapters[chapterIndex].media
-    targetSlide = targetMedia.slides[slideIndex]
+    targetChapter = @presentation.chapters[chapterIndex]
+    targetSlide = targetChapter.slides[slideIndex]
     if chapterIndex isnt @currentChapterIndex or @videoPlugin.skipTo(targetSlide.time)
       @changeSlide(targetSlide, chapterIndex, slideIndex)
       if chapterIndex isnt @currentChapterIndex
-        @videoPlugin.changeVideo(targetMedia.video, play)
+        @videoPlugin.changeVideo(targetChapter.video, play)
         @videoPlugin.skipTo(targetSlide.time)
       @currentChapterIndex = chapterIndex
     return
 
   checkSlideChange: (currentTime) ->
-    slides = @presentation.chapters[@currentChapterIndex].media.slides
+    slides = @presentation.chapters[@currentChapterIndex].slides
     for slide in slides when slide.time <= currentTime
       candidateSlide = slide
 
@@ -59,7 +59,7 @@ class Presentz
     previousSlideIndex = @currentSlideIndex
     @currentSlideIndex = slideIndex
     
-    slides = @presentation.chapters[chapterIndex].media.slides
+    slides = @presentation.chapters[chapterIndex].slides
     slides = slides[(slideIndex + 1)..(slideIndex + 5)]
     @findSlidePlugin(slide).preload slides
 
@@ -81,9 +81,7 @@ class Presentz
     clearInterval(@interval)
     @intervalSet = true
     timeChecker = () =>
-      #this.videoPlugin.adjustSize()
-      #this.slidePlugin.adjustSize()
-      this.checkState()
+      @.checkState()
       return
     @interval = setInterval(timeChecker, 500)
     return

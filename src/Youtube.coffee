@@ -35,7 +35,7 @@ class Youtube
     videoData.url.substr(videoData.url.lastIndexOf("/") + 1)
 
   handle: (presentation) ->
-    presentation.chapters[0].media.video.url.toLowerCase().indexOf("http://youtu.be") != -1
+    presentation.chapters[0].video.url.toLowerCase().indexOf("http://youtu.be") != -1
 
   onYouTubePlayerReady: (id) ->
     youTube = presentz.videoPlugin
@@ -46,14 +46,6 @@ class Youtube
       if !presentz.intervalSet
         presentz.startTimeChecker()
       youTube.player.playVideo()
-    return
-
-  adjustSize: () ->
-    newSize = @sizer.optimalSize()
-    player = $("##{@id}")
-    if player.width() != newSize.width
-      player.width(newSize.width)
-      player.height(newSize.height)
     return
 
   currentTime: () ->

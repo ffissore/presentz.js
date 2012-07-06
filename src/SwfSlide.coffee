@@ -21,13 +21,6 @@ class SwfSlide
 
     return
 
-  adjustSize: () ->
-    newSize = @sizer.optimalSize()
-    currentSlide = $("#swfslide")[0]
-    if currentSlide and currentSlide.width != newSize.width
-      currentSlide.width = newSize.width
-      currentSlide.height = newSize.height
-
   preload: (slides) ->
     index = 0
     for slide in slides when !(slide.url in @preloadedSlides)
@@ -36,7 +29,6 @@ class SwfSlide
       atts =
         id: "swfpreloadslide#{index}"
         style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
-      swfobject.embedSWF(slide.url, "swfpreloadslidecontainer#{index}", "1", "1", "8", null, null, null, atts, () =>
-          this.preloadedSlides.push slide.url
-      )
+      swfobject.embedSWF slide.url, "swfpreloadslidecontainer#{index}", "1", "1", "8", null, null, null, atts, () =>
+        @.preloadedSlides.push slide.url
     return

@@ -32,7 +32,7 @@ class Vimeo
 
       iframe = $("#{@videoContainer} iframe")[0]
       onReady = (id) =>
-        this.onReady(id)
+        @.onReady(id)
         return
       $f(iframe).addEvent("ready", onReady)
     else
@@ -42,27 +42,27 @@ class Vimeo
     return
 
   handle: (presentation) ->
-    presentation.chapters[0].media.video.url.toLowerCase().indexOf("http://vimeo.com") != -1
+    presentation.chapters[0].video.url.toLowerCase().indexOf("http://vimeo.com") != -1
 
   onReady: (id) ->
     video = $f(id)
     video.addEvent("play", () =>
-      this.video.handleEvent("play")
+      @.video.handleEvent("play")
       return
     )
     video.addEvent("pause", () =>
-      this.video.handleEvent("pause")
+      @.video.handleEvent("pause")
       return
     )
     video.addEvent("finish", () =>
-      this.video.handleEvent("finish")
+      @.video.handleEvent("finish")
       return
     )
     video.addEvent("playProgress", (data) =>
-      this.currentTimeInSeconds = data.seconds
+      @.currentTimeInSeconds = data.seconds
     )
     video.addEvent("loadProgress", (data) =>
-      this.loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
+      @.loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
     )
 
     if @wouldPlay
@@ -82,11 +82,3 @@ class Vimeo
       player.api("seekTo", time)
       return true
     return false
-
-  adjustSize: () ->
-    newSize = @sizer.optimalSize()
-    iframe = $("#{@videoContainer} iframe")
-    if iframe.width() != newSize.width
-      iframe.width(newSize.width)
-      iframe.height(newSize.height)
-    return

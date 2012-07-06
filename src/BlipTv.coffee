@@ -22,11 +22,7 @@ class BlipTv
     return
 
   handle: (presentation) ->
-    presentation.chapters[0].media.video.url.toLowerCase().indexOf("http://blip.tv") != -1
-
-  adjustSize: () ->
-    @video.adjustSize()
-    return
+    presentation.chapters[0].video.url.toLowerCase().indexOf("http://blip.tv") != -1
 
   currentTime: () ->
     return @video.currentTime()

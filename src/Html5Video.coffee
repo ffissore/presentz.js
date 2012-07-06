@@ -13,7 +13,7 @@ class Html5Video
       enableAutosize: false
       timerRate: 500
       success: (me) =>
-        this.onPlayerLoaded me
+        @.onPlayerLoaded me
         return
 
     new MediaElementPlayer("#html5player", playerOptions)
@@ -21,7 +21,7 @@ class Html5Video
 
   onPlayerLoaded: (@player) ->
     eventHandler = (event) =>
-      this.video.handleEvent event.type
+      @.video.handleEvent event.type
       return
     player.addEventListener("play", eventHandler, false)
     player.addEventListener("pause", eventHandler, false)
@@ -33,14 +33,6 @@ class Html5Video
       if !@presentz.intervalSet
         @presentz.startTimeChecker()
       @player.play()
-
-  adjustSize: () ->
-    if @player.height != $("#html5player").height()
-      newHeight = $("#html5player").height()
-      $(@videoContainer).height(newHeight)
-      $(".mejs-container").height(newHeight)
-      @player.height = newHeight
-    return
 
   currentTime: () ->
     return @player.currentTime
