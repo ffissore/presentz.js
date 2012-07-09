@@ -3,7 +3,7 @@ class Presentz
   constructor: (videoContainer, videoWxH, slideContainer, slideWxH) ->
     videoWxHParts = videoWxH.split("x")
     slideWxHParts = slideWxH.split("x")
-    @videoPlugins = [new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new Youtube(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])]
+    @videoPlugins = [new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new YoutubeIFrame(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])]
     @slidePlugins = [new SlideShare(slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])]
     @defaultVideoPlugin = new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
     @defaultSlidePlugin = new ImgSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])
@@ -81,7 +81,7 @@ class Presentz
     clearInterval(@interval)
     @intervalSet = true
     timeChecker = () =>
-      @.checkState()
+      @checkState()
       return
     @interval = setInterval(timeChecker, 500)
     return

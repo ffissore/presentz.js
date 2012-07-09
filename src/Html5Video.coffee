@@ -13,7 +13,7 @@ class Html5Video
       enableAutosize: false
       timerRate: 500
       success: (me) =>
-        @.onPlayerLoaded me
+        @onPlayerLoaded me
         return
 
     new MediaElementPlayer("#html5player", playerOptions)
@@ -21,7 +21,7 @@ class Html5Video
 
   onPlayerLoaded: (@player) ->
     eventHandler = (event) =>
-      @.video.handleEvent event.type
+      @video.handleEvent event.type
       return
     player.addEventListener("play", eventHandler, false)
     player.addEventListener("pause", eventHandler, false)

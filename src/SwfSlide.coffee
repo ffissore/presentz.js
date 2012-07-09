@@ -30,5 +30,5 @@ class SwfSlide
         id: "swfpreloadslide#{index}"
         style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
       swfobject.embedSWF slide.url, "swfpreloadslidecontainer#{index}", "1", "1", "8", null, null, null, atts, () =>
-        @.preloadedSlides.push slide.url
+        @preloadedSlides.push slide.url
     return
