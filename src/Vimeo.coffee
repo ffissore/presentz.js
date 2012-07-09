@@ -4,39 +4,36 @@ class Vimeo
     @video = new Video "play", "pause", "finish", @presentz
     @wouldPlay = false
     @currentTimeInSeconds = 0.0
-    @vimeoCallbackFunction = "vimeoCallback#{ parseInt(Math.random() * 1000000000) }"
-    window[@vimeoCallbackFunction] = @receiveVideoInfo
+    @vimeoCallbackFunctionName = @presentz.newElementName("callback")
+    window[@vimeoCallbackFunctionName] = @receiveVideoInfo
+    @elementId = @presentz.newElementName()
 
   changeVideo: (@videoData, @wouldPlay) ->
     ajaxCall =
-      url: "http://vimeo.com/api/v2/video/#{ videoId(@videoData) }.json"
+      url: "http://vimeo.com/api/v2/video/#{videoId(@videoData)}.json"
       dataType: "jsonp"
-      jsonpCallback: @vimeoCallbackFunction
+      jsonpCallback: @vimeoCallbackFunctionName
 
     $.ajax ajaxCall
     return
 
-  videoId = (videoData) ->
+  videoId= (videoData) ->
     videoData.url.substr(videoData.url.lastIndexOf("/") + 1)
 
   receiveVideoInfo: (data) =>
-    movieUrl = "http://player.vimeo.com/video/#{ videoId(@videoData) }?api=1&player_id=vimeoPlayer"
+    movieUrl = "http://player.vimeo.com/video/#{videoId(@videoData)}?api=1&player_id=#{@elementId}"
 
     if $(@videoContainer).children().length == 0
-      #width = $(@videoContainer).width()
-      #height = (width / data[0].width) * data[0].height
-      #@sizer = new Sizer(width, height, @videoContainer)
-
-      videoHtml = "<iframe id=\"vimeoPlayer\" src=\"#{movieUrl}\" width=\"#{@width}\" height=\"#{@height}\" frameborder=\"0\"></iframe>"
+      videoHtml = "<iframe id=\"#{@elementId}\" src=\"#{movieUrl}\" width=\"#{@width}\" height=\"#{@height}\" frameborder=\"0\"></iframe>"
       $(@videoContainer).append(videoHtml)
 
-      iframe = $("#{@videoContainer} iframe")[0]
-      onReady = (id) =>
+      iframe = $("##{@elementId}")[0]
+      onReady= (id) =>
         @onReady(id)
         return
       $f(iframe).addEvent("ready", onReady)
     else
-      iframe = $("#{@videoContainer} iframe")[0]
+      iframe = $("##{@elementId}")[0]
       iframe.src = movieUrl
 
     return
@@ -46,24 +43,25 @@ class Vimeo
 
   onReady: (id) ->
     video = $f(id)
-    video.addEvent("play", () =>
+    video.addEvent "play", () =>
       @video.handleEvent("play")
       return
-    )
-    video.addEvent("pause", () =>
+
+    video.addEvent "pause", () =>
       @video.handleEvent("pause")
       return
-    )
-    video.addEvent("finish", () =>
+
+    video.addEvent "finish", () =>
       @video.handleEvent("finish")
       return
-    )
-    video.addEvent("playProgress", (data) =>
+
+    video.addEvent "playProgress", (data) =>
       @currentTimeInSeconds = data.seconds
-    )
-    video.addEvent("loadProgress", (data) =>
+      return
+
+    video.addEvent "loadProgress", (data) =>
       @loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
-    )
+      return
 
     if @wouldPlay
       @wouldPlay = false

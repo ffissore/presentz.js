@@ -2,10 +2,11 @@ class Html5Video
 
   constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video "play", "pause", "ended", @presentz
+    @elementId = @presentz.newElementName()
 
   changeVideo: (videoData, @wouldPlay) ->
     $(@videoContainer).empty()
-    videoHtml = "<video id=\"html5player\" controls preload=\"none\" src=\"#{ videoData.url }\" width=\"#{@width}\" height=\"#{@height}\"></video>"
+    videoHtml = "<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"#{@width}\" height=\"#{@height}\"></video>"
     $(@videoContainer).append(videoHtml)
 
     playerOptions =
@@ -15,11 +16,11 @@ class Html5Video
         @onPlayerLoaded me
         return
 
-    new MediaElementPlayer("#html5player", playerOptions)
+    new MediaElementPlayer("##{@elementId}", playerOptions)
     return
 
   onPlayerLoaded: (@player) ->
-    eventHandler = (event) =>
+    eventHandler= (event) =>
       @video.handleEvent event.type
       return
     player.addEventListener("play", eventHandler, false)

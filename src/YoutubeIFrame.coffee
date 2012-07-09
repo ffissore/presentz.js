@@ -2,7 +2,7 @@ class YoutubeIFrame
 
   constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video 1, 2, 0, @presentz
-    @elementId = "ytplayer#{Math.round(Math.random() * 1000000)}"
+    @elementId = @presentz.newElementName()
 
   changeVideo: (videoData, @wouldPlay) ->
     if $(@videoContainer).children().length == 0
@@ -18,7 +18,6 @@ class YoutubeIFrame
         events:
           onReady: @onReady
           onStateChange: @handleEvent
-        wmode: "opaque"
     else
       @player.cueVideoById(videoId(videoData))
     return

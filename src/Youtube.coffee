@@ -9,7 +9,7 @@ class Youtube
     window.onYouTubePlayerReady = @onYouTubePlayerReady
 
   changeVideo: (videoData, @wouldPlay) ->
-    movieUrl = "http://www.youtube.com/e/#{ videoId(videoData) }?enablejsapi=1&autohide=1&fs=1&playerapiid=ytplayer"
+    movieUrl = "http://www.youtube.com/e/#{videoId(videoData)}?enablejsapi=1&autohide=1&fs=1&playerapiid=ytplayer"
 
     if $(@videoContainer).children().length == 0
       $(@videoContainer).append("<div id=\"youtubecontainer\"></div>")
@@ -31,7 +31,7 @@ class Youtube
 
     return
 
-  videoId = (videoData) ->
+  videoId= (videoData) ->
     videoData.url.substr(videoData.url.lastIndexOf("/") + 1)
 
   handle: (presentation) ->

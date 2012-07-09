@@ -11,6 +11,7 @@ class Presentz
     @currentSlideIndex = -1
     @listeners =
       slidechange: []
+      videochange: []
 
   registerVideoPlugin: (plugin) ->
     @videoPlugins.push(plugin)
@@ -38,6 +39,8 @@ class Presentz
       if chapterIndex isnt @currentChapterIndex
         @videoPlugin.changeVideo(targetChapter.video, play)
         @videoPlugin.skipTo(targetSlide.time)
+        for listener in @listeners.videochange
+          listener(@currentChapterIndex, @currentSlideIndex, chapterIndex, slideIndex)
       @currentChapterIndex = chapterIndex
     return
 
@@ -80,7 +83,7 @@ class Presentz
   startTimeChecker: () ->
     clearInterval(@interval)
     @intervalSet = true
-    timeChecker = () =>
+    timeChecker= () =>
       @checkState()
       return
     @interval = setInterval(timeChecker, 500)
@@ -94,6 +97,12 @@ class Presentz
   checkState: () ->
     @checkSlideChange(@videoPlugin.currentTime())
     return
+
+  newElementName: (prefix) ->
+    if prefix?
+      "#{prefix}_#{Math.round(Math.random() * 1000000)}"
+    else
+      "element_#{Math.round(Math.random() * 1000000)}"
 
 window.Presentz = Presentz
 
