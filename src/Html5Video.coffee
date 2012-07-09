@@ -5,7 +5,6 @@ class Html5Video
 
   changeVideo: (videoData, @wouldPlay) ->
     $(@videoContainer).empty()
-    #availableWidth = $(@videoContainer).width()
     videoHtml = "<video id=\"html5player\" controls preload=\"none\" src=\"#{ videoData.url }\" width=\"#{@width}\" height=\"#{@height}\"></video>"
     $(@videoContainer).append(videoHtml)
 

@@ -12,6 +12,9 @@ class YoutubeIFrame
         height: 200
         width: 300
         videoId: videoId(videoData)
+        playerVars:
+          rel: 0
+          wmode: "opaque"
         events:
           onReady: @onReady
           onStateChange: @handleEvent
