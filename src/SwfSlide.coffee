@@ -1,22 +1,26 @@
 class SwfSlide
 
-  constructor: (@slideContainer, @width, @height) ->
+  constructor: (@presentz, @slideContainer, @width, @height) ->
     @preloadedSlides = []
+    @elementId = @presentz.newElementName()
+    @swfId = @presentz.newElementName()
+    @preloadSlideContainerId = @presentz.newElementName()
+    @preloadSlideId = @presentz.newElementName()
 
   handle: (slide) ->
     slide.url.toLowerCase().indexOf(".swf") != -1
 
   changeSlide: (slide) ->
-    if $("#{@slideContainer} object").length == 0
+    if $("#{@slideContainer} object").length is 0
       $(@slideContainer).empty()
-      $(@slideContainer).append("<div id=\"swfslidecontainer\"></div>")
+      $(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
       params =
         wmode: "opaque"
       atts =
-        id: "swfslide"
-      swfobject.embedSWF(slide.url, "swfslidecontainer", @width, @height, "8", null, null, params, atts)
+        id: @swfId
+      swfobject.embedSWF(slide.url, @elementId, @width, @height, "8", null, null, params, atts)
     else
-      swfslide = $("#swfslide")[0]
+      swfslide = $("##{@swfId}")[0]
       swfslide.data = slide.url
 
     return
@@ -24,11 +28,11 @@ class SwfSlide
   preload: (slides) ->
     index = 0
     for slide in slides when !(slide.url in @preloadedSlides)
-      $("#swfpreloadslide#{index}").remove()
-      $(@slideContainer).append("<div id=\"swfpreloadslidecontainer#{index}\"></div>")
+      $("##{@preloadSlideId}#{index}").remove()
+      $(@slideContainer).append("<div id=\"#{@preloadSlideContainerId}#{index}\"></div>")
       atts =
-        id: "swfpreloadslide#{index}"
+        id: "#{@preloadSlideId}#{index}"
         style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
-      swfobject.embedSWF slide.url, "swfpreloadslidecontainer#{index}", "1", "1", "8", null, null, null, atts, () =>
+      swfobject.embedSWF slide.url, "#{@preloadSlideContainerId}#{index}", "1", "1", "8", null, null, null, atts, () =>
         @preloadedSlides.push slide.url
     return

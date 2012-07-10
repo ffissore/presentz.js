@@ -4,9 +4,9 @@ class Presentz
     videoWxHParts = videoWxH.split("x")
     slideWxHParts = slideWxH.split("x")
     @videoPlugins = [new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new YoutubeIFrame(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])]
-    @slidePlugins = [new SlideShare(slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])]
+    @slidePlugins = [new SlideShare(@, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1]),  new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])]
     @defaultVideoPlugin = new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
-    @defaultSlidePlugin = new ImgSlide(slideContainer, slideWxHParts[0], slideWxHParts[1])
+    @defaultSlidePlugin = new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
     @currentChapterIndex = -1
     @currentSlideIndex = -1
     @listeners =

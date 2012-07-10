@@ -3,12 +3,12 @@ class Video
   constructor: (@playState, @pauseState, @finishState, @presentz) ->
 
   handleEvent: (event) ->
-    if event == @playState
+    if event is @playState
       @presentz.startTimeChecker()
-    else if event == @pauseState or event == @finishState
+    else if event is @pauseState or event is @finishState
       @presentz.stopTimeChecker()
 
-    if event == @finishState and @presentz.currentChapterIndex < (@presentz.howManyChapters - 1)
+    if event is @finishState and @presentz.currentChapterIndex < (@presentz.howManyChapters - 1)
       @presentz.changeChapter(@presentz.currentChapterIndex + 1, 0, true)
 
     return

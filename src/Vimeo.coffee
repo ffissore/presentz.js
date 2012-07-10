@@ -23,7 +23,7 @@ class Vimeo
   receiveVideoInfo: (data) =>
     movieUrl = "http://player.vimeo.com/video/#{videoId(@videoData)}?api=1&player_id=#{@elementId}"
 
-    if $(@videoContainer).children().length == 0
+    if $(@videoContainer).children().length is 0
       videoHtml = "<iframe id=\"#{@elementId}\" src=\"#{movieUrl}\" width=\"#{@width}\" height=\"#{@height}\" frameborder=\"0\"></iframe>"
       $(@videoContainer).append(videoHtml)
 

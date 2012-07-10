@@ -1,10 +1,10 @@
 class ImgSlide
 
-  constructor: (@slideContainer) ->
+  constructor: (@presentz, @slideContainer) ->
     @preloadedSlides = []
 
   changeSlide: (slide) ->
-    if $("#{@slideContainer} img").length == 0
+    if $("#{@slideContainer} img").length is 0
       slideContainer = $(@slideContainer)
       slideContainer.empty()
       slideContainer.append("<table height=\"100%\"><tr><td valign=\"middle\"><img width=\"100%\" height=\"100%\" src=\"#{slide.url}\"></td></tr></table>")
