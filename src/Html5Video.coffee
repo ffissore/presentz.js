@@ -6,11 +6,10 @@ class Html5Video
 
   changeVideo: (videoData, @wouldPlay) ->
     $(@videoContainer).empty()
-    videoHtml = "<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"#{@width}\" height=\"#{@height}\"></video>"
+    videoHtml = "<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"100%\" height=\"100%\"></video>"
     $(@videoContainer).append(videoHtml)
 
     playerOptions =
-      enableAutosize: false
       timerRate: 500
       success: (me) =>
         @onPlayerLoaded me
