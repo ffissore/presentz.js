@@ -34,11 +34,11 @@ class Presentz
   changeChapter: (chapterIndex, slideIndex, play) ->
     targetChapter = @presentation.chapters[chapterIndex]
     targetSlide = targetChapter.slides[slideIndex]
-    if chapterIndex isnt @currentChapterIndex or @videoPlugin.skipTo(targetSlide.time)
+    if chapterIndex isnt @currentChapterIndex or @videoPlugin.skipTo(targetSlide.time, play)
       @changeSlide(targetSlide, chapterIndex, slideIndex)
       if chapterIndex isnt @currentChapterIndex
         @videoPlugin.changeVideo(targetChapter.video, play)
-        @videoPlugin.skipTo(targetSlide.time)
+        @videoPlugin.skipTo(targetSlide.time, play)
         for listener in @listeners.videochange
           listener(@currentChapterIndex, @currentSlideIndex, chapterIndex, slideIndex)
       @currentChapterIndex = chapterIndex

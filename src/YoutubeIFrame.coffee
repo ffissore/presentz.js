@@ -33,18 +33,20 @@ class YoutubeIFrame
 
   handleEvent: (event) =>
     @video.handleEvent(event.data)
+    return
 
   handle: (presentation) ->
     presentation.chapters[0].video.url.toLowerCase().indexOf("http://youtu.be") != -1
 
   currentTime: () ->
-    return @player.getCurrentTime()
+    @player.getCurrentTime()
 
-  skipTo: (time) ->
+  skipTo: (time, wouldPlay = false) ->
     if @player && @player.seekTo
       @player.seekTo(time, true)
-      return true
-    return false
+      @player.playVideo() if wouldPlay
+      true
+    false
 
   play: () ->
     @player.playVideo()

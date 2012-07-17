@@ -49,10 +49,11 @@ class Youtube
     return
 
   currentTime: () ->
-    return @player.getCurrentTime()
+    @player.getCurrentTime()
 
-  skipTo: (time) ->
+  skipTo: (time, wouldPlay = false) ->
     if @player
       @player.seekTo(time, true)
-      return true
-    return false
+      @player.playVideo() if wouldPlay
+      true
+    false

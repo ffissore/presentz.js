@@ -74,11 +74,12 @@ class Vimeo
   currentTime: () ->
     @currentTimeInSeconds
 
-  skipTo: (time) ->
+  skipTo: (time, wouldPlay = false) ->
     if time <= @loadedTimeInSeconds
       @player.api("seekTo", time)
-      return true
-    return false
+      @player.api("play") if wouldPlay
+      true
+    false
 
   play: () ->
     @player.api("play")

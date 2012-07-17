@@ -27,8 +27,8 @@ class BlipTv
   currentTime: () ->
     @video.currentTime()
 
-  skipTo: (time) ->
-    @video.skipTo(time)
+  skipTo: (time, wouldPlay = false) ->
+    @video.skipTo(time, wouldPlay)
 
   play: () ->
     @video.play()

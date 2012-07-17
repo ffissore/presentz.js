@@ -33,14 +33,17 @@ class Html5Video
         @presentz.startTimeChecker()
       @player.play()
 
-  currentTime: () ->
-    return @player.currentTime
+    return
 
-  skipTo: (time) ->
+  currentTime: () ->
+    @player.currentTime
+
+  skipTo: (time, wouldPlay = false) ->
     if @player and @player.currentTime
       @player.setCurrentTime(time)
-      return true
-    return false
+      @player.play() if wouldPlay
+      true
+    false
 
   play: () ->
     @player.play()
