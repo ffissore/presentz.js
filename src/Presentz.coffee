@@ -104,5 +104,11 @@ class Presentz
     else
       "element_#{Math.round(Math.random() * 1000000)}"
 
+  pause: () ->
+    @videoPlugin.pause()
+
+  play: () ->
+    @videoPlugin.play()
+
 window.Presentz = Presentz
 

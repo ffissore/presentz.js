@@ -45,3 +45,9 @@ class YoutubeIFrame
       @player.seekTo(time, true)
       return true
     return false
+
+  play: () ->
+    @player.playVideo()
+
+  pause: () ->
+    @player.pauseVideo()

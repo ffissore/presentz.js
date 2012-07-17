@@ -25,7 +25,13 @@ class BlipTv
     presentation.chapters[0].video.url.toLowerCase().indexOf("http://blip.tv") != -1
 
   currentTime: () ->
-    return @video.currentTime()
+    @video.currentTime()
 
   skipTo: (time) ->
-    return @video.skipTo(time)
+    @video.skipTo(time)
+
+  play: () ->
+    @video.play()
+
+  pause: () ->
+    @video.pause()

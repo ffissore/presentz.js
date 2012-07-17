@@ -42,24 +42,24 @@ class Vimeo
     presentation.chapters[0].video.url.toLowerCase().indexOf("http://vimeo.com") != -1
 
   onReady: (id) ->
-    video = $f(id)
-    video.addEvent "play", () =>
+    @player = $f(id)
+    @player.addEvent "play", () =>
       @video.handleEvent("play")
       return
 
-    video.addEvent "pause", () =>
+    @player.addEvent "pause", () =>
       @video.handleEvent("pause")
       return
 
-    video.addEvent "finish", () =>
+    @player.addEvent "finish", () =>
       @video.handleEvent("finish")
       return
 
-    video.addEvent "playProgress", (data) =>
+    @player.addEvent "playProgress", (data) =>
       @currentTimeInSeconds = data.seconds
       return
 
-    video.addEvent "loadProgress", (data) =>
+    @player.addEvent "loadProgress", (data) =>
       @loadedTimeInSeconds = parseInt(parseFloat(data.duration) * parseFloat(data.percent))
       return
 
@@ -67,7 +67,7 @@ class Vimeo
       @wouldPlay = false
       if !@presentz.intervalSet
         @presentz.startTimeChecker()
-      video.api("play")
+      @player.api("play")
 
     return
 
@@ -76,7 +76,12 @@ class Vimeo
 
   skipTo: (time) ->
     if time <= @loadedTimeInSeconds
-      player = $f($("#{@videoContainer} iframe")[0])
-      player.api("seekTo", time)
+      @player.api("seekTo", time)
       return true
     return false
+
+  play: () ->
+    @player.api("play")
+
+  pause: () ->
+    @player.api("pause")

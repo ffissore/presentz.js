@@ -41,3 +41,9 @@ class Html5Video
       @player.setCurrentTime(time)
       return true
     return false
+
+  play: () ->
+    @player.play()
+
+  pause: () ->
+    @player.pause()
