@@ -4,7 +4,7 @@ class Presentz
     videoWxHParts = videoWxH.split("x")
     slideWxHParts = slideWxH.split("x")
     @videoPlugins = [new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new YoutubeIFrame(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])]
-    @slidePlugins = [new SlideShare(@, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1]),  new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])]
+    @slidePlugins = [new SlideShare(@, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])]
     @defaultVideoPlugin = new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
     @defaultSlidePlugin = new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
     @currentChapterIndex = -1
@@ -61,7 +61,7 @@ class Presentz
 
     previousSlideIndex = @currentSlideIndex
     @currentSlideIndex = slideIndex
-    
+
     slides = @presentation.chapters[chapterIndex].slides
     slides = slides[(slideIndex + 1)..(slideIndex + 5)]
     @findSlidePlugin(slide).preload slides
@@ -109,6 +109,24 @@ class Presentz
 
   play: () ->
     @videoPlugin.play()
+
+  next: () ->
+    if @presentation.chapters[@currentChapterIndex].slides.length > @currentSlideIndex + 1
+      @changeChapter @currentChapterIndex, @currentSlideIndex + 1
+      return true
+    if @presentation.chapters.length > @currentChapterIndex + 1
+      @changeChapter @currentChapterIndex + 1, 0
+      return true
+    return false
+
+  previous: () ->
+    if @currentSlideIndex - 1 >= 0
+      @changeChapter @currentChapterIndex, @currentSlideIndex - 1
+      return true
+    if @currentChapterIndex - 1 >= 0
+      @changeChapter @currentChapterIndex - 1, @presentation.chapters[@currentChapterIndex - 1].slides.length - 1
+      return true
+    return false
 
 window.Presentz = Presentz
 
