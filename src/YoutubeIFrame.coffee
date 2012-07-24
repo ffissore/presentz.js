@@ -53,3 +53,6 @@ class YoutubeIFrame
 
   pause: () ->
     @player.pauseVideo()
+
+  isPaused: () ->
+    @video.isPaused()

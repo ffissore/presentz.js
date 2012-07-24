@@ -86,3 +86,6 @@ class Vimeo
 
   pause: () ->
     @player.api("pause")
+
+  isPaused: () ->
+    @video.isPaused()

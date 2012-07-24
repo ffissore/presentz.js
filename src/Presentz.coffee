@@ -106,6 +106,9 @@ class Presentz
 
   pause: () ->
     @videoPlugin.pause()
+    
+  isPaused: () ->
+    @videoPlugin.isPaused()
 
   play: () ->
     @videoPlugin.play()
