@@ -9,8 +9,8 @@ class YoutubeIFrame
       $(@videoContainer).append("<div id=\"#{@elementId}\"></div>")
 
       @player = new YT.Player @elementId,
-        height: 200
-        width: 300
+        height: @height
+        width: @width
         videoId: videoId(videoData)
         playerVars:
           rel: 0
