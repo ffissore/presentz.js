@@ -22,6 +22,9 @@ class Presentz
     return
 
   init: (@presentation) ->
+    @currentChapterIndex = -1
+    @currentSlideIndex = -1
+
     @howManyChapters = @presentation.chapters.length
 
     @videoPlugin = @findVideoPlugin()

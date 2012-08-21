@@ -42,7 +42,7 @@ class YoutubeIFrame
     @player.getCurrentTime()
 
   skipTo: (time, wouldPlay = false) ->
-    if @player && @player.seekTo
+    if time > 0 and @player and @player.seekTo
       @player.seekTo(time, true)
       @player.playVideo() if wouldPlay
       true
