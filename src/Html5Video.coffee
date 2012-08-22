@@ -5,9 +5,9 @@ class Html5Video
     @elementId = @presentz.newElementName()
 
   changeVideo: (videoData, @wouldPlay) ->
-    $(@videoContainer).empty()
+    jQuery(@videoContainer).empty()
     videoHtml = "<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"100%\" height=\"100%\"></video>"
-    $(@videoContainer).append(videoHtml)
+    jQuery(@videoContainer).append(videoHtml)
 
     playerOptions =
       timerRate: 500

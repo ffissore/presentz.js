@@ -10,7 +10,7 @@ class BlipTv
       data: "skin=json"
       jsonpCallback: "presentz.videoPlugin.receiveVideoInfo"
 
-    $.ajax ajaxCall
+    jQuery.ajax ajaxCall
     return
 
   receiveVideoInfo: (data) ->

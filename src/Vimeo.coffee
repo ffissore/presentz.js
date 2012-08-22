@@ -14,7 +14,7 @@ class Vimeo
       dataType: "jsonp"
       jsonpCallback: @vimeoCallbackFunctionName
 
-    $.ajax ajaxCall
+    jQuery.ajax ajaxCall
     return
 
   videoId= (videoData) ->
@@ -23,17 +23,17 @@ class Vimeo
   receiveVideoInfo: (data) =>
     movieUrl = "http://player.vimeo.com/video/#{videoId(@videoData)}?api=1&player_id=#{@elementId}"
 
-    if $(@videoContainer).children().length is 0
+    if jQuery(@videoContainer).children().length is 0
       videoHtml = "<iframe id=\"#{@elementId}\" src=\"#{movieUrl}\" width=\"#{@width}\" height=\"#{@height}\" frameborder=\"0\"></iframe>"
-      $(@videoContainer).append(videoHtml)
+      jQuery(@videoContainer).append(videoHtml)
 
-      iframe = $("##{@elementId}")[0]
+      iframe = jQuery("##{@elementId}")[0]
       onReady= (id) =>
         @onReady(id)
         return
       $f(iframe).addEvent("ready", onReady)
     else
-      iframe = $("##{@elementId}")[0]
+      iframe = jQuery("##{@elementId}")[0]
       iframe.src = movieUrl
 
     return

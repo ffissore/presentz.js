@@ -11,8 +11,8 @@ class Youtube
   changeVideo: (videoData, @wouldPlay) ->
     movieUrl = "http://www.youtube.com/e/#{videoId(videoData)}?enablejsapi=1&autohide=1&fs=1&playerapiid=ytplayer"
 
-    if $(@videoContainer).children().length is 0
-      $(@videoContainer).append("<div id=\"youtubecontainer\"></div>")
+    if jQuery(@videoContainer).children().length is 0
+      jQuery(@videoContainer).append("<div id=\"youtubecontainer\"></div>")
       params =
         allowScriptAccess: "always"
         allowFullScreen: true
@@ -40,7 +40,7 @@ class Youtube
   onYouTubePlayerReady: (id) ->
     youTube = presentz.videoPlugin
     youTube.id = id
-    youTube.player = $("#" + id)[0]
+    youTube.player = jQuery("#" + id)[0]
     youTube.player.addEventListener("onStateChange", "presentz.videoPlugin.video.handleEvent")
     if youTube.wouldPlay
       if !presentz.intervalSet

@@ -4,12 +4,12 @@ class ImgSlide
     @preloadedSlides = []
 
   changeSlide: (slide) ->
-    if $("#{@slideContainer} img").length is 0
-      slideContainer = $(@slideContainer)
+    if jQuery("#{@slideContainer} img").length is 0
+      slideContainer = jQuery(@slideContainer)
       slideContainer.empty()
       slideContainer.append("<table height=\"100%\"><tr><td valign=\"middle\"><img width=\"100%\" height=\"100%\" src=\"#{slide.url}\"></td></tr></table>")
     else
-      $("#{@slideContainer} img")[0].setAttribute("src", slide.url)
+      jQuery("#{@slideContainer} img")[0].setAttribute("src", slide.url)
     return
 
   preload: (slides) ->

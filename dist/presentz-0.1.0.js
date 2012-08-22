@@ -67,9 +67,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       var playerOptions, videoHtml,
         _this = this;
       this.wouldPlay = wouldPlay;
-      $(this.videoContainer).empty();
+      jQuery(this.videoContainer).empty();
       videoHtml = "<video id=\"" + this.elementId + "\" controls preload=\"none\" src=\"" + videoData.url + "\" width=\"100%\" height=\"100%\"></video>";
-      $(this.videoContainer).append(videoHtml);
+      jQuery(this.videoContainer).append(videoHtml);
       playerOptions = {
         timerRate: 500,
         success: function(me) {
@@ -159,7 +159,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         dataType: "jsonp",
         jsonpCallback: this.vimeoCallbackFunctionName
       };
-      $.ajax(ajaxCall);
+      jQuery.ajax(ajaxCall);
     };
 
     videoId = function(videoData) {
@@ -170,16 +170,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       var iframe, movieUrl, onReady, videoHtml,
         _this = this;
       movieUrl = "http://player.vimeo.com/video/" + (videoId(this.videoData)) + "?api=1&player_id=" + this.elementId;
-      if ($(this.videoContainer).children().length === 0) {
+      if (jQuery(this.videoContainer).children().length === 0) {
         videoHtml = "<iframe id=\"" + this.elementId + "\" src=\"" + movieUrl + "\" width=\"" + this.width + "\" height=\"" + this.height + "\" frameborder=\"0\"></iframe>";
-        $(this.videoContainer).append(videoHtml);
-        iframe = $("#" + this.elementId)[0];
+        jQuery(this.videoContainer).append(videoHtml);
+        iframe = jQuery("#" + this.elementId)[0];
         onReady = function(id) {
           _this.onReady(id);
         };
         $f(iframe).addEvent("ready", onReady);
       } else {
-        iframe = $("#" + this.elementId)[0];
+        iframe = jQuery("#" + this.elementId)[0];
         iframe.src = movieUrl;
       }
     };
@@ -267,8 +267,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     YoutubeIFrame.prototype.changeVideo = function(videoData, wouldPlay) {
       this.wouldPlay = wouldPlay;
-      if ($(this.videoContainer).children().length === 0) {
-        $(this.videoContainer).append("<div id=\"" + this.elementId + "\"></div>");
+      if (jQuery(this.videoContainer).children().length === 0) {
+        jQuery(this.videoContainer).append("<div id=\"" + this.elementId + "\"></div>");
         this.player = new YT.Player(this.elementId, {
           height: this.height,
           width: this.width,
@@ -361,7 +361,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         data: "skin=json",
         jsonpCallback: "presentz.videoPlugin.receiveVideoInfo"
       };
-      $.ajax(ajaxCall);
+      jQuery.ajax(ajaxCall);
     };
 
     BlipTv.prototype.receiveVideoInfo = function(data) {
@@ -411,12 +411,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     ImgSlide.prototype.changeSlide = function(slide) {
       var slideContainer;
-      if ($("" + this.slideContainer + " img").length === 0) {
-        slideContainer = $(this.slideContainer);
+      if (jQuery("" + this.slideContainer + " img").length === 0) {
+        slideContainer = jQuery(this.slideContainer);
         slideContainer.empty();
         slideContainer.append("<table height=\"100%\"><tr><td valign=\"middle\"><img width=\"100%\" height=\"100%\" src=\"" + slide.url + "\"></td></tr></table>");
       } else {
-        $("" + this.slideContainer + " img")[0].setAttribute("src", slide.url);
+        jQuery("" + this.slideContainer + " img")[0].setAttribute("src", slide.url);
       }
     };
 
@@ -459,8 +459,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     SlideShare.prototype.changeSlide = function(slide) {
       var atts, currentSlide, docId, flashvars, nextSlide, params, player;
-      if ($(this.slideContainer).children().length === 0) {
-        $(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
+      if (jQuery(this.slideContainer).children().length === 0) {
+        jQuery(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
         docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"));
         params = {
           allowScriptAccess: "always",
@@ -476,7 +476,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         swfobject.embedSWF("http://static.slidesharecdn.com/swf/ssplayer2.swf", this.elementId, this.width, this.height, "8", null, flashvars, params, atts);
         this.currentSlide = 0;
       } else {
-        player = $("#" + this.swfId)[0];
+        player = jQuery("#" + this.swfId)[0];
         nextSlide = slideNumber(slide);
         if (player.getCurrentSlide) {
           currentSlide = player.getCurrentSlide();
@@ -520,9 +520,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     SwfSlide.prototype.changeSlide = function(slide) {
       var atts, params, swfslide;
-      if ($("" + this.slideContainer + " object").length === 0) {
-        $(this.slideContainer).empty();
-        $(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
+      if (jQuery("" + this.slideContainer + " object").length === 0) {
+        jQuery(this.slideContainer).empty();
+        jQuery(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
         params = {
           wmode: "opaque"
         };
@@ -531,7 +531,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         };
         swfobject.embedSWF(slide.url, this.elementId, this.width, this.height, "8", null, null, params, atts);
       } else {
-        swfslide = $("#" + this.swfId)[0];
+        swfslide = jQuery("#" + this.swfId)[0];
         swfslide.data = slide.url;
       }
     };
@@ -545,8 +545,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         if (!(!(_ref = slide.url, __indexOf.call(this.preloadedSlides, _ref) >= 0))) {
           continue;
         }
-        $("#" + this.preloadSlideId + index).remove();
-        $(this.slideContainer).append("<div id=\"" + this.preloadSlideContainerId + index + "\"></div>");
+        jQuery("#" + this.preloadSlideId + index).remove();
+        jQuery(this.slideContainer).append("<div id=\"" + this.preloadSlideContainerId + index + "\"></div>");
         atts = {
           id: "" + this.preloadSlideId + index,
           style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
@@ -579,7 +579,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     SpeakerDeck.prototype.changeSlide = function(slide) {
       var nextSlide, receiveMessage, script, slideId,
         _this = this;
-      if ($(this.slideContainer).children().length === 0) {
+      if (jQuery(this.slideContainer).children().length === 0) {
         slideId = slide.url.substring(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#"));
         receiveMessage = function(event) {
           if (event.origin.indexOf("speakerdeck.com") === -1) {
@@ -587,7 +587,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           }
           _this.speakerdeckOrigin = event.origin;
           _this.speakerdeck = event.source;
-          $("" + _this.slideContainer + " iframe").attr("style", "");
+          jQuery("" + _this.slideContainer + " iframe").attr("style", "");
           if (event.data[0] === "change") {
             return _this.currentSlide = event.data[1].number;
           }
@@ -599,7 +599,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         script.src = "http://speakerdeck.com/assets/embed.js";
         script.setAttribute("class", "speakerdeck-embed");
         script.setAttribute("data-id", slideId);
-        $(this.slideContainer)[0].appendChild(script);
+        jQuery(this.slideContainer)[0].appendChild(script);
       } else {
         if (this.speakerdeck != null) {
           nextSlide = slideNumber(slide);

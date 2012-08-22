@@ -9,8 +9,8 @@ class SlideShare
     slide.url.toLowerCase().indexOf("slideshare.net") != -1
 
   changeSlide: (slide) ->
-    if $(@slideContainer).children().length is 0
-      $(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
+    if jQuery(@slideContainer).children().length is 0
+      jQuery(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
       docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
       params =
         allowScriptAccess: "always"
@@ -24,7 +24,7 @@ class SlideShare
       swfobject.embedSWF("http://static.slidesharecdn.com/swf/ssplayer2.swf", @elementId, @width, @height, "8", null, flashvars, params, atts)
       @currentSlide = 0
     else
-      player = $("##{@swfId}")[0]
+      player = jQuery("##{@swfId}")[0]
       nextSlide = slideNumber(slide)
       if player.getCurrentSlide
         currentSlide = player.getCurrentSlide()
