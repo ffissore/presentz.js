@@ -21,8 +21,8 @@ class BlipTv
     @skipTo = @video.skipTo
     return
 
-  handle: (presentation) ->
-    presentation.chapters[0].video.url.toLowerCase().indexOf("http://blip.tv") != -1
+  handle: (video) ->
+    video.url.toLowerCase().indexOf("http://blip.tv") != -1
 
   currentTime: () ->
     @video.currentTime()

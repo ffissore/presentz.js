@@ -8,6 +8,7 @@ class Presentz
     @defaultVideoPlugin = new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
     @defaultSlidePlugin = new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
     @currentChapterIndex = -1
+    @currentChapter = undefined
     @currentSlideIndex = -1
     @listeners =
       slidechange: []
@@ -23,12 +24,16 @@ class Presentz
 
   init: (@presentation) ->
     @currentChapterIndex = -1
+    @currentChapter = undefined
     @currentSlideIndex = -1
 
     @howManyChapters = @presentation.chapters.length
 
-    @videoPlugin = @findVideoPlugin()
-
+    for chapter in @presentation.chapters
+      chapter.video._plugin = @findVideoPlugin(chapter.video)
+      for slide in chapter.slides
+        slide._plugin = @findSlidePlugin(slide)
+      
     return
 
   on: (eventType, callback) ->
@@ -37,14 +42,15 @@ class Presentz
   changeChapter: (chapterIndex, slideIndex, play) ->
     targetChapter = @presentation.chapters[chapterIndex]
     targetSlide = targetChapter.slides[slideIndex]
-    if chapterIndex isnt @currentChapterIndex or @videoPlugin.skipTo(targetSlide.time, play)
+    if chapterIndex isnt @currentChapterIndex or (@currentChapter? and @currentChapter.video._plugin.skipTo(targetSlide.time, play))
       @changeSlide(targetSlide, chapterIndex, slideIndex)
       if chapterIndex isnt @currentChapterIndex
-        @videoPlugin.changeVideo(targetChapter.video, play)
-        @videoPlugin.skipTo(targetSlide.time, play)
+        targetChapter.video._plugin.changeVideo(targetChapter.video, play)
+        targetChapter.video._plugin.skipTo(targetSlide.time, play)
         for listener in @listeners.videochange
           listener(@currentChapterIndex, @currentSlideIndex, chapterIndex, slideIndex)
       @currentChapterIndex = chapterIndex
+      @currentChapter = targetChapter
     return
 
   checkSlideChange: (currentTime) ->
@@ -59,22 +65,21 @@ class Presentz
 
   changeSlide: (slide, chapterIndex, slideIndex) ->
     @currentSlide = slide
-    @slidePlugin = @findSlidePlugin(slide)
-    @slidePlugin.changeSlide(slide)
+    slide._plugin.changeSlide(slide)
 
     previousSlideIndex = @currentSlideIndex
     @currentSlideIndex = slideIndex
 
-    slides = @presentation.chapters[chapterIndex].slides
-    slides = slides[(slideIndex + 1)..(slideIndex + 5)]
-    @findSlidePlugin(slide).preload slides
+    next4Slides = @presentation.chapters[chapterIndex].slides[(slideIndex + 1)..(slideIndex + 5)]
+    for nextSlide in next4Slides
+      nextSlide._plugin.preload nextSlide if nextSlide._plugin.preload?
 
     for listener in @listeners.slidechange
       listener(@currentChapterIndex, previousSlideIndex, chapterIndex, slideIndex)
     return
 
-  findVideoPlugin: () ->
-    plugins = (plugin for plugin in @videoPlugins when plugin.handle(@presentation))
+  findVideoPlugin: (video) ->
+    plugins = (plugin for plugin in @videoPlugins when plugin.handle(video))
     return plugins[0] if plugins.length > 0
     return @defaultVideoPlugin
 
@@ -98,7 +103,7 @@ class Presentz
     return
 
   checkState: () ->
-    @checkSlideChange(@videoPlugin.currentTime())
+    @checkSlideChange(@currentChapter.video._plugin.currentTime()) if @currentChapter?
     return
 
   newElementName: (prefix) ->
@@ -108,29 +113,29 @@ class Presentz
       "element_#{Math.round(Math.random() * 1000000)}"
 
   pause: () ->
-    @videoPlugin.pause()
+    @currentChapter.video._plugin.pause() if @currentChapter?
     
   isPaused: () ->
-    @videoPlugin.isPaused()
+    @currentChapter.video._plugin.isPaused() if @currentChapter?
 
   play: () ->
-    @videoPlugin.play()
+    @currentChapter.video._plugin.play() if @currentChapter?
 
   next: () ->
     if @presentation.chapters[@currentChapterIndex].slides.length > @currentSlideIndex + 1
-      @changeChapter @currentChapterIndex, @currentSlideIndex + 1
+      @changeChapter @currentChapterIndex, @currentSlideIndex + 1, true
       return true
     if @presentation.chapters.length > @currentChapterIndex + 1
-      @changeChapter @currentChapterIndex + 1, 0
+      @changeChapter @currentChapterIndex + 1, 0, true
       return true
     return false
 
   previous: () ->
     if @currentSlideIndex - 1 >= 0
-      @changeChapter @currentChapterIndex, @currentSlideIndex - 1
+      @changeChapter @currentChapterIndex, @currentSlideIndex - 1, true
       return true
     if @currentChapterIndex - 1 >= 0
-      @changeChapter @currentChapterIndex - 1, @presentation.chapters[@currentChapterIndex - 1].slides.length - 1
+      @changeChapter @currentChapterIndex - 1, @presentation.chapters[@currentChapterIndex - 1].slides.length - 1, true
       return true
     return false
 

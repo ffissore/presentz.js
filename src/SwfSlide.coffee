@@ -25,13 +25,14 @@ class SwfSlide
 
     return
 
-  preload: (slides) ->
-    for slide in slides when !(slide.url in @preloadedSlides)
-      jQuery("##{@preloadSlideId}").remove()
-      jQuery(@slideContainer).append("<div id=\"#{@preloadSlideContainerId}\"></div>")
-      atts =
-        id: "#{@preloadSlideId}"
-        style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
-      swfobject.embedSWF slide.url, "#{@preloadSlideContainerId}", "1", "1", "8", null, null, null, atts, () =>
-        @preloadedSlides.push slide.url
+  preload: (slide) ->
+    return if (slide.url in @preloadedSlides)
+
+    jQuery("##{@preloadSlideId}").remove()
+    jQuery(@slideContainer).append("<div id=\"#{@preloadSlideContainerId}\"></div>")
+    atts =
+      id: "#{@preloadSlideId}"
+      style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
+    swfobject.embedSWF slide.url, "#{@preloadSlideContainerId}", "1", "1", "8", null, null, null, atts, () =>
+      @preloadedSlides.push slide.url
     return

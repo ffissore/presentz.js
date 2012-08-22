@@ -12,11 +12,8 @@ class ImgSlide
       jQuery("#{@slideContainer} img").attr "src", slide.url
     return
 
-  preload: (slides) ->
-    images = []
-    for slide in slides when !(slide.url in @preloadedSlides)
-      image = new Image()
-      image.src = slide.url
-      images.push image
-      @preloadedSlides.push slide.url
-    return images
+  preload: (slide) ->
+    return if (slide.url in @preloadedSlides)
+    image = new Image()
+    image.src = slide.url
+    return

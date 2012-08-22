@@ -35,8 +35,8 @@ class YoutubeIFrame
     @video.handleEvent(event.data)
     return
 
-  handle: (presentation) ->
-    presentation.chapters[0].video.url.toLowerCase().indexOf("http://youtu.be") != -1
+  handle: (video) ->
+    video.url.toLowerCase().indexOf("http://youtu.be") != -1
 
   currentTime: () ->
     return @player.getCurrentTime() if @player.getCurrentTime?

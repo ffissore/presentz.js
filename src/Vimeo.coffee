@@ -38,8 +38,8 @@ class Vimeo
 
     return
 
-  handle: (presentation) ->
-    presentation.chapters[0].video.url.toLowerCase().indexOf("http://vimeo.com") != -1
+  handle: (video) ->
+    video.url.toLowerCase().indexOf("http://vimeo.com") != -1
 
   onReady: (id) ->
     @player = $f(id)
