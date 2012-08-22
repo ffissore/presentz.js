@@ -170,7 +170,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       var iframe, movieUrl, onReady, videoHtml,
         _this = this;
       movieUrl = "http://player.vimeo.com/video/" + (videoId(this.videoData)) + "?api=1&player_id=" + this.elementId;
-      if (jQuery(this.videoContainer).children().length === 0) {
+      if (jQuery(this.elementId).length === 0) {
         videoHtml = "<iframe id=\"" + this.elementId + "\" src=\"" + movieUrl + "\" width=\"" + this.width + "\" height=\"" + this.height + "\" frameborder=\"0\"></iframe>";
         jQuery(this.videoContainer).append(videoHtml);
         iframe = jQuery("#" + this.elementId)[0];
@@ -267,7 +267,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     YoutubeIFrame.prototype.changeVideo = function(videoData, wouldPlay) {
       this.wouldPlay = wouldPlay;
-      if (jQuery(this.videoContainer).children().length === 0) {
+      if (jQuery(this.elementId).length === 0) {
         jQuery(this.videoContainer).append("<div id=\"" + this.elementId + "\"></div>");
         this.player = new YT.Player(this.elementId, {
           height: this.height,

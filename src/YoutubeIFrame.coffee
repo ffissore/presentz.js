@@ -5,7 +5,7 @@ class YoutubeIFrame
     @elementId = @presentz.newElementName()
 
   changeVideo: (videoData, @wouldPlay) ->
-    if jQuery(@videoContainer).children().length is 0
+    if jQuery(@elementId).length is 0
       jQuery(@videoContainer).append("<div id=\"#{@elementId}\"></div>")
 
       @player = new YT.Player @elementId,
