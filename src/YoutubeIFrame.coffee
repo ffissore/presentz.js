@@ -39,7 +39,8 @@ class YoutubeIFrame
     presentation.chapters[0].video.url.toLowerCase().indexOf("http://youtu.be") != -1
 
   currentTime: () ->
-    @player.getCurrentTime()
+    return @player.getCurrentTime() if @player.getCurrentTime?
+    return 0
 
   skipTo: (time, wouldPlay = false) ->
     if time > 0 and @player and @player.seekTo
