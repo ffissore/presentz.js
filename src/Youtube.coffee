@@ -1,4 +1,4 @@
-class YoutubeIFrame
+class Youtube
 
   constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video 1, 2, 0, @presentz
