@@ -1,0 +1,20 @@
+{
+  "name": "presentz.js",
+  "description": "A web library to show synchronized video + slides presentations",
+  "keywords": ["presentation", "slide", "video", "synchronization"],
+  "version": "0.1.0",
+  "author": "Federico Fissore <federico@fissore.org>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ffissore/presentz.js.git"
+  },
+  "devDependencies": {
+    "uglify-js": ""
+  },
+  "licenses": [
+    {
+      "type": "GPLv3",
+      "url": "https://www.gnu.org/copyleft/gpl.html"
+    }
+  ]
+}
