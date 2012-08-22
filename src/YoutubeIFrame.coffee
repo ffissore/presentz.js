@@ -5,7 +5,7 @@ class YoutubeIFrame
     @elementId = @presentz.newElementName()
 
   changeVideo: (videoData, @wouldPlay) ->
-    if jQuery(@elementId).length is 0
+    if jQuery("##{@elementId}").length is 0
       jQuery(@videoContainer).append("<div id=\"#{@elementId}\"></div>")
 
       @player = new YT.Player @elementId,
@@ -43,8 +43,8 @@ class YoutubeIFrame
     return 0
 
   skipTo: (time, wouldPlay = false) ->
-    if time > 0 and @player and @player.seekTo
-      @player.seekTo(time, true)
+    if @player and @player.seekTo
+      @player.seekTo(time, true) if wouldPlay or @video.isPaused()
       @player.playVideo() if wouldPlay
       true
     false

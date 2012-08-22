@@ -11,7 +11,7 @@ class SwfSlide
     slide.url.toLowerCase().indexOf(".swf") != -1
 
   changeSlide: (slide) ->
-    if jQuery("#{@slideContainer} object").length is 0
+    if jQuery("##{@swfId}").length is 0
       jQuery(@slideContainer).empty()
       jQuery(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
       params =
@@ -26,13 +26,12 @@ class SwfSlide
     return
 
   preload: (slides) ->
-    index = 0
     for slide in slides when !(slide.url in @preloadedSlides)
-      jQuery("##{@preloadSlideId}#{index}").remove()
-      jQuery(@slideContainer).append("<div id=\"#{@preloadSlideContainerId}#{index}\"></div>")
+      jQuery("##{@preloadSlideId}").remove()
+      jQuery(@slideContainer).append("<div id=\"#{@preloadSlideContainerId}\"></div>")
       atts =
-        id: "#{@preloadSlideId}#{index}"
+        id: "#{@preloadSlideId}"
         style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
-      swfobject.embedSWF slide.url, "#{@preloadSlideContainerId}#{index}", "1", "1", "8", null, null, null, atts, () =>
+      swfobject.embedSWF slide.url, "#{@preloadSlideContainerId}", "1", "1", "8", null, null, null, atts, () =>
         @preloadedSlides.push slide.url
     return

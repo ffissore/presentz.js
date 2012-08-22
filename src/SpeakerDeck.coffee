@@ -2,19 +2,21 @@ class SpeakerDeck
 
   constructor: (@presentz, @slideContainer, @width, @height) ->
     @currentSlide = 0
+    @elementId = @presentz.newElementName()
 
   handle: (slide) ->
     slide.url.toLowerCase().indexOf("speakerdeck.com") != -1
 
   changeSlide: (slide) ->
-    if jQuery(@slideContainer).children().length is 0
+    if jQuery("#{@slideContainer} iframe.speakerdeck-iframe").length is 0
+      jQuery(@slideContainer).empty()
       slideId = slide.url.substring(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#"))
 
       receiveMessage = (event) =>
         return if event.origin.indexOf("speakerdeck.com") is -1
         @speakerdeckOrigin = event.origin
         @speakerdeck = event.source
-        jQuery("#{@slideContainer} iframe").attr("style", "")
+        jQuery("#{@slideContainer} iframe.speakerdeck-iframe").attr "style", ""
         @currentSlide = event.data[1].number if event.data[0] is "change"
 
       window.addEventListener "message", receiveMessage, false

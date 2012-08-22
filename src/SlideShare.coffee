@@ -9,7 +9,7 @@ class SlideShare
     slide.url.toLowerCase().indexOf("slideshare.net") != -1
 
   changeSlide: (slide) ->
-    if jQuery(@slideContainer).children().length is 0
+    if jQuery("##{@swfId}").length is 0
       jQuery(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
       docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
       params =
@@ -26,7 +26,7 @@ class SlideShare
     else
       player = jQuery("##{@swfId}")[0]
       nextSlide = slideNumber(slide)
-      if player.getCurrentSlide
+      if player.getCurrentSlide?
         currentSlide = player.getCurrentSlide()
         if nextSlide is (currentSlide + 1)
           player.next()

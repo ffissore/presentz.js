@@ -170,7 +170,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       var iframe, movieUrl, onReady, videoHtml,
         _this = this;
       movieUrl = "http://player.vimeo.com/video/" + (videoId(this.videoData)) + "?api=1&player_id=" + this.elementId;
-      if (jQuery(this.elementId).length === 0) {
+      if (jQuery("#" + this.elementId).length === 0) {
         videoHtml = "<iframe id=\"" + this.elementId + "\" src=\"" + movieUrl + "\" width=\"" + this.width + "\" height=\"" + this.height + "\" frameborder=\"0\"></iframe>";
         jQuery(this.videoContainer).append(videoHtml);
         iframe = jQuery("#" + this.elementId)[0];
@@ -267,7 +267,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     YoutubeIFrame.prototype.changeVideo = function(videoData, wouldPlay) {
       this.wouldPlay = wouldPlay;
-      if (jQuery(this.elementId).length === 0) {
+      if (jQuery("#" + this.elementId).length === 0) {
         jQuery(this.videoContainer).append("<div id=\"" + this.elementId + "\"></div>");
         this.player = new YT.Player(this.elementId, {
           height: this.height,
@@ -319,8 +319,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       if (wouldPlay == null) {
         wouldPlay = false;
       }
-      if (time > 0 && this.player && this.player.seekTo) {
-        this.player.seekTo(time, true);
+      if (this.player && this.player.seekTo) {
+        if (wouldPlay || this.video.isPaused()) {
+          this.player.seekTo(time, true);
+        }
         if (wouldPlay) {
           this.player.playVideo();
         }
@@ -410,13 +412,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     ImgSlide.prototype.changeSlide = function(slide) {
-      var slideContainer;
+      var $slideContainer;
       if (jQuery("" + this.slideContainer + " img").length === 0) {
-        slideContainer = jQuery(this.slideContainer);
-        slideContainer.empty();
-        slideContainer.append("<table height=\"100%\"><tr><td valign=\"middle\"><img width=\"100%\" height=\"100%\" src=\"" + slide.url + "\"></td></tr></table>");
+        $slideContainer = jQuery(this.slideContainer);
+        $slideContainer.empty();
+        $slideContainer.append("<table width=\"100%\" height=\"100%\"><tr><td align=\"center\" valign=\"middle\"><img height=\"100%\" src=\"" + slide.url + "\"></td></tr></table>");
       } else {
-        jQuery("" + this.slideContainer + " img")[0].setAttribute("src", slide.url);
+        jQuery("" + this.slideContainer + " img").attr("src", slide.url);
       }
     };
 
@@ -459,7 +461,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     SlideShare.prototype.changeSlide = function(slide) {
       var atts, currentSlide, docId, flashvars, nextSlide, params, player;
-      if (jQuery(this.slideContainer).children().length === 0) {
+      if (jQuery("#" + this.swfId).length === 0) {
         jQuery(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
         docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"));
         params = {
@@ -478,7 +480,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       } else {
         player = jQuery("#" + this.swfId)[0];
         nextSlide = slideNumber(slide);
-        if (player.getCurrentSlide) {
+        if (player.getCurrentSlide != null) {
           currentSlide = player.getCurrentSlide();
           if (nextSlide === (currentSlide + 1)) {
             player.next();
@@ -520,7 +522,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     SwfSlide.prototype.changeSlide = function(slide) {
       var atts, params, swfslide;
-      if (jQuery("" + this.slideContainer + " object").length === 0) {
+      if (jQuery("#" + this.swfId).length === 0) {
         jQuery(this.slideContainer).empty();
         jQuery(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
         params = {
@@ -537,21 +539,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     SwfSlide.prototype.preload = function(slides) {
-      var atts, index, slide, _i, _len, _ref,
+      var atts, slide, _i, _len, _ref,
         _this = this;
-      index = 0;
       for (_i = 0, _len = slides.length; _i < _len; _i++) {
         slide = slides[_i];
         if (!(!(_ref = slide.url, __indexOf.call(this.preloadedSlides, _ref) >= 0))) {
           continue;
         }
-        jQuery("#" + this.preloadSlideId + index).remove();
-        jQuery(this.slideContainer).append("<div id=\"" + this.preloadSlideContainerId + index + "\"></div>");
+        jQuery("#" + this.preloadSlideId).remove();
+        jQuery(this.slideContainer).append("<div id=\"" + this.preloadSlideContainerId + "\"></div>");
         atts = {
-          id: "" + this.preloadSlideId + index,
+          id: "" + this.preloadSlideId,
           style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
         };
-        swfobject.embedSWF(slide.url, "" + this.preloadSlideContainerId + index, "1", "1", "8", null, null, null, atts, function() {
+        swfobject.embedSWF(slide.url, "" + this.preloadSlideContainerId, "1", "1", "8", null, null, null, atts, function() {
           return _this.preloadedSlides.push(slide.url);
         });
       }
@@ -570,6 +571,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.width = width;
       this.height = height;
       this.currentSlide = 0;
+      this.elementId = this.presentz.newElementName();
     }
 
     SpeakerDeck.prototype.handle = function(slide) {
@@ -579,7 +581,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     SpeakerDeck.prototype.changeSlide = function(slide) {
       var nextSlide, receiveMessage, script, slideId,
         _this = this;
-      if (jQuery(this.slideContainer).children().length === 0) {
+      if (jQuery("" + this.slideContainer + " iframe.speakerdeck-iframe").length === 0) {
+        jQuery(this.slideContainer).empty();
         slideId = slide.url.substring(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#"));
         receiveMessage = function(event) {
           if (event.origin.indexOf("speakerdeck.com") === -1) {
@@ -587,7 +590,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           }
           _this.speakerdeckOrigin = event.origin;
           _this.speakerdeck = event.source;
-          jQuery("" + _this.slideContainer + " iframe").attr("style", "");
+          jQuery("" + _this.slideContainer + " iframe.speakerdeck-iframe").attr("style", "");
           if (event.data[0] === "change") {
             return _this.currentSlide = event.data[1].number;
           }
