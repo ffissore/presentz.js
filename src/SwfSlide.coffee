@@ -8,7 +8,7 @@ class SwfSlide
     @preloadSlideId = @presentz.newElementName()
 
   handle: (slide) ->
-    slide.url.toLowerCase().indexOf(".swf") != -1
+    slide.url.toLowerCase().indexOf(".swf") isnt -1
 
   changeSlide: (slide) ->
     if jQuery("##{@swfId}").length is 0

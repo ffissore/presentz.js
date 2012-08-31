@@ -11,7 +11,7 @@ class Youtube
       @player = new YT.Player @elementId,
         height: @height
         width: @width
-        videoId: videoId(videoData)
+        videoId: @videoId(videoData)
         playerVars:
           rel: 0
           wmode: "opaque"
@@ -19,11 +19,19 @@ class Youtube
           onReady: @onReady
           onStateChange: @handleEvent
     else
-      @player.cueVideoById(videoId(videoData))
+      @player.cueVideoById(@videoId(videoData))
     return
 
-  videoId= (videoData) ->
-    videoData.url.substr(videoData.url.lastIndexOf("/") + 1)
+  videoId: (videoData) ->
+    url = videoData.url
+    lowercaseUrl = url.toLowerCase()
+    if lowercaseUrl.indexOf("//youtu.be/") isnt -1
+      id = url.substr(url.lastIndexOf("/") + 1)
+      id = id.substr(0, id.indexOf("?")) if id.indexOf("?") isnt -1
+    else if lowercaseUrl.indexOf("//youtube.com/") isnt -1 or lowercaseUrl.indexOf("//www.youtube.com/") isnt -1
+      id = url.substr(url.indexOf("v=") + 2)
+      id = id.substr(0, id.indexOf("&")) if id.indexOf("&") isnt -1
+    id
 
   onReady: () =>
     if !@presentz.intervalSet
@@ -36,7 +44,8 @@ class Youtube
     return
 
   handle: (video) ->
-    video.url.toLowerCase().indexOf("http://youtu.be") != -1
+    lowerCaseUrl = video.url.toLowerCase()
+    lowerCaseUrl.indexOf("//youtu.be/") isnt -1 or lowerCaseUrl.indexOf("//youtube.com/") isnt -1 or lowerCaseUrl.indexOf("//www.youtube.com/") isnt -1
 
   currentTime: () ->
     return @player.getCurrentTime() if @player.getCurrentTime?
@@ -57,3 +66,6 @@ class Youtube
 
   isPaused: () ->
     @video.isPaused()
+
+root = exports ? window
+root.Youtube = Youtube

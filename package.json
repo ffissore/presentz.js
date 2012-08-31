@@ -9,7 +9,12 @@
     "url": "git://github.com/ffissore/presentz.js.git"
   },
   "devDependencies": {
-    "uglify-js": ""
+    "uglify-js": "",
+    "mocha": "",
+    "coffee-script": ""
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha --compilers coffee:coffee-script"
   },
   "licenses": [
     {

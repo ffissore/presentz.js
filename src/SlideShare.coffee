@@ -6,7 +6,7 @@ class SlideShare
     @swfId = @presentz.newElementName()
 
   handle: (slide) ->
-    slide.url.toLowerCase().indexOf("slideshare.net") != -1
+    slide.url.toLowerCase().indexOf("slideshare.net") isnt -1
 
   changeSlide: (slide) ->
     if jQuery("##{@swfId}").length is 0

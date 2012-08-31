@@ -74,7 +74,7 @@ class Presentz
     for slide in slides when slide.time <= currentTime
       candidateSlide = slide
 
-    if candidateSlide? and @currentSlide.url != candidateSlide.url
+    if candidateSlide? and @currentSlide.url isnt candidateSlide.url
       @changeSlide(candidateSlide, @currentChapterIndex, slides.indexOf(candidateSlide))
 
     return
@@ -155,5 +155,5 @@ class Presentz
       return true
     return false
 
-window.Presentz = Presentz
-
+root = exports ? window
+root.Presentz = Presentz

@@ -5,7 +5,7 @@ class SpeakerDeck
     @elementId = @presentz.newElementName()
 
   handle: (slide) ->
-    slide.url.toLowerCase().indexOf("speakerdeck.com") != -1
+    slide.url.toLowerCase().indexOf("speakerdeck.com") isnt -1
 
   changeSlide: (slide) ->
     if jQuery("#{@slideContainer} iframe.speakerdeck-iframe").length is 0

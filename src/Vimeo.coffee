@@ -39,7 +39,7 @@ class Vimeo
     return
 
   handle: (video) ->
-    video.url.toLowerCase().indexOf("http://vimeo.com") != -1
+    video.url.toLowerCase().indexOf("http://vimeo.com") isnt -1
 
   onReady: (id) ->
     @player = $f(id)
