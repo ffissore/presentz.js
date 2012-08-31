@@ -482,7 +482,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   })();
 
   SlideShare = (function() {
-    var slideNumber;
 
     function SlideShare(presentz, slideContainer, width, height) {
       this.presentz = presentz;
@@ -498,11 +497,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       return slide.url.toLowerCase().indexOf("slideshare.net") !== -1;
     };
 
+    SlideShare.prototype.slideId = function(slide) {
+      return slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"));
+    };
+
+    SlideShare.prototype.slideNumber = function(slide) {
+      return parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1));
+    };
+
     SlideShare.prototype.changeSlide = function(slide) {
       var atts, currentSlide, docId, flashvars, nextSlide, params, player;
       if (jQuery("#" + this.swfId).length === 0) {
         jQuery(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
-        docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"));
+        docId = this.slideId(slide);
         params = {
           allowScriptAccess: "always",
           wmode: "opaque"
@@ -518,26 +525,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.currentSlide = 0;
       } else {
         player = jQuery("#" + this.swfId)[0];
-        nextSlide = slideNumber(slide);
+        nextSlide = this.slideNumber(slide);
         if (player.getCurrentSlide != null) {
           currentSlide = player.getCurrentSlide();
           if (nextSlide === (currentSlide + 1)) {
             player.next();
           } else {
-            player.jumpTo(slideNumber(slide));
+            player.jumpTo(this.slideNumber(slide));
             this.currentSlide = player.getCurrentSlide();
           }
         }
       }
     };
 
-    slideNumber = function(slide) {
-      return parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1));
-    };
-
     return SlideShare;
 
   })();
+
+  root = typeof exports !== "undefined" && exports !== null ? exports : window;
+
+  if (!(root.presentz != null)) {
+    root.presentz = {};
+  }
+
+  root.presentz.SlideShare = SlideShare;
 
   SwfSlide = (function() {
 
@@ -595,6 +606,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     return SwfSlide;
 
   })();
+
+  root = typeof exports !== "undefined" && exports !== null ? exports : window;
+
+  if (!(root.presentz != null)) {
+    root.presentz = {};
+  }
+
+  root.presentz.SwfSlide = SwfSlide;
 
   SpeakerDeck = (function() {
     var slideNumber;
