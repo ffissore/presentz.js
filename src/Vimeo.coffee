@@ -5,23 +5,26 @@ class Vimeo
     @wouldPlay = false
     @currentTimeInSeconds = 0.0
     @vimeoCallbackFunctionName = @presentz.newElementName("callback")
-    window[@vimeoCallbackFunctionName] = @receiveVideoInfo
+    window[@vimeoCallbackFunctionName] = @receiveVideoInfo if window? #we don't have a window when testing
     @elementId = @presentz.newElementName()
 
   changeVideo: (@videoData, @wouldPlay) ->
     ajaxCall =
-      url: "http://vimeo.com/api/v2/video/#{videoId(@videoData)}.json"
+      url: "http://vimeo.com/api/v2/video/#{@videoId(@videoData)}.json"
       dataType: "jsonp"
       jsonpCallback: @vimeoCallbackFunctionName
 
     jQuery.ajax ajaxCall
     return
 
-  videoId= (videoData) ->
-    videoData.url.substr(videoData.url.lastIndexOf("/") + 1)
+  videoId: (videoData) ->
+    id = videoData.url
+    id = id.substr(id.lastIndexOf("/") + 1)
+    id = id.substr(0, id.indexOf("?")) if id.indexOf("?") isnt -1
+    id
 
   receiveVideoInfo: (data) =>
-    movieUrl = "http://player.vimeo.com/video/#{videoId(@videoData)}?api=1&player_id=#{@elementId}"
+    movieUrl = "http://player.vimeo.com/video/#{@videoId(@videoData)}?api=1&player_id=#{@elementId}"
 
     if jQuery("##{@elementId}").length is 0
       videoHtml = "<iframe id=\"#{@elementId}\" src=\"#{movieUrl}\" width=\"#{@width}\" height=\"#{@height}\" frameborder=\"0\"></iframe>"
@@ -39,7 +42,7 @@ class Vimeo
     return
 
   handle: (video) ->
-    video.url.toLowerCase().indexOf("http://vimeo.com") isnt -1
+    video.url.toLowerCase().indexOf("//vimeo.com/") isnt -1
 
   onReady: (id) ->
     @player = $f(id)
@@ -89,3 +92,7 @@ class Vimeo
 
   isPaused: () ->
     @video.isPaused()
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.Vimeo = Vimeo

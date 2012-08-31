@@ -156,4 +156,6 @@ class Presentz
     return false
 
 root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.Presentz = Presentz
 root.Presentz = Presentz

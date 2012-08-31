@@ -23,13 +23,13 @@ class Youtube
     return
 
   videoId: (videoData) ->
-    url = videoData.url
-    lowercaseUrl = url.toLowerCase()
+    lowercaseUrl = videoData.url.toLowerCase()
+    id = videoData.url
     if lowercaseUrl.indexOf("//youtu.be/") isnt -1
-      id = url.substr(url.lastIndexOf("/") + 1)
+      id = id.substr(id.lastIndexOf("/") + 1)
       id = id.substr(0, id.indexOf("?")) if id.indexOf("?") isnt -1
     else if lowercaseUrl.indexOf("//youtube.com/") isnt -1 or lowercaseUrl.indexOf("//www.youtube.com/") isnt -1
-      id = url.substr(url.indexOf("v=") + 2)
+      id = id.substr(id.indexOf("v=") + 2)
       id = id.substr(0, id.indexOf("&")) if id.indexOf("&") isnt -1
     id
 
@@ -68,4 +68,5 @@ class Youtube
     @video.isPaused()
 
 root = exports ? window
-root.Youtube = Youtube
+root.presentz = {} if !root.presentz?
+root.presentz.Youtube = Youtube
