@@ -3,10 +3,24 @@ class Presentz
   constructor: (videoContainer, videoWxH, slideContainer, slideWxH) ->
     videoWxHParts = videoWxH.split("x")
     slideWxHParts = slideWxH.split("x")
-    @videoPlugins = [new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new Youtube(@, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])]
-    @slidePlugins = [new SlideShare(@, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])]
-    @defaultVideoPlugin = new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
-    @defaultSlidePlugin = new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+
+    @availableVideoPlugins =
+      vimeo: new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
+      youtube: new Youtube(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
+      bliptv: new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
+      html5: new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
+
+    @availableSlidePlugins =
+      slideshare: new SlideShare(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      swf: new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      speakerdeck: new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      image: new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+
+    @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.bliptv]
+    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck]
+    @defaultVideoPlugin = @availableVideoPlugins.html5
+    @defaultSlidePlugin = @availableSlidePlugins.image
+
     @currentChapterIndex = -1
     @currentChapter = undefined
     @currentSlideIndex = -1
@@ -14,12 +28,14 @@ class Presentz
       slidechange: []
       videochange: []
 
-  registerVideoPlugin: (plugin) ->
-    @videoPlugins.push(plugin)
+  registerVideoPlugin: (name, plugin) ->
+    @availableVideoPlugins[name] = plugin
+    @videoPlugins.push(@availableVideoPlugins[name])
     return
 
-  registerSlidePlugin: (plugin) ->
-    @slidePlugins.push(plugin)
+  registerSlidePlugin: (name, plugin) ->
+    @availableSlidePlugins[name] = plugin
+    @slidePlugins.push(@availableSlidePlugins[name])
     return
 
   init: (@presentation) ->
@@ -33,7 +49,7 @@ class Presentz
       chapter.video._plugin = @findVideoPlugin(chapter.video)
       for slide in chapter.slides
         slide._plugin = @findSlidePlugin(slide)
-      
+
     return
 
   on: (eventType, callback) ->
@@ -114,7 +130,7 @@ class Presentz
 
   pause: () ->
     @currentChapter.video._plugin.pause() if @currentChapter?
-    
+
   isPaused: () ->
     @currentChapter.video._plugin.isPaused() if @currentChapter?
 

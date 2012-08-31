@@ -63,6 +63,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.elementId = this.presentz.newElementName();
     }
 
+    Html5Video.prototype.handle = function(video) {
+      return true;
+    };
+
     Html5Video.prototype.changeVideo = function(videoData, wouldPlay) {
       var playerOptions, videoHtml,
         _this = this;
@@ -411,12 +415,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.preloadedSlides = [];
     }
 
+    ImgSlide.prototype.handle = function(slide) {
+      return true;
+    };
+
     ImgSlide.prototype.changeSlide = function(slide) {
       var $slideContainer;
       if (jQuery("" + this.slideContainer + " img").length === 0) {
         $slideContainer = jQuery(this.slideContainer);
         $slideContainer.empty();
-        $slideContainer.append("<table width=\"100%\" height=\"100%\"><tr><td align=\"center\" valign=\"middle\"><img height=\"100%\" src=\"" + slide.url + "\"></td></tr></table>");
+        $slideContainer.append("<img src=\"" + slide.url + "\"/>");
       } else {
         jQuery("" + this.slideContainer + " img").attr("src", slide.url);
       }
@@ -613,10 +621,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       var slideWxHParts, videoWxHParts;
       videoWxHParts = videoWxH.split("x");
       slideWxHParts = slideWxH.split("x");
-      this.videoPlugins = [new Vimeo(this, videoContainer, videoWxHParts[0], videoWxHParts[1]), new Youtube(this, videoContainer, videoWxHParts[0], videoWxHParts[1]), new BlipTv(this, videoContainer, videoWxHParts[0], videoWxHParts[1])];
-      this.slidePlugins = [new SlideShare(this, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SwfSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1]), new SpeakerDeck(this, slideContainer, slideWxHParts[0], slideWxHParts[1])];
-      this.defaultVideoPlugin = new Html5Video(this, videoContainer, videoWxHParts[0], videoWxHParts[1]);
-      this.defaultSlidePlugin = new ImgSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1]);
+      this.availableVideoPlugins = {
+        vimeo: new Vimeo(this, videoContainer, videoWxHParts[0], videoWxHParts[1]),
+        youtube: new Youtube(this, videoContainer, videoWxHParts[0], videoWxHParts[1]),
+        bliptv: new BlipTv(this, videoContainer, videoWxHParts[0], videoWxHParts[1]),
+        html5: new Html5Video(this, videoContainer, videoWxHParts[0], videoWxHParts[1])
+      };
+      this.availableSlidePlugins = {
+        slideshare: new SlideShare(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
+        swf: new SwfSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
+        speakerdeck: new SpeakerDeck(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
+        image: new ImgSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      };
+      this.videoPlugins = [this.availableVideoPlugins.vimeo, this.availableVideoPlugins.youtube, this.availableVideoPlugins.bliptv];
+      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck];
+      this.defaultVideoPlugin = this.availableVideoPlugins.html5;
+      this.defaultSlidePlugin = this.availableSlidePlugins.image;
       this.currentChapterIndex = -1;
       this.currentChapter = void 0;
       this.currentSlideIndex = -1;
@@ -626,12 +646,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       };
     }
 
-    Presentz.prototype.registerVideoPlugin = function(plugin) {
-      this.videoPlugins.push(plugin);
+    Presentz.prototype.registerVideoPlugin = function(name, plugin) {
+      this.availableVideoPlugins[name] = plugin;
+      this.videoPlugins.push(this.availableVideoPlugins[name]);
     };
 
-    Presentz.prototype.registerSlidePlugin = function(plugin) {
-      this.slidePlugins.push(plugin);
+    Presentz.prototype.registerSlidePlugin = function(name, plugin) {
+      this.availableSlidePlugins[name] = plugin;
+      this.slidePlugins.push(this.availableSlidePlugins[name]);
     };
 
     Presentz.prototype.init = function(presentation) {

@@ -4,6 +4,8 @@ class Html5Video
     @video = new Video "play", "pause", "ended", @presentz
     @elementId = @presentz.newElementName()
 
+  handle: (video) -> true
+
   changeVideo: (videoData, @wouldPlay) ->
     jQuery(@videoContainer).empty()
     videoHtml = "<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"100%\" height=\"100%\"></video>"
