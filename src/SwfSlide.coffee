@@ -36,3 +36,7 @@ class SwfSlide
     swfobject.embedSWF slide.url, "#{@preloadSlideContainerId}", "1", "1", "8", null, null, null, atts, () =>
       @preloadedSlides.push slide.url
     return
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.SwfSlide = SwfSlide

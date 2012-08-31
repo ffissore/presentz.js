@@ -7,11 +7,17 @@ class SlideShare
 
   handle: (slide) ->
     slide.url.toLowerCase().indexOf("slideshare.net") isnt -1
+    
+  slideId: (slide) ->
+    slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
+
+  slideNumber: (slide) ->
+    parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1))
 
   changeSlide: (slide) ->
     if jQuery("##{@swfId}").length is 0
       jQuery(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
-      docId = slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
+      docId = @slideId(slide)
       params =
         allowScriptAccess: "always"
         wmode: "opaque"
@@ -25,16 +31,17 @@ class SlideShare
       @currentSlide = 0
     else
       player = jQuery("##{@swfId}")[0]
-      nextSlide = slideNumber(slide)
+      nextSlide = @slideNumber(slide)
       if player.getCurrentSlide?
         currentSlide = player.getCurrentSlide()
         if nextSlide is (currentSlide + 1)
           player.next()
         else
-          player.jumpTo(slideNumber(slide))
+          player.jumpTo(@slideNumber(slide))
           @currentSlide = player.getCurrentSlide()
 
     return
 
-  slideNumber= (slide) ->
-    parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1))
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.SlideShare = SlideShare

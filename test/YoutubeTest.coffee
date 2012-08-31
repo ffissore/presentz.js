@@ -8,24 +8,25 @@ global.Video = FakeVideo
 fake_presentz =
   newElementName: () -> ""
 
-describe "URL parsing", () ->
-  yt = null
+describe "Youtube URL parsing", () ->
+  video = null
 
   beforeEach () ->
-    yt = new Youtube(fake_presentz)
+    video = new Youtube(fake_presentz)
 
   it "should handle valid URLs", () ->
-    assert(yt.handle({ url: "http://youtu.be/eBktyyaV9LY" }))
-    assert(yt.handle({ url: "https://youtu.be/eBktyyaV9LY" }))
-    assert(yt.handle({ url: "http://youtu.be/eBktyyaV9LY?feature=youtu.be" }))
-    assert(yt.handle({ url: "https://youtu.be/eBktyyaV9LY?feature=youtu.be" }))
-    assert(yt.handle({ url: "http://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }))
-    assert(yt.handle({ url: "https://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }))
+    assert(video.handle({ url: "http://youtu.be/eBktyyaV9LY" }))
+    assert(video.handle({ url: "https://youtu.be/eBktyyaV9LY" }))
+    assert(video.handle({ url: "http://youtu.be/eBktyyaV9LY?feature=youtu.be" }))
+    assert(video.handle({ url: "https://youtu.be/eBktyyaV9LY?feature=youtu.be" }))
+    assert(video.handle({ url: "http://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }))
+    assert(video.handle({ url: "https://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }))
+    assert(!video.handle({ url: "http://www.google.com" }))
 
-  it "should extract correct video id", () ->
-    assert.equal(yt.videoId({ url: "http://youtu.be/eBktyyaV9LY" }), "eBktyyaV9LY")
-    assert.equal(yt.videoId({ url: "https://youtu.be/eBktyyaV9LY" }), "eBktyyaV9LY")
-    assert.equal(yt.videoId({ url: "http://youtu.be/eBktyyaV9LY?feature=youtu.be" }),"eBktyyaV9LY")
-    assert.equal(yt.videoId({ url: "https://youtu.be/eBktyyaV9LY?feature=youtu.be" }),"eBktyyaV9LY")
-    assert.equal(yt.videoId({ url: "http://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }), "eBktyyaV9LY")
-    assert.equal(yt.videoId({ url: "https://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }), "eBktyyaV9LY")
+  it "should extract video id", () ->
+    assert.equal(video.videoId({ url: "http://youtu.be/eBktyyaV9LY" }), "eBktyyaV9LY")
+    assert.equal(video.videoId({ url: "https://youtu.be/eBktyyaV9LY" }), "eBktyyaV9LY")
+    assert.equal(video.videoId({ url: "http://youtu.be/eBktyyaV9LY?feature=youtu.be" }),"eBktyyaV9LY")
+    assert.equal(video.videoId({ url: "https://youtu.be/eBktyyaV9LY?feature=youtu.be" }),"eBktyyaV9LY")
+    assert.equal(video.videoId({ url: "http://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }), "eBktyyaV9LY")
+    assert.equal(video.videoId({ url: "https://www.youtube.com/watch?v=eBktyyaV9LY&feature=youtu.be" }), "eBktyyaV9LY")

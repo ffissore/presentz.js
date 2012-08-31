@@ -14,7 +14,7 @@
     "coffee-script": ""
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha --compilers coffee:coffee-script"
+    "test": "node_modules/mocha/bin/mocha --compilers coffee:coffee-script --reporter spec"
   },
   "licenses": [
     {
