@@ -27,6 +27,7 @@ class Presentz
     @listeners =
       slidechange: []
       videochange: []
+      timechange: []
 
   registerVideoPlugin: (name, plugin) ->
     @availableVideoPlugins[name] = plugin
@@ -76,6 +77,9 @@ class Presentz
 
     if candidateSlide? and @currentSlide.url isnt candidateSlide.url
       @changeSlide(candidateSlide, @currentChapterIndex, slides.indexOf(candidateSlide))
+      
+    for listener in @listeners.timechange
+      listener(currentTime)
 
     return
 

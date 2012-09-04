@@ -699,7 +699,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.currentSlideIndex = -1;
       this.listeners = {
         slidechange: [],
-        videochange: []
+        videochange: [],
+        timechange: []
       };
     }
 
@@ -757,7 +758,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Presentz.prototype.checkSlideChange = function(currentTime) {
-      var candidateSlide, slide, slides, _i, _len;
+      var candidateSlide, listener, slide, slides, _i, _j, _len, _len1, _ref;
       slides = this.presentation.chapters[this.currentChapterIndex].slides;
       for (_i = 0, _len = slides.length; _i < _len; _i++) {
         slide = slides[_i];
@@ -767,6 +768,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       }
       if ((candidateSlide != null) && this.currentSlide.url !== candidateSlide.url) {
         this.changeSlide(candidateSlide, this.currentChapterIndex, slides.indexOf(candidateSlide));
+      }
+      _ref = this.listeners.timechange;
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        listener = _ref[_j];
+        listener(currentTime);
       }
     };
 
