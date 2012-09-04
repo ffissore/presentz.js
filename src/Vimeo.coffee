@@ -1,7 +1,7 @@
 class Vimeo
 
   constructor: (@presentz, @videoContainer, @width, @height) ->
-    @video = new Video "play", "pause", "finish", @presentz
+    @video = new Video ["play"], ["pause"], ["finish"], @presentz
     @wouldPlay = false
     @currentTimeInSeconds = 0.0
     @vimeoCallbackFunctionName = @presentz.newElementName("callback")

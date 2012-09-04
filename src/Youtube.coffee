@@ -1,7 +1,7 @@
 class Youtube
 
   constructor: (@presentz, @videoContainer, @width, @height) ->
-    @video = new Video 1, 2, 0, @presentz
+    @video = new Video [1], [-1, 2], [0], @presentz
     @elementId = @presentz.newElementName()
 
   changeVideo: (videoData, @wouldPlay) ->

@@ -1,7 +1,7 @@
 class Html5Video
 
   constructor: (@presentz, @videoContainer, @width, @height) ->
-    @video = new Video "play", "pause", "ended", @presentz
+    @video = new Video ["play"], ["pause"], ["ended"], @presentz
     @elementId = @presentz.newElementName()
 
   handle: (video) -> true
@@ -52,6 +52,6 @@ class Html5Video
 
   pause: () ->
     @player.pause()
-    
+
   isPaused: () ->
     @video.isPaused()

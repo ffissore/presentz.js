@@ -1,18 +1,18 @@
 class Video
 
-  constructor: (@playState, @pauseState, @finishState, @presentz) ->
-    @isInPauseState = false
+  constructor: (@playStates, @pauseStates, @finishStates, @presentz) ->
+    @isInPauseState = true
 
   handleEvent: (event) ->
-    if event is @playState
+    if event in @playStates
       @presentz.startTimeChecker()
-    else if event is @pauseState or event is @finishState
+    else if event in @pauseStates or event in @finishStates
       @presentz.stopTimeChecker()
 
-    if event is @finishState and @presentz.currentChapterIndex < (@presentz.howManyChapters - 1)
+    if event in @finishStates and @presentz.currentChapterIndex < (@presentz.howManyChapters - 1)
       @presentz.changeChapter(@presentz.currentChapterIndex + 1, 0, true)
 
-    @isInPauseState = event is @pauseState
+    @isInPauseState = event in @pauseStates
 
     return
     
