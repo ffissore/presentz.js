@@ -50,4 +50,4 @@ class Html5Video
     @player.pause()
 
   isPaused: () ->
-    @video.isPaused()
+    @video.isInPauseState

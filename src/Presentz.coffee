@@ -28,6 +28,9 @@ class Presentz
       slidechange: []
       videochange: []
       timechange: []
+      play: []
+      pause: []
+      finish: []
       
     @isSynchronized = true
 

@@ -50,7 +50,7 @@ class Youtube
 
   skipTo: (time, wouldPlay = false) ->
     if @player and @player.seekTo
-      @player.seekTo(time, true) if wouldPlay or @video.isPaused()
+      @player.seekTo(time, true) if wouldPlay or @isPaused()
       @play() if wouldPlay
       true
     false
@@ -62,7 +62,7 @@ class Youtube
     @player.pauseVideo()
 
   isPaused: () ->
-    @video.isPaused()
+    @video.isInPauseState
 
 root = exports ? window
 root.presentz = {} if !root.presentz?

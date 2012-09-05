@@ -33,19 +33,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     Video.prototype.handleEvent = function(event) {
-      if (__indexOf.call(this.playStates, event) >= 0) {
+      var listener, listeners, _i, _len;
+      this.isInPlayState = __indexOf.call(this.playStates, event) >= 0;
+      this.isInPauseState = __indexOf.call(this.pauseStates, event) >= 0;
+      this.isInFinishState = __indexOf.call(this.finishStates, event) >= 0;
+      if (this.isInPlayState) {
         this.presentz.startTimeChecker();
-      } else if (__indexOf.call(this.pauseStates, event) >= 0 || __indexOf.call(this.finishStates, event) >= 0) {
+        listeners = this.presentz.listeners.play;
+      } else if (this.isInPauseState || this.isInFinishState) {
         this.presentz.stopTimeChecker();
+        if (this.isInPauseState) {
+          listeners = this.presentz.listeners.pause;
+        } else if (this.isInFinishState) {
+          listeners = this.presentz.listeners.finish;
+        }
       }
-      if (__indexOf.call(this.finishStates, event) >= 0 && this.presentz.currentChapterIndex < (this.presentz.howManyChapters - 1)) {
+      if (listeners != null) {
+        for (_i = 0, _len = listeners.length; _i < _len; _i++) {
+          listener = listeners[_i];
+          listener();
+        }
+      }
+      if (this.isInFinishState && this.presentz.currentChapterIndex < (this.presentz.howManyChapters - 1)) {
         this.presentz.changeChapter(this.presentz.currentChapterIndex + 1, 0, true);
       }
-      this.isInPauseState = __indexOf.call(this.pauseStates, event) >= 0;
-    };
-
-    Video.prototype.isPaused = function() {
-      return this.isInPauseState;
     };
 
     return Video;
@@ -126,7 +137,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Html5Video.prototype.isPaused = function() {
-      return this.video.isPaused();
+      return this.video.isInPauseState;
     };
 
     return Html5Video;
@@ -345,7 +356,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         wouldPlay = false;
       }
       if (this.player && this.player.seekTo) {
-        if (wouldPlay || this.video.isPaused()) {
+        if (wouldPlay || this.isPaused()) {
           this.player.seekTo(time, true);
         }
         if (wouldPlay) {
@@ -365,7 +376,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Youtube.prototype.isPaused = function() {
-      return this.video.isPaused();
+      return this.video.isInPauseState;
     };
 
     return Youtube;
@@ -691,7 +702,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.listeners = {
         slidechange: [],
         videochange: [],
-        timechange: []
+        timechange: [],
+        play: [],
+        pause: [],
+        finish: []
       };
       this.isSynchronized = true;
     }
