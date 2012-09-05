@@ -28,6 +28,8 @@ class Presentz
       slidechange: []
       videochange: []
       timechange: []
+      
+    @isSynchronized = true
 
   registerVideoPlugin: (name, plugin) ->
     @availableVideoPlugins[name] = plugin
@@ -108,7 +110,13 @@ class Presentz
     return plugins[0] if plugins.length > 0
     return @defaultSlidePlugin
 
+  synchronized: (@isSynchronized) ->
+    @stopTimeChecker() if @intervalSet and !@isSynchronized
+    @startTimeChecker() if !@intervalSet and @isSynchronized and !@isPaused()
+  
   startTimeChecker: () ->
+    return unless @isSynchronized
+    
     clearInterval(@interval)
     @intervalSet = true
     timeChecker= () =>

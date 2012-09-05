@@ -693,6 +693,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         videochange: [],
         timechange: []
       };
+      this.isSynchronized = true;
     }
 
     Presentz.prototype.registerVideoPlugin = function(name, plugin) {
@@ -827,9 +828,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       return this.defaultSlidePlugin;
     };
 
+    Presentz.prototype.synchronized = function(isSynchronized) {
+      this.isSynchronized = isSynchronized;
+      if (this.intervalSet && !this.isSynchronized) {
+        this.stopTimeChecker();
+      }
+      if (!this.intervalSet && this.isSynchronized && !this.isPaused()) {
+        return this.startTimeChecker();
+      }
+    };
+
     Presentz.prototype.startTimeChecker = function() {
       var timeChecker,
         _this = this;
+      if (!this.isSynchronized) {
+        return;
+      }
       clearInterval(this.interval);
       this.intervalSet = true;
       timeChecker = function() {
