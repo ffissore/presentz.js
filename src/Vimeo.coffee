@@ -68,9 +68,7 @@ class Vimeo
 
     if @wouldPlay
       @wouldPlay = false
-      if !@presentz.intervalSet
-        @presentz.startTimeChecker()
-      @player.api("play")
+      @play()
 
     return
 
@@ -80,7 +78,7 @@ class Vimeo
   skipTo: (time, wouldPlay = false) ->
     if time <= @loadedTimeInSeconds
       @player.api("seekTo", time)
-      @player.api("play") if wouldPlay
+      @play() if wouldPlay
       true
     false
 

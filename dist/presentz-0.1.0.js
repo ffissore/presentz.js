@@ -95,10 +95,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       player.addEventListener("ended", eventHandler, false);
       this.player.load();
       if (this.wouldPlay) {
-        if (!this.presentz.intervalSet) {
-          this.presentz.startTimeChecker();
-        }
-        this.player.play();
+        this.play();
       }
     };
 
@@ -113,7 +110,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       if (this.player && this.player.currentTime) {
         this.player.setCurrentTime(time);
         if (wouldPlay) {
-          this.player.play();
+          this.play();
         }
         true;
       }
@@ -219,10 +216,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       });
       if (this.wouldPlay) {
         this.wouldPlay = false;
-        if (!this.presentz.intervalSet) {
-          this.presentz.startTimeChecker();
-        }
-        this.player.api("play");
+        this.play();
       }
     };
 
@@ -237,7 +231,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       if (time <= this.loadedTimeInSeconds) {
         this.player.api("seekTo", time);
         if (wouldPlay) {
-          this.player.api("play");
+          this.play();
         }
         true;
       }
@@ -324,11 +318,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Youtube.prototype.onReady = function() {
-      if (!this.presentz.intervalSet) {
-        this.presentz.startTimeChecker();
-      }
       if (this.wouldPlay) {
-        return this.player.playVideo();
+        return this.play();
       }
     };
 
@@ -358,7 +349,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           this.player.seekTo(time, true);
         }
         if (wouldPlay) {
-          this.player.playVideo();
+          this.play();
         }
         true;
       }

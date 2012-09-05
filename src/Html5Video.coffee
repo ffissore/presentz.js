@@ -29,11 +29,7 @@ class Html5Video
     player.addEventListener("ended", eventHandler, false)
 
     @player.load()
-
-    if @wouldPlay
-      if !@presentz.intervalSet
-        @presentz.startTimeChecker()
-      @player.play()
+    @play() if @wouldPlay
 
     return
 
@@ -43,7 +39,7 @@ class Html5Video
   skipTo: (time, wouldPlay = false) ->
     if @player and @player.currentTime
       @player.setCurrentTime(time)
-      @player.play() if wouldPlay
+      @play() if wouldPlay
       true
     false
 

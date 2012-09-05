@@ -34,10 +34,7 @@ class Youtube
     id
 
   onReady: () =>
-    if !@presentz.intervalSet
-      @presentz.startTimeChecker()
-    if @wouldPlay
-      @player.playVideo()
+    @play() if @wouldPlay
 
   handleEvent: (event) =>
     @video.handleEvent(event.data)
@@ -54,7 +51,7 @@ class Youtube
   skipTo: (time, wouldPlay = false) ->
     if @player and @player.seekTo
       @player.seekTo(time, true) if wouldPlay or @video.isPaused()
-      @player.playVideo() if wouldPlay
+      @play() if wouldPlay
       true
     false
 
