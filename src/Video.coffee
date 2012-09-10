@@ -5,7 +5,7 @@ class Video
 
   handleEvent: (event) ->
     @isInPlayState = event in @playStates
-    @isInPauseState = event in @pauseStates
+    @isInPauseState = event in @pauseStates or !@isInPlayState
     @isInFinishState = event in @finishStates
 
     if @isInPlayState

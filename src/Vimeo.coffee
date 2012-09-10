@@ -89,7 +89,7 @@ class Vimeo
     @player.api("pause")
 
   isPaused: () ->
-    @video.isPaused()
+    @video.isInPauseState
 
 root = exports ? window
 root.presentz = {} if !root.presentz?

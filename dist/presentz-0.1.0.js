@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Video.prototype.handleEvent = function(event) {
       var listener, listeners, _i, _len;
       this.isInPlayState = __indexOf.call(this.playStates, event) >= 0;
-      this.isInPauseState = __indexOf.call(this.pauseStates, event) >= 0;
+      this.isInPauseState = __indexOf.call(this.pauseStates, event) >= 0 || !this.isInPlayState;
       this.isInFinishState = __indexOf.call(this.finishStates, event) >= 0;
       if (this.isInPlayState) {
         this.presentz.startTimeChecker();
@@ -258,7 +258,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Vimeo.prototype.isPaused = function() {
-      return this.video.isPaused();
+      return this.video.isInPauseState;
     };
 
     return Vimeo;
