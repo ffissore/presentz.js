@@ -723,6 +723,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Presentz.prototype.init = function(presentation) {
       var chapter, slide, _i, _j, _len, _len1, _ref, _ref1;
       this.presentation = presentation;
+      if (this.intervalSet) {
+        this.stopTimeChecker();
+      }
       this.currentChapterIndex = -1;
       this.currentChapter = void 0;
       this.currentSlideIndex = -1;

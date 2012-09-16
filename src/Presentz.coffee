@@ -45,6 +45,8 @@ class Presentz
     return
 
   init: (@presentation) ->
+    @stopTimeChecker() if @intervalSet
+    
     @currentChapterIndex = -1
     @currentChapter = undefined
     @currentSlideIndex = -1
