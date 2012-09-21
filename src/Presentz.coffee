@@ -15,9 +15,10 @@ class Presentz
       swf: new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       speakerdeck: new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       image: new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      rvlio: new RvlIO(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
 
     @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.bliptv]
-    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck]
+    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck, @availableSlidePlugins.rvlio]
     @defaultVideoPlugin = @availableVideoPlugins.html5
     @defaultSlidePlugin = @availableSlidePlugins.image
 
