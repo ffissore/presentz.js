@@ -16,7 +16,8 @@ class SpeakerDeck
         return if event.origin.indexOf("speakerdeck.com") is -1
         @speakerdeckOrigin = event.origin
         @speakerdeck = event.source
-        @currentSlide = event.data[1].number if event.data[0] is "change"
+        data = JSON.parse(event.data)
+        @currentSlide = data[1].number if data[0] is "change"
 
       window.addEventListener "message", receiveMessage, false
 

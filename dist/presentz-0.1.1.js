@@ -639,13 +639,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         jQuery(this.slideContainer).empty();
         slideId = slide.url.substring(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#"));
         receiveMessage = function(event) {
+          var data;
           if (event.origin.indexOf("speakerdeck.com") === -1) {
             return;
           }
           _this.speakerdeckOrigin = event.origin;
           _this.speakerdeck = event.source;
-          if (event.data[0] === "change") {
-            return _this.currentSlide = event.data[1].number;
+          data = JSON.parse(event.data);
+          if (data[0] === "change") {
+            return _this.currentSlide = data[1].number;
           }
         };
         window.addEventListener("message", receiveMessage, false);
