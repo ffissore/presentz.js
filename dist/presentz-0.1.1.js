@@ -668,6 +668,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       return parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1));
     };
 
+    SpeakerDeck.prototype.slideId = function(slide) {
+      return slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"));
+    };
+
     return SpeakerDeck;
 
   })();
