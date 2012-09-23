@@ -30,7 +30,7 @@ class SpeakerDeck
       jQuery(@slideContainer)[0].appendChild(script)
     else
       if @speakerdeck?
-        nextSlide = slideNumber(slide)
+        nextSlide = @slideNumber(slide)
         @speakerdeck.postMessage JSON.stringify(["goToSlide", nextSlide]), @speakerdeckOrigin
     return
 

@@ -660,7 +660,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         jQuery(this.slideContainer)[0].appendChild(script);
       } else {
         if (this.speakerdeck != null) {
-          nextSlide = slideNumber(slide);
+          nextSlide = this.slideNumber(slide);
           this.speakerdeck.postMessage(JSON.stringify(["goToSlide", nextSlide]), this.speakerdeckOrigin);
         }
       }
