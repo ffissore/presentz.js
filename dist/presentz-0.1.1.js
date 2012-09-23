@@ -618,7 +618,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   root.presentz.SwfSlide = SwfSlide;
 
   SpeakerDeck = (function() {
-    var slideNumber;
 
     function SpeakerDeck(presentz, slideContainer, width, height) {
       this.presentz = presentz;
@@ -666,7 +665,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       }
     };
 
-    slideNumber = function(slide) {
+    SpeakerDeck.prototype.slideNumber = function(slide) {
       return parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1));
     };
 

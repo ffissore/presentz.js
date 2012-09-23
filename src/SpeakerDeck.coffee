@@ -34,5 +34,5 @@ class SpeakerDeck
         @speakerdeck.postMessage JSON.stringify(["goToSlide", nextSlide]), @speakerdeckOrigin
     return
 
-  slideNumber= (slide) ->
+  slideNumber: (slide) ->
     parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1))
