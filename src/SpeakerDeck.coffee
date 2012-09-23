@@ -16,7 +16,6 @@ class SpeakerDeck
         return if event.origin.indexOf("speakerdeck.com") is -1
         @speakerdeckOrigin = event.origin
         @speakerdeck = event.source
-        jQuery("#{@slideContainer} iframe.speakerdeck-iframe").attr "style", ""
         @currentSlide = event.data[1].number if event.data[0] is "change"
 
       window.addEventListener "message", receiveMessage, false

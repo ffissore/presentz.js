@@ -644,7 +644,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           }
           _this.speakerdeckOrigin = event.origin;
           _this.speakerdeck = event.source;
-          jQuery("" + _this.slideContainer + " iframe.speakerdeck-iframe").attr("style", "");
           if (event.data[0] === "change") {
             return _this.currentSlide = event.data[1].number;
           }
