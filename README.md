@@ -2,6 +2,8 @@
 
 Presentz.js is a javascript library for synchronizing videos and slides.
 
+It's at the heart of http://presentz.org/, a website for freely publishing conference talks, pitches, and the like.
+
 ## Dependencies quick reference
 
 (skip if you are still not using presentz.js but just reading this README)
@@ -142,7 +144,7 @@ where:
 
 ### Speakerdeck
 
-Slideshows on speakerdeck are identified by an ID but unfortunately, there is yet no public API to have this ID from the slideshow public url. You can get it by clicking the "Embed" link on the right of a slideshow, "Embed" again and looking for a `data-id` attribute in the `<script../>` snippet just below.
+Slideshows on speakerdeck are identified by an ID but, unfortunately, there is yet no public API to have this ID from the slideshow public url. You can get it by clicking the "Embed" link on the right of a slideshow, "Embed" again and looking for a `data-id` attribute in the `<script../>` snippet just below.
 
 Use that ID to compose a fake speakerdeck URL, like
 
@@ -162,9 +164,9 @@ where:
 
 [Reveal.js](http://lab.hakim.se/reveal-js/) is framework to creating HTML + CSS with 3D transforms based slideshows, very good looking.
 
-Support in presentz.js is experimental and expects the slide is hosted on http://www.rvl.io/
+Support in presentz.js is experimental and expects the slides to be hosted on http://www.rvl.io/
 
-Use the base URL and append the number of the slide to show, for example:
+Use the base URL and append the number of the slide you want to show, for example:
 
 ```json
 {
