@@ -106,3 +106,82 @@ Use the url to the video file in the `video.url` property
 ```
 
 Raw video files require mediaelementjs is already setup (if you just put in their .js file, the player will be so ugly to be unusable)
+
+## Supported slide sources
+
+### Images and SWF files
+
+You can export a presentation made with [LibreOffice](https://www.libreoffice.org/) to images (should be "File -> Export -> HTML Document"). Or you can convert a PDF to a series of SWF with [SWFTools](http://www.swftools.org/).
+
+Either way, once you have your files, put the url in the `slide.url` property
+
+```json
+{
+  "url": "http://presentz.org/assets/demo/slide1.png",
+  "time": 0
+},
+```
+
+### SlideShare
+
+Slideshows on slideshare are identified by an ID they call `PPTLocation` (in their [API](http://www.slideshare.net/developers/documentation#get_slideshow)) and `doc` (in their [player API](http://www.slideshare.net/developers/playerapi)).
+
+Use that ID to compose a fake slideshare URL, like
+
+```json
+{
+  "url": "http://www.slideshare.net/slides-110818145820-phpapp02#1",
+  "time": 0
+},
+```
+
+where: 
+- `http://www.slideshare.net` is used to activate the slideshare plugin
+- `slides-110818145820-phpapp02` is the ID (or doc, or PPTLocation)
+- `#1` is the slide number (one based)
+
+### Speakerdeck
+
+Slideshows on speakerdeck are identified by an ID but unfortunately, there is yet no public API to have this ID from the slideshow public url. You can get it by clicking the "Embed" link on the right of a slideshow, "Embed" again and looking for a `data-id` attribute in the `<script../>` snippet just below.
+
+Use that ID to compose a fake speakerdeck URL, like
+
+```json
+{
+  "url": "https://speakerdeck.com/4ffbeed2df7b3f00010233bf#1",
+  "time": 0
+},
+```
+
+where: 
+- `https://speakerdeck.com` is used to activate the speakerdeck plugin
+- `4ffbeed2df7b3f00010233bf` is the ID
+- `#1` is the slide number (one based)
+
+### Rvl.io
+
+[Reveal.js](http://lab.hakim.se/reveal-js/) is framework to creating HTML + CSS with 3D transforms based slideshows, very good looking.
+
+Support in presentz.js is experimental and expects the slide is hosted on http://www.rvl.io/
+
+Use the base URL and append the number of the slide to show, for example:
+
+```json
+{
+  "url": "http://www.rvl.io/federico/presentz/#/0",
+  "time": 0
+}
+```
+
+where:
+- `http://www.rvl.io/federico/presentz/` is the base url
+- `#/0` is the slide number (zero based)
+
+Reveal.js supports vertical slides, that are a sort of "sub slides" of a parent one. To show those slides, append the number to the parent slide number, for example
+
+```json
+{
+  "url": "http://www.rvl.io/federico/presentz/#/0/1",
+  "time": 10
+}
+```
