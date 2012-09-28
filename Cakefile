@@ -12,7 +12,7 @@ task "build", ->
     "cat dist/presentz_tmp.js >> dist/presentz.js"
     "rm dist/presentz_tmp.js"
     "node_modules/uglify-js/bin/uglifyjs -o dist/presentz.min.js dist/presentz.js"
-    "mv dist/presentz.js dist/presentz-0.1.1.js"
-    "mv dist/presentz.min.js dist/presentz-0.1.1.min.js"
+    "mv dist/presentz.js dist/presentz-1.0.0.js"
+    "mv dist/presentz.min.js dist/presentz-1.0.0.min.js"
   ].join " && ", (err) ->
     assert !err?, err
