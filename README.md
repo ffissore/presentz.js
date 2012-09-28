@@ -36,20 +36,20 @@ Presentz.js starts with a presentation, a json object whose structure is
           "time": 14
         }
       ]
-    },
-    {
-      "title": "Part 2",
-      "duration": 7,
-      "video": {
-        "url": "http://presentz.org/assets/demo/demo2.webm"
-      },
-      "slides": [
-        {
-          "url": "http://presentz.org/assets/demo/slide5.png",
-          "time": 0
-        }
-      ]
     }
   ]
 }
 ```
+
+(A slightly richer version of this presentation can be seen at http://presentz.org/demo/01_videotag-img)
+
+In essence:
+
+- each presentation has a `title` and a list of `chapters`
+- each chapter has 
+  - a `duration` (expressed in seconds)
+  - a `video` with a `url`
+  - a list of `slides`
+- each slide has a `url` and a `time` (expressed in seconds)
+
+The most important information is the `time` of a slide: it's used to determine when a slidechange has to occur and which slide has to be displayed. Such time is relative to the video of the containing chapter.
