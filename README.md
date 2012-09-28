@@ -2,13 +2,15 @@
 
 Presentz.js is a javascript library for synchronizing videos and slides.
 
-## Dependencies quick reference (skip if you are still not using presentz.js but just reading this README)
+## Dependencies quick reference
+
+(skip if you are still not using presentz.js but just reading this README)
 
 Depending on which video and slide sources you are using, you need zero to a couple of additional js libraries
 
 - [SWFObject](https://code.google.com/p/swfobject/): if your slides are made with flash or if they are hosted on slideshare
 - [Froogaloop](http://developer.vimeo.com/player/js-api): if your video is on Vimeo
-- [Mediaelementjs](http://mediaelementjs.com/): if your host your video files on your own. There are also .css files and images to setup a good looking player, so using medialementjs requires some additional work effort.
+- [Mediaelementjs](http://mediaelementjs.com/): if you host your video files on your own. There are also .css files and images to setup a good looking player, so using medialementjs requires some additional effort.
 - [Youtube IFrame API](https://developers.google.com/youtube/iframe_api_reference): if your videos are on youtube
 
 ## A JSON file
