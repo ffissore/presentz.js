@@ -2,6 +2,15 @@
 
 Presentz.js is a javascript library for synchronizing videos and slides.
 
+## Dependencies quick reference (skip if you are still not using presentz.js but just reading this README)
+
+Depending on which video and slide sources you are using, you need zero to a couple of additional js libraries
+
+- [SWFObject](https://code.google.com/p/swfobject/): if your slides are made with flash or if they are hosted on slideshare
+- [Froogaloop](http://developer.vimeo.com/player/js-api): if your video is on Vimeo
+- [Mediaelementjs](http://mediaelementjs.com/): if your host your video files on your own. There are also .css files and images to setup a good looking player, so using medialementjs requires some additional work effort.
+- [Youtube IFrame API](https://developers.google.com/youtube/iframe_api_reference): if your videos are on youtube
+
 ## A JSON file
 
 Presentz.js starts with a presentation, a json object whose structure is
@@ -61,26 +70,37 @@ At the moment, Presentz.js supports Youtube, Vimeo and raw video sources (as in 
 
 ### Youtube
 
-Just use the youtube url in the `video.url` property
+Use the youtube url in the `video.url` property
 
 ```json
 "video": {
   "url": "http://youtu.be/hJgncy4I1ig",
   "thumb": "/assets/demo/youtube-slideshare.png"
-}
+},
 ```
 
 Works with both the long url `http://www.youtube.com/watch?v=hJgncy4I1ig` and the short one `http://youtu.be/hJgncy4I1ig`
 
 ### Vimeo
 
-Just use the vimeo url in the `video.url` property
-
+Use the vimeo url in the `video.url` property
 
 ```json
 "video": {
   "url": "http://vimeo.com/27902834",
   "thumb": "/assets/demo/vimeo-img.png"
-}
-
+},
 ```
+
+### Raw video files
+
+Use the url to the video file in the `video.url` property
+
+```json
+"video": {
+  "url": "http://presentz.org/assets/demo/demo1.webm",
+  "thumb": "http://presentz.org/assets/demo/videotag-img.png"
+},
+```
+
+Raw video files require mediaelementjs is already setup (if you just put in their .js file, the player will be so ugly to be unusable)
