@@ -9,41 +9,43 @@ Presentz.js starts with a presentation, a json object whose structure is
 
 ```json
 {
-  "title": "Youtube player, Speaker Deck player",
+  "title": "Video tag, images as slides",
   "chapters": [
     {
+      "title": "Part 1",
       "duration": 21,
       "video": {
-        "url": "http://youtu.be/hJgncy4I1ig",
-        "thumb": "/assets/demo/youtube-slideshare.png"
+        "url": "http://presentz.org/assets/demo/demo1.webm",
+        "thumb": "http://presentz.org/assets/demo/videotag-img.png"
       },
       "slides": [
         {
-          "url": "https://speakerdeck.com/4ffbeed2df7b3f00010233bf#1",
+          "url": "http://presentz.org/assets/demo/slide1.png",
           "time": 0
         },
         {
-          "url": "https://speakerdeck.com/4ffbeed2df7b3f00010233bf#2",
+          "url": "http://presentz.org/assets/demo/slide2.png",
           "time": 7
         },
         {
-          "url": "https://speakerdeck.com/4ffbeed2df7b3f00010233bf#3",
+          "url": "http://presentz.org/assets/demo/slide3.png",
           "time": 9.5
         },
         {
-          "url": "https://speakerdeck.com/4ffbeed2df7b3f00010233bf#4",
+          "url": "http://presentz.org/assets/demo/slide4.png",
           "time": 14
         }
       ]
     },
     {
+      "title": "Part 2",
       "duration": 7,
       "video": {
-        "url": "http://youtu.be/WK0MSxOUm-o"
+        "url": "http://presentz.org/assets/demo/demo2.webm"
       },
       "slides": [
         {
-          "url": "https://speakerdeck.com/4ffbeed2df7b3f00010233bf#5",
+          "url": "http://presentz.org/assets/demo/slide5.png",
           "time": 0
         }
       ]
