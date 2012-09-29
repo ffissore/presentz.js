@@ -1,0 +1,44 @@
+<html>
+<body>
+
+<div>
+  <div id="player_video" style="float:left; width: 460px; height: 420px;"></div>
+  <div id="slideshow_player" style="float:left; width: 460px; height: 420px;"></div>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.youtube.com/iframe_api"></script>
+
+<script type="text/javascript" src="../dist/presentz-1.0.0.js"></script>
+<script type="text/javascript">
+  var youtubeReady = false;
+  var presentation;
+  var presentz;
+
+  function onYouTubeIframeAPIReady() {
+    youtubeReady = true;
+    initPresentz();
+  }
+
+  function initPresentz(pres) {
+    if (pres) {
+      presentation = pres;
+    }
+
+    if (!youtubeReady || !presentation) {
+      return;
+    }
+
+    presentz = new Presentz("#player_video", "460x420", "#slideshow_player", "460x420")
+    presentz.init(presentation);
+    presentz.changeChapter(0, 0, true)
+  }
+
+  $().ready(function() {
+    $.get("youtube_speakerdeck.json", function(json) {
+      initPresentz(json);
+    });
+  });
+</script>
+</body>
+</html>
