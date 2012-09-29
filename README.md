@@ -67,6 +67,15 @@ In essence:
 
 The most important information is the `time` of a slide: it's used to determine when a slidechange has to occur and which slide has to be displayed. Such time is relative to the video of the containing chapter.
 
+## Events
+
+You can listen to the events emitted by Presentz.js with the syntax `.on(eventName, function(){...}`
+
+Presentz.js emits the following events:
+- `slidechange`, emitted when the slide changes. Callback arguments: `oldChapterIndex`, `oldSlideIndex`, `newChapterIndex`, `newSlideIndex`
+- `videochange`, emitted when the chapter changes. See `slidechange` callback arguments
+- `timechange`, emitted as the video player plays the video. Callback argument: `currentTime` (a float)
+
 ## Supported video sources
 
 Presentz.js wants to use and reuse everything is already available, but we can rely only on those video streaming services that provide a "player API". As a fallback, we can host our video files on our own servers (or on any other webserver, think amazon s3, dropbox...)
