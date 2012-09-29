@@ -69,7 +69,7 @@ The most important information is the `time` of a slide: it's used to determine 
 
 ## Events
 
-You can listen to the events emitted by Presentz.js with the syntax `.on(eventName, function(){...}`
+You can listen to the events emitted by Presentz.js with the syntax `.on(eventName, function(){...})`
 
 Presentz.js emits the following events:
 - `slidechange`, emitted when the slide changes. Callback arguments: `oldChapterIndex`, `oldSlideIndex`, `newChapterIndex`, `newSlideIndex`
