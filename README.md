@@ -170,33 +170,75 @@ where:
 - `4ffbeed2df7b3f00010233bf` is the ID
 - `#1` is the slide number (one based)
 
-### Rvl.io
+### Rvl.io, Reveal.js, DZSlides and other hash/javascript/brower based slide systems that can fit into an IFrame 
 
-[Reveal.js](http://lab.hakim.se/reveal-js/) is framework to creating HTML + CSS with 3D transforms based slideshows, very good looking.
+[Reveal.js](http://lab.hakim.se/reveal-js/), [Rvl.io](http://www.rvl.io/) and [DZSlides](http://paulrouget.com/dzslides/) are some popular frameworks for creating very good looking HTML + CSS based slideshows.
 
-Support in presentz.js is experimental and expects the slides to be hosted on http://www.rvl.io/
+As they monitor the URL to know which slide has to be displayed, presentz.js supports them by wrapping the slideshow into an IFrame and changing its url.
 
-Use the base URL and append the number of the slide you want to show, for example:
+Each of these system has its own way of understanding which slide to display. See the following examples:
+
+#### Rvl.io and Reveal.js
 
 ```json
 {
   "url": "http://www.rvl.io/federico/presentz/#/0",
-  "time": 0
+  "time": 0,
+  "_plugin_id": "iframe"
 }
 ```
 
 where:
 - `http://www.rvl.io/federico/presentz/` is the base url
 - `#/0` is the slide number (zero based)
+- `"_plugin_id": "iframe"` is used to force presentz.js use the IFrameSlide plugin (otherwise the fallback ImageSlide would be used
 
 Reveal.js supports vertical slides, that are a sort of "sub slides" of a parent one. To show those slides, append the number to the parent slide number, for example
 
 ```json
 {
   "url": "http://www.rvl.io/federico/presentz/#/0/1",
-  "time": 10
+  "time": 10,
+  "_plugin_id": "iframe"
 }
 ```
+
+#### DZSlides
+
+```json
+{
+  "url": "http://www.mozillaitalia.org/slides/linuxday12/#1.0",
+  "time": 0,
+  "_plugin_id": "iframe"
+}
+```
+
+where:
+- `http://www.mozillaitalia.org/slides/linuxday12/` is the base url
+- `#1.0` is the slide number (one based)
+- `"_plugin_id": "iframe"` is used to force presentz.js use the IFrameSlide plugin (otherwise the fallback ImageSlide would be used
+
+### Plugin override
+
+Presentz.js tries to understand which plugins fits best by looking at the video/slide url. If you wish to force usage of a particular plugin, add the slide/video json object a `_plugin_id` field. For example:
+
+```json
+{
+  "url": "http://www.mozillaitalia.org/slides/linuxday12/#1.0",
+  "time": 0,
+  "_plugin_id": "iframe"
+}
+```
+
+Allowed values include:
+- video: "vimeo", "youtube", "html5"
+- slide: "slideshare", "speakerdeck", "swf", "image", "iframe"
+
+### Adding your plugin
+
+By calling methods `Presentz.registerVideoPlugin(id, plugin)` and `Presentz.registerSlidePlugin(id, plugin)` (before calling the `init` method) you can make presentz.js work with your own plugin.
+
+If you think you plugin can be of benefit to presentz.js users, consider making a pull request and have included in the official distribution.
 
 License
 -----------

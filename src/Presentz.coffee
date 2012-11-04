@@ -15,10 +15,10 @@ class Presentz
       swf: new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       speakerdeck: new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       image: new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
-      rvlio: new RvlIO(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      iframe: new IFrameSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
 
     @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.bliptv]
-    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck, @availableSlidePlugins.rvlio]
+    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck]
     @defaultVideoPlugin = @availableVideoPlugins.html5
     @defaultSlidePlugin = @availableSlidePlugins.image
 
@@ -107,11 +107,15 @@ class Presentz
     return
 
   findVideoPlugin: (video) ->
+    return @availableVideoPlugins[video._plugin_id] if video._plugin_id? and @availableVideoPlugins[video._plugin_id]?
+    
     plugins = (plugin for plugin in @videoPlugins when plugin.handle(video))
     return plugins[0] if plugins.length > 0
     return @defaultVideoPlugin
 
   findSlidePlugin: (slide) ->
+    return @availableSlidePlugins[slide._plugin_id] if slide._plugin_id? and @availableSlidePlugins[slide._plugin_id]?
+    
     plugins = (plugin for plugin in @slidePlugins when plugin.handle(slide))
     return plugins[0] if plugins.length > 0
     return @defaultSlidePlugin
