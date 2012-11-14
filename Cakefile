@@ -1,6 +1,8 @@
 exec = require("child_process").exec
 assert = require("assert")
 
+version = require("./package.json").version
+
 task "build", ->
   exec [
     "mkdir -p dist"
@@ -12,7 +14,8 @@ task "build", ->
     "cat dist/presentz_tmp.js >> dist/presentz.js"
     "rm dist/presentz_tmp.js"
     "node_modules/uglify-js/bin/uglifyjs -o dist/presentz.min.js dist/presentz.js"
-    "mv dist/presentz.js dist/presentz-1.1.2.js"
-    "mv dist/presentz.min.js dist/presentz-1.1.2.min.js"
+    "mv dist/presentz.js dist/presentz-#{version}.js"
+    "mv dist/presentz.min.js dist/presentz-#{version}.min.js"
+    "sed -i 's/presentz-[0-9].[0-9].[0-9]/presentz-#{version}/g' examples/*.html"
   ].join " && ", (err) ->
     assert !err?, err

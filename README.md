@@ -143,6 +143,7 @@ Use that ID to compose a fake slideshare URL, like
 ```json
 {
   "url": "http://www.slideshare.net/slides-110818145820-phpapp02#1",
+  "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides"
   "time": 0
 },
 ```
@@ -151,6 +152,9 @@ where:
 - `http://www.slideshare.net` is used to activate the slideshare plugin
 - `slides-110818145820-phpapp02` is the ID (or doc, or PPTLocation)
 - `#1` is the slide number (one based)
+- `http://www.slideshare.net/federicofissore/presentz-demo-slides` is the url to access the slide show on slideshare
+
+If the `public_url` is present, presentz.js will NOT use the flash player (hurrah!) instead will pick the JPGs provided by SlideShare's [oEmbed API](http://www.slideshare.net/developers/oembed). It's therefore highly recommended to provide a `public_url` 
 
 ### Speakerdeck
 
