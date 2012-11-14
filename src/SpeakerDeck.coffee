@@ -9,7 +9,8 @@ class SpeakerDeck
 
   changeSlide: (slide) ->
     if jQuery("#{@slideContainer} iframe.speakerdeck-iframe").length is 0
-      jQuery(@slideContainer).empty()
+      $slideContainer = jQuery(@slideContainer)
+      $slideContainer.empty()
       slideId = slide.url.substring(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#"))
 
       receiveMessage = (event) =>
@@ -27,7 +28,7 @@ class SpeakerDeck
       script.src = "http://speakerdeck.com/assets/embed.js"
       script.setAttribute("class", "speakerdeck-embed")
       script.setAttribute("data-id", slideId)
-      jQuery(@slideContainer)[0].appendChild(script)
+      $slideContainer[0].appendChild(script)
     else
       if @speakerdeck?
         nextSlide = @slideNumber(slide)

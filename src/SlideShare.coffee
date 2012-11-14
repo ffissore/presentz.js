@@ -6,7 +6,7 @@ class SlideShare
     @swfId = @presentz.newElementName()
 
   handle: (slide) ->
-    slide.url.toLowerCase().indexOf("slideshare.net") isnt -1
+    slide.url.toLowerCase().indexOf("slideshare.net") isnt -1 and !slide.public_url?
     
   slideId: (slide) ->
     slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
@@ -16,7 +16,10 @@ class SlideShare
 
   changeSlide: (slide) ->
     if jQuery("##{@swfId}").length is 0
-      jQuery(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
+      $slideContainer = jQuery(@slideContainer)
+      $slideContainer.empty()
+      $slideContainer.append("<div id=\"#{@elementId}\"></div>")
+      
       docId = @slideId(slide)
       params =
         allowScriptAccess: "always"

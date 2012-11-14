@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (function() {
   "use strict";
 
-  var BlipTv, Html5Video, IFrameSlide, ImgSlide, Presentz, SlideShare, SpeakerDeck, SwfSlide, Video, Vimeo, Youtube, root,
+  var BlipTv, Html5Video, IFrameSlide, ImgSlide, Presentz, SlideShare, SlideShareByImage, SpeakerDeck, SwfSlide, Video, Vimeo, Youtube, root,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
@@ -479,6 +479,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       }
       image = new Image();
       image.src = slide.url;
+      this.preloadedSlides.push(slide.url);
     };
 
     return ImgSlide;
@@ -498,7 +499,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     SlideShare.prototype.handle = function(slide) {
-      return slide.url.toLowerCase().indexOf("slideshare.net") !== -1;
+      return slide.url.toLowerCase().indexOf("slideshare.net") !== -1 && !(slide.public_url != null);
     };
 
     SlideShare.prototype.slideId = function(slide) {
@@ -510,9 +511,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     SlideShare.prototype.changeSlide = function(slide) {
-      var atts, currentSlide, docId, flashvars, nextSlide, params, player;
+      var $slideContainer, atts, currentSlide, docId, flashvars, nextSlide, params, player;
       if (jQuery("#" + this.swfId).length === 0) {
-        jQuery(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
+        $slideContainer = jQuery(this.slideContainer);
+        $slideContainer.empty();
+        $slideContainer.append("<div id=\"" + this.elementId + "\"></div>");
         docId = this.slideId(slide);
         params = {
           allowScriptAccess: "always",
@@ -554,6 +557,101 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   root.presentz.SlideShare = SlideShare;
 
+  SlideShareByImage = (function() {
+
+    function SlideShareByImage(presentz, slideContainer) {
+      this.presentz = presentz;
+      this.slideContainer = slideContainer;
+      this.elementId = this.presentz.newElementName();
+      this.preloadedSlides = [];
+      this.slideInfo = {};
+    }
+
+    SlideShareByImage.prototype.handle = function(slide) {
+      return slide.url.toLowerCase().indexOf("slideshare.net") !== -1 && (slide.public_url != null);
+    };
+
+    SlideShareByImage.prototype.slideNumber = function(slide) {
+      return parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1));
+    };
+
+    SlideShareByImage.prototype.ensureSlideInfoFetched = function(slidePublicUrl, callback) {
+      var _this = this;
+      if (this.slideInfo[slidePublicUrl] != null) {
+        return callback();
+      }
+      jQuery.ajax({
+        url: "http://www.slideshare.net/api/oembed/2",
+        data: {
+          url: slidePublicUrl,
+          format: "json"
+        },
+        dataType: "jsonp",
+        success: function(slideinfo) {
+          _this.slideInfo[slidePublicUrl] = slideinfo;
+          return callback();
+        }
+      });
+    };
+
+    SlideShareByImage.prototype.urlOfSlide = function(slide) {
+      var slideInfo;
+      slideInfo = this.slideInfo[slide.public_url];
+      if (slideInfo.conversion_version === 2) {
+        return "" + slideInfo.slide_image_baseurl + (this.slideNumber(slide)) + slideInfo.slide_image_baseurl_suffix;
+      } else {
+        return "" + slideInfo.slide_image_baseurl + "-slide-" + (this.slideNumber(slide)) + slideInfo.slide_image_baseurl_suffix;
+      }
+    };
+
+    SlideShareByImage.prototype.changeSlide = function(slide) {
+      var $slideContainer,
+        _this = this;
+      if (jQuery("#" + this.elementId).length === 0) {
+        $slideContainer = jQuery(this.slideContainer);
+        $slideContainer.empty();
+        $slideContainer.append("<div id=\"" + this.elementId + "\"></div>");
+      }
+      this.ensureSlideInfoFetched(slide.public_url, function() {
+        var $img;
+        $img = jQuery("#" + _this.elementId + " img");
+        if ($img.length === 0) {
+          return jQuery("#" + _this.elementId).append("<img src=\"" + (_this.urlOfSlide(slide)) + "\"/>");
+        } else {
+          return $img.attr("src", _this.urlOfSlide(slide));
+        }
+      });
+    };
+
+    SlideShareByImage.prototype.preload = function(slide) {
+      var _this = this;
+      if (slide.public_url == null) {
+        return;
+      }
+      this.ensureSlideInfoFetched(slide.public_url, function() {
+        var image, url;
+        url = _this.urlOfSlide(slide);
+        if ((__indexOf.call(_this.preloadedSlides, url) >= 0)) {
+          return;
+        }
+        image = new Image();
+        image.src = url;
+        return _this.preloadedSlides.push(url);
+      });
+    };
+
+    return SlideShareByImage;
+
+  })();
+
+  root = typeof exports !== "undefined" && exports !== null ? exports : window;
+
+  if (!(root.presentz != null)) {
+    root.presentz = {};
+  }
+
+  root.presentz.SlideShareByImage = SlideShareByImage;
+
   SwfSlide = (function() {
 
     function SwfSlide(presentz, slideContainer, width, height) {
@@ -573,10 +671,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     SwfSlide.prototype.changeSlide = function(slide) {
-      var atts, params, swfslide;
+      var $slideContainer, atts, params, swfslide;
       if (jQuery("#" + this.swfId).length === 0) {
-        jQuery(this.slideContainer).empty();
-        jQuery(this.slideContainer).append("<div id=\"" + this.elementId + "\"></div>");
+        $slideContainer = jQuery(this.slideContainer);
+        $slideContainer.empty();
+        $slideContainer.append("<div id=\"" + this.elementId + "\"></div>");
         params = {
           wmode: "opaque"
         };
@@ -635,10 +734,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     SpeakerDeck.prototype.changeSlide = function(slide) {
-      var nextSlide, receiveMessage, script, slideId,
+      var $slideContainer, nextSlide, receiveMessage, script, slideId,
         _this = this;
       if (jQuery("" + this.slideContainer + " iframe.speakerdeck-iframe").length === 0) {
-        jQuery(this.slideContainer).empty();
+        $slideContainer = jQuery(this.slideContainer);
+        $slideContainer.empty();
         slideId = slide.url.substring(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#"));
         receiveMessage = function(event) {
           var data;
@@ -659,7 +759,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         script.src = "http://speakerdeck.com/assets/embed.js";
         script.setAttribute("class", "speakerdeck-embed");
         script.setAttribute("data-id", slideId);
-        jQuery(this.slideContainer)[0].appendChild(script);
+        $slideContainer[0].appendChild(script);
       } else {
         if (this.speakerdeck != null) {
           nextSlide = this.slideNumber(slide);
@@ -685,7 +785,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function IFrameSlide(presentz, slideContainer) {
       this.presentz = presentz;
       this.slideContainer = slideContainer;
-      this.preloadedSlides = [];
       this.selector = "" + this.slideContainer + " iframe.iframe-slide-container";
     }
 
@@ -694,9 +793,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     IFrameSlide.prototype.changeSlide = function(slide) {
+      var $slideContainer;
       if (jQuery(this.selector).length === 0) {
-        jQuery(this.slideContainer).empty();
-        jQuery(this.slideContainer).append("<iframe frameborder=\"0\" class=\"iframe-slide-container\" src=\"" + slide.url + "\"></iframe>");
+        $slideContainer = jQuery(this.slideContainer);
+        $slideContainer.empty();
+        $slideContainer.append("<iframe frameborder=\"0\" class=\"iframe-slide-container\" src=\"" + slide.url + "\"></iframe>");
       } else {
         jQuery(this.selector).attr("src", slide.url);
       }
@@ -720,13 +821,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       };
       this.availableSlidePlugins = {
         slideshare: new SlideShare(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
+        slidesharebyimage: new SlideShareByImage(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
         swf: new SwfSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
         speakerdeck: new SpeakerDeck(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
         image: new ImgSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
         iframe: new IFrameSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1])
       };
       this.videoPlugins = [this.availableVideoPlugins.vimeo, this.availableVideoPlugins.youtube, this.availableVideoPlugins.bliptv];
-      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck];
+      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.slidesharebyimage, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck];
       this.defaultVideoPlugin = this.availableVideoPlugins.html5;
       this.defaultSlidePlugin = this.availableSlidePlugins.image;
       this.currentChapterIndex = -1;

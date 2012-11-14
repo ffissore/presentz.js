@@ -1,0 +1,46 @@
+{
+  "title": "Vimeo player, SlideShare player",
+  "chapters": [
+    {
+      "duration": 21,
+      "video": {
+        "url": "http://youtu.be/hJgncy4I1ig"
+      },
+      "slides": [
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#1",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 0
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#2",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 7
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#3",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 9.5
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#4",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 14
+        }
+      ]
+    },
+    {
+      "duration": 7,
+      "video": {
+        "url": "http://youtu.be/WK0MSxOUm-o"
+      },
+      "slides": [
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#5",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 0
+        }
+      ]
+    }
+  ]
+}

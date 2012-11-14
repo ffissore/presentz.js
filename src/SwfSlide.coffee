@@ -12,8 +12,9 @@ class SwfSlide
 
   changeSlide: (slide) ->
     if jQuery("##{@swfId}").length is 0
-      jQuery(@slideContainer).empty()
-      jQuery(@slideContainer).append("<div id=\"#{@elementId}\"></div>")
+      $slideContainer = jQuery(@slideContainer)
+      $slideContainer.empty()
+      $slideContainer.append("<div id=\"#{@elementId}\"></div>")
       params =
         wmode: "opaque"
       atts =
@@ -34,7 +35,7 @@ class SwfSlide
       id: "#{@preloadSlideId}"
       style: "visibility: hidden; position: absolute; margin: 0 0 0 0; top: 0;"
     swfobject.embedSWF slide.url, "#{@preloadSlideContainerId}", "1", "1", "8", null, null, null, atts, () =>
-      @preloadedSlides.push slide.url
+      @preloadedSlides.push(slide.url)
     return
 
 root = exports ? window

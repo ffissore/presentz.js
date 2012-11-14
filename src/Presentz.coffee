@@ -12,13 +12,14 @@ class Presentz
 
     @availableSlidePlugins =
       slideshare: new SlideShare(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      slidesharebyimage: new SlideShareByImage(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       swf: new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       speakerdeck: new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       image: new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
       iframe: new IFrameSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
 
     @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.bliptv]
-    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck]
+    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.slidesharebyimage, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck]
     @defaultVideoPlugin = @availableVideoPlugins.html5
     @defaultSlidePlugin = @availableSlidePlugins.image
 
@@ -100,7 +101,7 @@ class Presentz
 
     next4Slides = @presentation.chapters[chapterIndex].slides[(slideIndex + 1)..(slideIndex + 5)]
     for nextSlide in next4Slides
-      nextSlide._plugin.preload nextSlide if nextSlide._plugin.preload?
+      nextSlide._plugin.preload(nextSlide) if nextSlide._plugin.preload?
 
     for listener in @listeners.slidechange
       listener(@currentChapterIndex, previousSlideIndex, chapterIndex, slideIndex)
