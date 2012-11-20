@@ -910,7 +910,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           candidateSlide = slide;
         }
       }
-      if ((candidateSlide != null) && this.currentSlide.url !== candidateSlide.url) {
+      if ((candidateSlide != null) && (this.currentSlide.url !== candidateSlide.url || slides.indexOf(candidateSlide) !== slides.indexOf(this.currentSlide))) {
         this.changeSlide(candidateSlide, this.currentChapterIndex, slides.indexOf(candidateSlide));
       }
       _ref = this.listeners.timechange;

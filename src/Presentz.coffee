@@ -84,7 +84,7 @@ class Presentz
     for slide in slides when slide.time <= currentTime
       candidateSlide = slide
 
-    if candidateSlide? and @currentSlide.url isnt candidateSlide.url
+    if candidateSlide? and (@currentSlide.url isnt candidateSlide.url or slides.indexOf(candidateSlide) isnt slides.indexOf(@currentSlide))
       @changeSlide(candidateSlide, @currentChapterIndex, slides.indexOf(candidateSlide))
       
     for listener in @listeners.timechange
