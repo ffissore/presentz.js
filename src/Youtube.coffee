@@ -1,25 +1,44 @@
 class Youtube
 
+  IFRAME_API = "//www.youtube.com/iframe_api"
+  
   constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video [1], [-1, 2], [0], @presentz
     @elementId = @presentz.newElementName()
 
-  changeVideo: (videoData, @wouldPlay) ->
-    if jQuery("##{@elementId}").length is 0
-      jQuery(@videoContainer).append("<div id=\"#{@elementId}\"></div>")
-
-      @player = new YT.Player @elementId,
-        height: @height
-        width: @width
-        videoId: @videoId(videoData)
-        playerVars:
-          rel: 0
-          wmode: "opaque"
-        events:
-          onReady: @onReady
-          onStateChange: @handleEvent
+  ensureYoutubeIframeAPILoaded: (callback) ->
+    if jQuery("script[src=\"#{IFRAME_API}\"]").length is 0
+      script = document.createElement("script")
+      script.type = "text/javascript"
+      script.async = true
+      script.src = IFRAME_API
+      jQuery(@videoContainer)[0].appendChild(script)
+      window.onYouTubeIframeAPIReady = () ->
+        callback()
     else
-      @player.cueVideoById(@videoId(videoData))
+      callback()
+    return
+    
+  changeVideo: (videoData, @wouldPlay) ->
+    @ensureYoutubeIframeAPILoaded () =>
+      if jQuery("##{@elementId}").length is 0
+        jQuery(@videoContainer).append("<div id=\"#{@elementId}\"></div>")
+  
+        @player = new YT.Player @elementId,
+          height: @height
+          width: @width
+          videoId: @videoId(videoData)
+          playerVars:
+            rel: 0
+            wmode: "opaque"
+          events:
+            onReady: @onReady
+            onStateChange: @handleEvent
+      else
+        @player.cueVideoById(@videoId(videoData))
+        
+      return
+      
     return
 
   videoId: (videoData) ->
