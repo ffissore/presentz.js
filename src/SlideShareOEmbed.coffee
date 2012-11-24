@@ -1,4 +1,4 @@
-class SlideShareByImage
+class SlideShareOEmbed
 
   constructor: (@presentz, @slideContainer) ->
     @elementId = @presentz.newElementName()
@@ -61,4 +61,4 @@ class SlideShareByImage
     
 root = exports ? window
 root.presentz = {} if !root.presentz?
-root.presentz.SlideShareByImage = SlideShareByImage
+root.presentz.SlideShareOEmbed = SlideShareOEmbed

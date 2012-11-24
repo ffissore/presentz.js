@@ -7,7 +7,7 @@ task "build", ->
   exec [
     "mkdir -p dist"
     "rm -rf dist/*"
-    "coffee -o dist -j presentz_tmp -c src/strict.coffee src/Video.coffee src/Html5Video.coffee src/Vimeo.coffee src/Youtube.coffee src/BlipTv.coffee src/ImgSlide.coffee src/SlideShare.coffee src/SlideShareByImage.coffee src/SwfSlide.coffee src/SpeakerDeck.coffee src/IFrameSlide.coffee src/Presentz.coffee"
+    "coffee -o dist -j presentz_tmp -c src/strict.coffee src/Video.coffee src/Html5Video.coffee src/Vimeo.coffee src/Youtube.coffee src/BlipTv.coffee src/ImgSlide.coffee src/SlideShare.coffee src/SlideShareOEmbed.coffee src/SwfSlide.coffee src/SpeakerDeck.coffee src/IFrameSlide.coffee src/Presentz.coffee"
     "echo '/*' >> dist/presentz.js"
     "cat LICENSE_SHORT >> dist/presentz.js"
     "echo '*/' >> dist/presentz.js"
