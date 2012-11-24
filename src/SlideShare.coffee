@@ -6,7 +6,8 @@ class SlideShare
     @swfId = @presentz.newElementName()
 
   handle: (slide) ->
-    slide.url.toLowerCase().indexOf("slideshare.net") isnt -1 and !slide.public_url?
+    #TODO remove subsequent comment to enable slideshare oembed api
+    slide.url.toLowerCase().indexOf("slideshare.net") isnt -1 # and !slide.public_url?
     
   slideId: (slide) ->
     slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
