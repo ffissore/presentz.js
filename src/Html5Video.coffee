@@ -9,13 +9,12 @@ class Html5Video
   changeVideo: (videoData, @wouldPlay) ->
     $videoContainer = jQuery(@videoContainer)
     $videoContainer.empty()
-    videoHtml = "<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"100%\" height=\"100%\"></video>"
-    $videoContainer.append(videoHtml)
+    $videoContainer.append("<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"100%\" height=\"100%\"></video>")
 
     playerOptions =
       timerRate: 500
       success: (me) =>
-        @onPlayerLoaded me
+        @onPlayerLoaded(me)
         return
 
     new MediaElementPlayer("##{@elementId}", playerOptions)
@@ -23,7 +22,7 @@ class Html5Video
 
   onPlayerLoaded: (@player) ->
     eventHandler = (event) =>
-      @video.handleEvent event.type
+      @video.handleEvent(event.type)
       return
     @player.addEventListener("play", eventHandler, false)
     @player.addEventListener("pause", eventHandler, false)
