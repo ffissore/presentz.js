@@ -7,9 +7,10 @@ class Html5Video
   handle: (video) -> true
 
   changeVideo: (videoData, @wouldPlay) ->
-    jQuery(@videoContainer).empty()
+    $videoContainer = jQuery(@videoContainer)
+    $videoContainer.empty()
     videoHtml = "<video id=\"#{@elementId}\" controls preload=\"none\" src=\"#{videoData.url}\" width=\"100%\" height=\"100%\"></video>"
-    jQuery(@videoContainer).append(videoHtml)
+    $videoContainer.append(videoHtml)
 
     playerOptions =
       timerRate: 500
@@ -21,12 +22,12 @@ class Html5Video
     return
 
   onPlayerLoaded: (@player) ->
-    eventHandler= (event) =>
+    eventHandler = (event) =>
       @video.handleEvent event.type
       return
-    player.addEventListener("play", eventHandler, false)
-    player.addEventListener("pause", eventHandler, false)
-    player.addEventListener("ended", eventHandler, false)
+    @player.addEventListener("play", eventHandler, false)
+    @player.addEventListener("pause", eventHandler, false)
+    @player.addEventListener("ended", eventHandler, false)
 
     @player.load()
     @play() if @wouldPlay
@@ -37,7 +38,7 @@ class Html5Video
     @player.currentTime
 
   skipTo: (time, wouldPlay = false) ->
-    if @player and @player.currentTime
+    if @player? and @player.currentTime > 0
       @player.setCurrentTime(time)
       @play() if wouldPlay
       true
