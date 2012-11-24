@@ -1,22 +1,28 @@
 class Presentz
 
+  toWidthHeight = (str) ->
+    parts = str.split("x")
+    widthHeight =
+      width: jQuery.trim(parts[0])
+      height: jQuery.trim(parts[1])
+
   constructor: (videoContainer, videoWxH, slideContainer, slideWxH) ->
-    videoWxHParts = videoWxH.split("x")
-    slideWxHParts = slideWxH.split("x")
+    sizeOfVideo = toWidthHeight(videoWxH)
+    sizeOfSlide = toWidthHeight(slideWxH)
 
     @availableVideoPlugins =
-      vimeo: new Vimeo(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
-      youtube: new Youtube(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
-      bliptv: new BlipTv(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
-      html5: new Html5Video(@, videoContainer, videoWxHParts[0], videoWxHParts[1])
+      vimeo: new Vimeo(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
+      youtube: new Youtube(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
+      bliptv: new BlipTv(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
+      html5: new Html5Video(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
 
     @availableSlidePlugins =
-      slideshare: new SlideShare(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
-      slideshareoembed: new SlideShareOEmbed(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
-      swf: new SwfSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
-      speakerdeck: new SpeakerDeck(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
-      image: new ImgSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
-      iframe: new IFrameSlide(@, slideContainer, slideWxHParts[0], slideWxHParts[1])
+      slideshare: new SlideShare(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
+      slideshareoembed: new SlideShareOEmbed(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
+      swf: new SwfSlide(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
+      speakerdeck: new SpeakerDeck(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
+      image: new ImgSlide(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
+      iframe: new IFrameSlide(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
 
     @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.bliptv]
     @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.slideshareoembed, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck]
@@ -33,7 +39,7 @@ class Presentz
       play: []
       pause: []
       finish: []
-      
+
     @isSynchronized = true
 
   registerVideoPlugin: (name, plugin) ->
@@ -48,7 +54,7 @@ class Presentz
 
   init: (@presentation) ->
     @stopTimeChecker() if @intervalSet
-    
+
     @currentChapterIndex = -1
     @currentChapter = undefined
     @currentSlideIndex = -1
@@ -84,9 +90,9 @@ class Presentz
     for slide in slides when slide.time <= currentTime
       candidateSlide = slide
 
-    if candidateSlide? and (@currentSlide.url isnt candidateSlide.url or slides.indexOf(candidateSlide) isnt slides.indexOf(@currentSlide))
+    if candidateSlide? and slides.indexOf(candidateSlide) isnt slides.indexOf(@currentSlide)
       @changeSlide(candidateSlide, @currentChapterIndex, slides.indexOf(candidateSlide))
-      
+
     for listener in @listeners.timechange
       listener(currentTime)
 
@@ -109,14 +115,14 @@ class Presentz
 
   findVideoPlugin: (video) ->
     return @availableVideoPlugins[video._plugin_id] if video._plugin_id? and @availableVideoPlugins[video._plugin_id]?
-    
+
     plugins = (plugin for plugin in @videoPlugins when plugin.handle(video))
     return plugins[0] if plugins.length > 0
     return @defaultVideoPlugin
 
   findSlidePlugin: (slide) ->
     return @availableSlidePlugins[slide._plugin_id] if slide._plugin_id? and @availableSlidePlugins[slide._plugin_id]?
-    
+
     plugins = (plugin for plugin in @slidePlugins when plugin.handle(slide))
     return plugins[0] if plugins.length > 0
     return @defaultSlidePlugin
@@ -124,10 +130,10 @@ class Presentz
   synchronized: (@isSynchronized) ->
     @stopTimeChecker() if @intervalSet and !@isSynchronized
     @startTimeChecker() if !@intervalSet and @isSynchronized and !@isPaused()
-  
+
   startTimeChecker: () ->
     return unless @isSynchronized
-    
+
     clearInterval(@interval)
     @intervalSet = true
     timeChecker= () =>
