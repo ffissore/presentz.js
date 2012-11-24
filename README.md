@@ -14,7 +14,11 @@ Depending on which video and slide sources you are using, you need zero to a cou
 - [SWFObject](https://code.google.com/p/swfobject/): if your slides are made with flash or if they are hosted on slideshare
 - [Froogaloop](http://developer.vimeo.com/player/js-api): if your video is on Vimeo
 - [Mediaelementjs](http://mediaelementjs.com/): if you host your video files on your own. There are also .css files and images to setup a good looking player, so using medialementjs requires some additional effort.
-- [Youtube IFrame API](https://developers.google.com/youtube/iframe_api_reference): if your videos are on youtube
+
+Since the following APIs cannot be bundled*, Presentz.js will load them on its own
+- [Youtube IFrame API](https://developers.google.com/youtube/iframe_api_reference)
+
+(*) It's either technically or legally impossible or unconvenient
 
 ## A JSON file
 
