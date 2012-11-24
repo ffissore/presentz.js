@@ -20,9 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (function() {
   "use strict";
 
-  var BlipTv, Html5Video, IFrameSlide, ImgSlide, Presentz, SlideShare, SlideShareByImage, SpeakerDeck, SwfSlide, Video, Vimeo, Youtube, root,
+  var BlipTv, Html5Video, IFrameSlide, ImgSlide, Presentz, RvlIO, SlideShare, SlideShareOEmbed, SpeakerDeck, SwfSlide, Video, Vimeo, Youtube, root,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Video = (function() {
 
@@ -81,12 +83,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Html5Video.prototype.changeVideo = function(videoData, wouldPlay) {
-      var playerOptions, videoHtml,
+      var $videoContainer, playerOptions,
         _this = this;
       this.wouldPlay = wouldPlay;
-      jQuery(this.videoContainer).empty();
-      videoHtml = "<video id=\"" + this.elementId + "\" controls preload=\"none\" src=\"" + videoData.url + "\" width=\"100%\" height=\"100%\"></video>";
-      jQuery(this.videoContainer).append(videoHtml);
+      $videoContainer = jQuery(this.videoContainer);
+      $videoContainer.empty();
+      $videoContainer.append("<video id=\"" + this.elementId + "\" controls preload=\"none\" src=\"" + videoData.url + "\" width=\"100%\" height=\"100%\"></video>");
       playerOptions = {
         timerRate: 500,
         success: function(me) {
@@ -103,9 +105,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       eventHandler = function(event) {
         _this.video.handleEvent(event.type);
       };
-      player.addEventListener("play", eventHandler, false);
-      player.addEventListener("pause", eventHandler, false);
-      player.addEventListener("ended", eventHandler, false);
+      this.player.addEventListener("play", eventHandler, false);
+      this.player.addEventListener("pause", eventHandler, false);
+      this.player.addEventListener("ended", eventHandler, false);
       this.player.load();
       if (this.wouldPlay) {
         this.play();
@@ -120,7 +122,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       if (wouldPlay == null) {
         wouldPlay = false;
       }
-      if (this.player && this.player.currentTime) {
+      if ((this.player != null) && this.player.currentTime > 0) {
         this.player.setCurrentTime(time);
         if (wouldPlay) {
           this.play();
@@ -276,6 +278,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   root.presentz.Vimeo = Vimeo;
 
   Youtube = (function() {
+    var IFRAME_API;
+
+    IFRAME_API = "//www.youtube.com/iframe_api";
 
     function Youtube(presentz, videoContainer, width, height) {
       this.presentz = presentz;
@@ -290,26 +295,45 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.elementId = this.presentz.newElementName();
     }
 
-    Youtube.prototype.changeVideo = function(videoData, wouldPlay) {
-      this.wouldPlay = wouldPlay;
-      if (jQuery("#" + this.elementId).length === 0) {
-        jQuery(this.videoContainer).append("<div id=\"" + this.elementId + "\"></div>");
-        this.player = new YT.Player(this.elementId, {
-          height: this.height,
-          width: this.width,
-          videoId: this.videoId(videoData),
-          playerVars: {
-            rel: 0,
-            wmode: "opaque"
-          },
-          events: {
-            onReady: this.onReady,
-            onStateChange: this.handleEvent
-          }
-        });
+    Youtube.prototype.ensureYoutubeIframeAPILoaded = function(callback) {
+      var script;
+      if (jQuery("script[src=\"" + IFRAME_API + "\"]").length === 0) {
+        script = document.createElement("script");
+        script.type = "text/javascript";
+        script.async = true;
+        script.src = IFRAME_API;
+        jQuery(this.videoContainer)[0].appendChild(script);
+        window.onYouTubeIframeAPIReady = function() {
+          return callback();
+        };
       } else {
-        this.player.cueVideoById(this.videoId(videoData));
+        callback();
       }
+    };
+
+    Youtube.prototype.changeVideo = function(videoData, wouldPlay) {
+      var _this = this;
+      this.wouldPlay = wouldPlay;
+      this.ensureYoutubeIframeAPILoaded(function() {
+        if (jQuery("#" + _this.elementId).length === 0) {
+          jQuery(_this.videoContainer).append("<div id=\"" + _this.elementId + "\"></div>");
+          _this.player = new YT.Player(_this.elementId, {
+            height: _this.height,
+            width: _this.width,
+            videoId: _this.videoId(videoData),
+            playerVars: {
+              rel: 0,
+              wmode: "opaque"
+            },
+            events: {
+              onReady: _this.onReady,
+              onStateChange: _this.handleEvent
+            }
+          });
+        } else {
+          _this.player.cueVideoById(_this.videoId(videoData));
+        }
+      });
     };
 
     Youtube.prototype.videoId = function(videoData) {
@@ -462,13 +486,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     ImgSlide.prototype.changeSlide = function(slide) {
-      var $slideContainer;
-      if (jQuery("" + this.slideContainer + " img").length === 0) {
+      var $img, $slideContainer;
+      $img = jQuery("" + this.slideContainer + " img");
+      if ($img.length === 0) {
         $slideContainer = jQuery(this.slideContainer);
         $slideContainer.empty();
         $slideContainer.append("<img src=\"" + slide.url + "\"/>");
       } else {
-        jQuery("" + this.slideContainer + " img").attr("src", slide.url);
+        $img.attr("src", slide.url);
       }
     };
 
@@ -499,7 +524,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     SlideShare.prototype.handle = function(slide) {
-      return slide.url.toLowerCase().indexOf("slideshare.net") !== -1 && !(slide.public_url != null);
+      return slide.url.toLowerCase().indexOf("slideshare.net") !== -1;
     };
 
     SlideShare.prototype.slideId = function(slide) {
@@ -511,8 +536,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     SlideShare.prototype.changeSlide = function(slide) {
-      var $slideContainer, atts, currentSlide, docId, flashvars, nextSlide, params, player;
-      if (jQuery("#" + this.swfId).length === 0) {
+      var $slideContainer, $swf, atts, currentSlide, docId, flashvars, nextSlide, params, player;
+      $swf = jQuery("#" + this.swfId);
+      if ($swf.length === 0) {
         $slideContainer = jQuery(this.slideContainer);
         $slideContainer.empty();
         $slideContainer.append("<div id=\"" + this.elementId + "\"></div>");
@@ -531,7 +557,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         swfobject.embedSWF("http://static.slidesharecdn.com/swf/ssplayer2.swf", this.elementId, this.width, this.height, "8", null, flashvars, params, atts);
         this.currentSlide = 0;
       } else {
-        player = jQuery("#" + this.swfId)[0];
+        player = $swf[0];
         nextSlide = this.slideNumber(slide);
         if (player.getCurrentSlide != null) {
           currentSlide = player.getCurrentSlide();
@@ -557,9 +583,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   root.presentz.SlideShare = SlideShare;
 
-  SlideShareByImage = (function() {
+  SlideShareOEmbed = (function() {
 
-    function SlideShareByImage(presentz, slideContainer) {
+    function SlideShareOEmbed(presentz, slideContainer) {
       this.presentz = presentz;
       this.slideContainer = slideContainer;
       this.elementId = this.presentz.newElementName();
@@ -567,15 +593,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.slideInfo = {};
     }
 
-    SlideShareByImage.prototype.handle = function(slide) {
+    SlideShareOEmbed.prototype.handle = function(slide) {
       return slide.url.toLowerCase().indexOf("slideshare.net") !== -1 && (slide.public_url != null);
     };
 
-    SlideShareByImage.prototype.slideNumber = function(slide) {
+    SlideShareOEmbed.prototype.slideNumber = function(slide) {
       return parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1));
     };
 
-    SlideShareByImage.prototype.ensureSlideInfoFetched = function(slidePublicUrl, callback) {
+    SlideShareOEmbed.prototype.ensureSlideInfoFetched = function(slidePublicUrl, callback) {
       var _this = this;
       if (this.slideInfo[slidePublicUrl] != null) {
         return callback();
@@ -594,7 +620,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       });
     };
 
-    SlideShareByImage.prototype.urlOfSlide = function(slide) {
+    SlideShareOEmbed.prototype.urlOfSlide = function(slide) {
       var slideInfo;
       slideInfo = this.slideInfo[slide.public_url];
       if (slideInfo.conversion_version === 2) {
@@ -604,7 +630,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       }
     };
 
-    SlideShareByImage.prototype.changeSlide = function(slide) {
+    SlideShareOEmbed.prototype.changeSlide = function(slide) {
       var $slideContainer,
         _this = this;
       if (jQuery("#" + this.elementId).length === 0) {
@@ -623,7 +649,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       });
     };
 
-    SlideShareByImage.prototype.preload = function(slide) {
+    SlideShareOEmbed.prototype.preload = function(slide) {
       var _this = this;
       if (slide.public_url == null) {
         return;
@@ -640,7 +666,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       });
     };
 
-    return SlideShareByImage;
+    return SlideShareOEmbed;
 
   })();
 
@@ -650,7 +676,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     root.presentz = {};
   }
 
-  root.presentz.SlideShareByImage = SlideShareByImage;
+  root.presentz.SlideShareOEmbed = SlideShareOEmbed;
 
   SwfSlide = (function() {
 
@@ -785,7 +811,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function IFrameSlide(presentz, slideContainer) {
       this.presentz = presentz;
       this.slideContainer = slideContainer;
-      this.selector = "" + this.slideContainer + " iframe.iframe-slide-container";
+      this.iframeSelector = "" + this.slideContainer + " iframe.iframe-slide-container";
     }
 
     IFrameSlide.prototype.handle = function() {
@@ -793,13 +819,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     IFrameSlide.prototype.changeSlide = function(slide) {
-      var $slideContainer;
-      if (jQuery(this.selector).length === 0) {
+      var $iframe, $slideContainer;
+      $iframe = jQuery(this.iframeSelector);
+      if ($iframe.length === 0) {
         $slideContainer = jQuery(this.slideContainer);
         $slideContainer.empty();
         $slideContainer.append("<iframe frameborder=\"0\" class=\"iframe-slide-container\" src=\"" + slide.url + "\"></iframe>");
       } else {
-        jQuery(this.selector).attr("src", slide.url);
+        $iframe.attr("src", slide.url);
       }
     };
 
@@ -807,28 +834,55 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   })();
 
+  RvlIO = (function(_super) {
+
+    __extends(RvlIO, _super);
+
+    function RvlIO() {
+      return RvlIO.__super__.constructor.apply(this, arguments);
+    }
+
+    RvlIO.prototype.handle = function(slide) {
+      return slide.url.toLowerCase().indexOf("rvl.io") !== -1;
+    };
+
+    return RvlIO;
+
+  })(IFrameSlide);
+
   Presentz = (function() {
+    var toWidthHeight;
+
+    toWidthHeight = function(str) {
+      var parts, widthHeight;
+      parts = str.split("x");
+      return widthHeight = {
+        width: jQuery.trim(parts[0]),
+        height: jQuery.trim(parts[1])
+      };
+    };
 
     function Presentz(videoContainer, videoWxH, slideContainer, slideWxH) {
-      var slideWxHParts, videoWxHParts;
-      videoWxHParts = videoWxH.split("x");
-      slideWxHParts = slideWxH.split("x");
+      var sizeOfSlide, sizeOfVideo;
+      sizeOfVideo = toWidthHeight(videoWxH);
+      sizeOfSlide = toWidthHeight(slideWxH);
       this.availableVideoPlugins = {
-        vimeo: new Vimeo(this, videoContainer, videoWxHParts[0], videoWxHParts[1]),
-        youtube: new Youtube(this, videoContainer, videoWxHParts[0], videoWxHParts[1]),
-        bliptv: new BlipTv(this, videoContainer, videoWxHParts[0], videoWxHParts[1]),
-        html5: new Html5Video(this, videoContainer, videoWxHParts[0], videoWxHParts[1])
+        vimeo: new Vimeo(this, videoContainer, sizeOfVideo.width, sizeOfVideo.height),
+        youtube: new Youtube(this, videoContainer, sizeOfVideo.width, sizeOfVideo.height),
+        bliptv: new BlipTv(this, videoContainer, sizeOfVideo.width, sizeOfVideo.height),
+        html5: new Html5Video(this, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
       };
       this.availableSlidePlugins = {
-        slideshare: new SlideShare(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
-        slidesharebyimage: new SlideShareByImage(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
-        swf: new SwfSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
-        speakerdeck: new SpeakerDeck(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
-        image: new ImgSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1]),
-        iframe: new IFrameSlide(this, slideContainer, slideWxHParts[0], slideWxHParts[1])
+        slideshare: new SlideShare(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
+        slideshareoembed: new SlideShareOEmbed(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
+        swf: new SwfSlide(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
+        speakerdeck: new SpeakerDeck(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
+        image: new ImgSlide(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
+        iframe: new IFrameSlide(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
+        rvlio: new RvlIO(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
       };
       this.videoPlugins = [this.availableVideoPlugins.vimeo, this.availableVideoPlugins.youtube, this.availableVideoPlugins.bliptv];
-      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.slidesharebyimage, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck];
+      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.slideshareoembed, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck, this.availableSlidePlugins.rvlio];
       this.defaultVideoPlugin = this.availableVideoPlugins.html5;
       this.defaultSlidePlugin = this.availableSlidePlugins.image;
       this.currentChapterIndex = -1;
@@ -910,7 +964,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           candidateSlide = slide;
         }
       }
-      if ((candidateSlide != null) && (this.currentSlide.url !== candidateSlide.url || slides.indexOf(candidateSlide) !== slides.indexOf(this.currentSlide))) {
+      if ((candidateSlide != null) && slides.indexOf(candidateSlide) !== slides.indexOf(this.currentSlide)) {
         this.changeSlide(candidateSlide, this.currentChapterIndex, slides.indexOf(candidateSlide));
       }
       _ref = this.listeners.timechange;

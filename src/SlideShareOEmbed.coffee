@@ -29,9 +29,9 @@ class SlideShareOEmbed
   urlOfSlide: (slide) ->
     slideInfo = @slideInfo[slide.public_url]
     if slideInfo.conversion_version is 2
-      return "#{slideInfo.slide_image_baseurl}#{@slideNumber(slide)}#{slideInfo.slide_image_baseurl_suffix}"
+      "#{slideInfo.slide_image_baseurl}#{@slideNumber(slide)}#{slideInfo.slide_image_baseurl_suffix}"
     else
-      return "#{slideInfo.slide_image_baseurl}-slide-#{@slideNumber(slide)}#{slideInfo.slide_image_baseurl_suffix}"
+      "#{slideInfo.slide_image_baseurl}-slide-#{@slideNumber(slide)}#{slideInfo.slide_image_baseurl_suffix}"
 
   changeSlide: (slide) ->
     if jQuery("##{@elementId}").length is 0

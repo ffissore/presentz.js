@@ -6,12 +6,13 @@ class ImgSlide
   handle: (slide) -> true
 
   changeSlide: (slide) ->
-    if jQuery("#{@slideContainer} img").length is 0
+    $img = jQuery("#{@slideContainer} img")
+    if $img.length is 0
       $slideContainer = jQuery(@slideContainer)
       $slideContainer.empty()
       $slideContainer.append("<img src=\"#{slide.url}\"/>")
     else
-      jQuery("#{@slideContainer} img").attr "src", slide.url
+      $img.attr("src", slide.url)
     return
 
   preload: (slide) ->
