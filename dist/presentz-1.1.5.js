@@ -244,7 +244,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         wouldPlay = false;
       }
       if (time <= this.loadedTimeInSeconds) {
-        this.player.api("seekTo", time);
+        this.player.api("seekTo", time + 2);
         if (wouldPlay) {
           this.play();
         }

@@ -32,7 +32,7 @@ class SpeakerDeck
     else
       if @speakerdeck?
         nextSlide = @slideNumber(slide)
-        @speakerdeck.postMessage JSON.stringify(["goToSlide", nextSlide]), @speakerdeckOrigin
+        @speakerdeck.postMessage(JSON.stringify(["goToSlide", nextSlide]), @speakerdeckOrigin)
     return
 
   slideNumber: (slide) ->

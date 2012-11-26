@@ -77,7 +77,7 @@ class Vimeo
 
   skipTo: (time, wouldPlay = false) ->
     if time <= @loadedTimeInSeconds
-      @player.api("seekTo", time)
+      @player.api("seekTo", time + 2)
       @play() if wouldPlay
       true
     false
