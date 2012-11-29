@@ -1,5 +1,7 @@
 class Presentz
 
+  EMPTY_FUNCTION = () ->
+  
   toWidthHeight = (str) ->
     parts = str.split("x")
     widthHeight =
@@ -72,11 +74,15 @@ class Presentz
   on: (eventType, callback) ->
     @listeners[eventType].push callback
 
-  changeChapter: (chapterIndex, slideIndex, play) ->
+  changeChapter: (chapterIndex, slideIndex, play, callback = EMPTY_FUNCTION) ->
     targetChapter = @presentation.chapters[chapterIndex]
+    return callback("no chapter at index #{chapterIndex}") unless targetChapter?
+    
     targetSlide = targetChapter.slides[slideIndex]
+    return callback("no slide at index #{slideIndex}") unless targetSlide?
+    
     if chapterIndex isnt @currentChapterIndex or (@currentChapter? and @currentChapter.video._plugin.skipTo(targetSlide.time, play))
-      @changeSlide(targetSlide, chapterIndex, slideIndex)
+      @changeSlide(chapterIndex, slideIndex)
       if chapterIndex isnt @currentChapterIndex
         targetChapter.video._plugin.changeVideo(targetChapter.video, play)
         targetChapter.video._plugin.skipTo(targetSlide.time, play)
@@ -84,6 +90,8 @@ class Presentz
           listener(@currentChapterIndex, @currentSlideIndex, chapterIndex, slideIndex)
       @currentChapterIndex = chapterIndex
       @currentChapter = targetChapter
+      
+    callback()
     return
 
   checkSlideChange: (currentTime) ->
@@ -91,16 +99,16 @@ class Presentz
     for slide in slides when slide.time <= currentTime
       candidateSlide = slide
 
-    if candidateSlide? and slides.indexOf(candidateSlide) isnt slides.indexOf(@currentSlide)
-      @changeSlide(candidateSlide, @currentChapterIndex, slides.indexOf(candidateSlide))
+    if candidateSlide? and slides.indexOf(candidateSlide) isnt @currentSlideIndex
+      @changeSlide(@currentChapterIndex, slides.indexOf(candidateSlide))
 
     for listener in @listeners.timechange
       listener(currentTime)
 
     return
 
-  changeSlide: (slide, chapterIndex, slideIndex) ->
-    @currentSlide = slide
+  changeSlide: (chapterIndex, slideIndex) ->
+    slide = @presentation.chapters[chapterIndex].slides[slideIndex]
     slide._plugin.changeSlide(slide)
 
     previousSlideIndex = @currentSlideIndex
@@ -112,6 +120,7 @@ class Presentz
 
     for listener in @listeners.slidechange
       listener(@currentChapterIndex, previousSlideIndex, chapterIndex, slideIndex)
+    
     return
 
   findVideoPlugin: (video) ->
