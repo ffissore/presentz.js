@@ -20,7 +20,7 @@ class Video
 
     listener() for listener in listeners if listeners?
 
-    if @isInFinishState and @presentz.currentChapterIndex < (@presentz.howManyChapters - 1)
+    if @isInFinishState and @presentz.currentChapterIndex < (@presentz.presentation.chapters.length - 1)
       @presentz.changeChapter(@presentz.currentChapterIndex + 1, 0, true)
 
     return

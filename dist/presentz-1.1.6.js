@@ -58,7 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           listener();
         }
       }
-      if (this.isInFinishState && this.presentz.currentChapterIndex < (this.presentz.howManyChapters - 1)) {
+      if (this.isInFinishState && this.presentz.currentChapterIndex < (this.presentz.presentation.chapters.length - 1)) {
         this.presentz.changeChapter(this.presentz.currentChapterIndex + 1, 0, true);
       }
     };
