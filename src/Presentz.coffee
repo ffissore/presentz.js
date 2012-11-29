@@ -33,7 +33,6 @@ class Presentz
     @defaultSlidePlugin = @availableSlidePlugins.image
 
     @currentChapterIndex = -1
-    @currentChapter = undefined
     @currentSlideIndex = -1
     @listeners =
       slidechange: []
@@ -59,7 +58,6 @@ class Presentz
     @stopTimeChecker() if @intervalSet
 
     @currentChapterIndex = -1
-    @currentChapter = undefined
     @currentSlideIndex = -1
 
     @howManyChapters = @presentation.chapters.length
@@ -77,11 +75,11 @@ class Presentz
   changeChapter: (chapterIndex, slideIndex, play, callback = EMPTY_FUNCTION) ->
     targetChapter = @presentation.chapters[chapterIndex]
     return callback("no chapter at index #{chapterIndex}") unless targetChapter?
-    
+
     targetSlide = targetChapter.slides[slideIndex]
     return callback("no slide at index #{slideIndex}") unless targetSlide?
-    
-    if chapterIndex isnt @currentChapterIndex or (@currentChapter? and @currentChapter.video._plugin.skipTo(targetSlide.time, play))
+
+    if chapterIndex isnt @currentChapterIndex or (@currentChapterIndex isnt -1 and @presentation.chapters[@currentChapterIndex].video._plugin.skipTo(targetSlide.time, play))
       @changeSlide(chapterIndex, slideIndex)
       if chapterIndex isnt @currentChapterIndex
         targetChapter.video._plugin.changeVideo(targetChapter.video, play)
@@ -89,8 +87,7 @@ class Presentz
         for listener in @listeners.videochange
           listener(@currentChapterIndex, @currentSlideIndex, chapterIndex, slideIndex)
       @currentChapterIndex = chapterIndex
-      @currentChapter = targetChapter
-      
+
     callback()
     return
 
@@ -120,7 +117,7 @@ class Presentz
 
     for listener in @listeners.slidechange
       listener(@currentChapterIndex, previousSlideIndex, chapterIndex, slideIndex)
-    
+
     return
 
   findVideoPlugin: (video) ->
@@ -158,7 +155,7 @@ class Presentz
     return
 
   checkState: () ->
-    @checkSlideChange(@currentChapter.video._plugin.currentTime()) if @currentChapter?
+    @checkSlideChange(@presentation.chapters[@currentChapterIndex].video._plugin.currentTime()) if @currentChapterIndex isnt -1
     return
 
   newElementName: (prefix) ->
@@ -168,13 +165,13 @@ class Presentz
       "element_#{Math.round(Math.random() * 1000000)}"
 
   pause: () ->
-    @currentChapter.video._plugin.pause() if @currentChapter?
+    @presentation.chapters[@currentChapterIndex].video._plugin.pause() if @currentChapterIndex isnt -1
 
   isPaused: () ->
-    @currentChapter.video._plugin.isPaused() if @currentChapter?
+    @presentation.chapters[@currentChapterIndex].video._plugin.isPaused() if @currentChapterIndex isnt -1
 
   play: () ->
-    @currentChapter.video._plugin.play() if @currentChapter?
+    @presentation.chapters[@currentChapterIndex].video._plugin.play() if @currentChapterIndex isnt -1
 
   next: () ->
     if @presentation.chapters[@currentChapterIndex].slides.length > @currentSlideIndex + 1
