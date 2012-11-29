@@ -46,12 +46,12 @@ class Presentz
 
   registerVideoPlugin: (name, plugin) ->
     @availableVideoPlugins[name] = plugin
-    @videoPlugins.push(@availableVideoPlugins[name])
+    @videoPlugins.push(plugin)
     return
 
   registerSlidePlugin: (name, plugin) ->
     @availableSlidePlugins[name] = plugin
-    @slidePlugins.push(@availableSlidePlugins[name])
+    @slidePlugins.push(plugin)
     return
 
   init: (@presentation) ->
@@ -59,8 +59,6 @@ class Presentz
 
     @currentChapterIndex = -1
     @currentSlideIndex = -1
-
-    @howManyChapters = @presentation.chapters.length
 
     for chapter in @presentation.chapters
       chapter.video._plugin = @findVideoPlugin(chapter.video)
@@ -70,7 +68,7 @@ class Presentz
     return
 
   on: (eventType, callback) ->
-    @listeners[eventType].push callback
+    @listeners[eventType].push(callback)
 
   changeChapter: (chapterIndex, slideIndex, play, callback = EMPTY_FUNCTION) ->
     targetChapter = @presentation.chapters[chapterIndex]
@@ -91,19 +89,6 @@ class Presentz
     callback()
     return
 
-  checkSlideChange: (currentTime) ->
-    slides = @presentation.chapters[@currentChapterIndex].slides
-    for slide in slides when slide.time <= currentTime
-      candidateSlide = slide
-
-    if candidateSlide? and slides.indexOf(candidateSlide) isnt @currentSlideIndex
-      @changeSlide(@currentChapterIndex, slides.indexOf(candidateSlide))
-
-    for listener in @listeners.timechange
-      listener(currentTime)
-
-    return
-
   changeSlide: (chapterIndex, slideIndex) ->
     slide = @presentation.chapters[chapterIndex].slides[slideIndex]
     slide._plugin.changeSlide(slide)
@@ -117,6 +102,19 @@ class Presentz
 
     for listener in @listeners.slidechange
       listener(@currentChapterIndex, previousSlideIndex, chapterIndex, slideIndex)
+
+    return
+
+  checkSlideChange: (currentTime) ->
+    slides = @presentation.chapters[@currentChapterIndex].slides
+    for slide in slides when slide.time <= currentTime
+      candidateSlide = slide
+
+    if candidateSlide? and slides.indexOf(candidateSlide) isnt @currentSlideIndex
+      @changeSlide(@currentChapterIndex, slides.indexOf(candidateSlide))
+
+    for listener in @listeners.timechange
+      listener(currentTime)
 
     return
 
