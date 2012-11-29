@@ -25,7 +25,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://a.vimeocdn.com/js/froogaloop2.min.js?daceb-1348941466"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-<script type="text/javascript" src="../dist/presentz-1.1.5.js"></script>
+<script type="text/javascript" src="../dist/presentz-1.1.6.js"></script>
 <script type="text/javascript">
   var presentation;
   var presentz;
@@ -35,7 +35,11 @@
 
     presentz = new Presentz("#player_video", "460x420", "#slideshow_player", "460x420")
     presentz.init(presentation);
-    presentz.changeChapter(0, 0, true)
+    presentz.changeChapter(0, 0, true, function(err) {
+      if (err) {
+        alert(err);
+      }
+    });
   }
 
   $().ready(function() {

@@ -2,7 +2,7 @@
   "name": "presentz.js",
   "description": "A web library to show synchronized video + slides presentations",
   "keywords": ["presentation", "slide", "video", "synchronization"],
-  "version": "1.1.5",
+  "version": "1.1.6",
   "author": "Federico Fissore <federico@fissore.org>",
   "repository": {
     "type": "git",

@@ -851,7 +851,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   })(IFrameSlide);
 
   Presentz = (function() {
-    var toWidthHeight;
+    var EMPTY_FUNCTION, toWidthHeight;
+
+    EMPTY_FUNCTION = function() {};
 
     toWidthHeight = function(str) {
       var parts, widthHeight;
@@ -886,7 +888,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.defaultVideoPlugin = this.availableVideoPlugins.html5;
       this.defaultSlidePlugin = this.availableSlidePlugins.image;
       this.currentChapterIndex = -1;
-      this.currentChapter = void 0;
       this.currentSlideIndex = -1;
       this.listeners = {
         slidechange: [],
@@ -901,12 +902,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     Presentz.prototype.registerVideoPlugin = function(name, plugin) {
       this.availableVideoPlugins[name] = plugin;
-      this.videoPlugins.push(this.availableVideoPlugins[name]);
+      this.videoPlugins.push(plugin);
     };
 
     Presentz.prototype.registerSlidePlugin = function(name, plugin) {
       this.availableSlidePlugins[name] = plugin;
-      this.slidePlugins.push(this.availableSlidePlugins[name]);
+      this.slidePlugins.push(plugin);
     };
 
     Presentz.prototype.init = function(presentation) {
@@ -916,9 +917,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.stopTimeChecker();
       }
       this.currentChapterIndex = -1;
-      this.currentChapter = void 0;
       this.currentSlideIndex = -1;
-      this.howManyChapters = this.presentation.chapters.length;
       _ref = this.presentation.chapters;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         chapter = _ref[_i];
@@ -935,12 +934,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       return this.listeners[eventType].push(callback);
     };
 
-    Presentz.prototype.changeChapter = function(chapterIndex, slideIndex, play) {
+    Presentz.prototype.changeChapter = function(chapterIndex, slideIndex, play, callback) {
       var listener, targetChapter, targetSlide, _i, _len, _ref;
+      if (callback == null) {
+        callback = EMPTY_FUNCTION;
+      }
       targetChapter = this.presentation.chapters[chapterIndex];
+      if (targetChapter == null) {
+        return callback("no chapter at index " + chapterIndex);
+      }
       targetSlide = targetChapter.slides[slideIndex];
-      if (chapterIndex !== this.currentChapterIndex || ((this.currentChapter != null) && this.currentChapter.video._plugin.skipTo(targetSlide.time, play))) {
-        this.changeSlide(targetSlide, chapterIndex, slideIndex);
+      if (targetSlide == null) {
+        return callback("no slide at index " + slideIndex);
+      }
+      if (chapterIndex !== this.currentChapterIndex || (this.currentChapterIndex !== -1 && this.presentation.chapters[this.currentChapterIndex].video._plugin.skipTo(targetSlide.time, play))) {
+        this.changeSlide(chapterIndex, slideIndex);
         if (chapterIndex !== this.currentChapterIndex) {
           targetChapter.video._plugin.changeVideo(targetChapter.video, play);
           targetChapter.video._plugin.skipTo(targetSlide.time, play);
@@ -951,32 +959,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           }
         }
         this.currentChapterIndex = chapterIndex;
-        this.currentChapter = targetChapter;
       }
+      callback();
     };
 
-    Presentz.prototype.checkSlideChange = function(currentTime) {
-      var candidateSlide, listener, slide, slides, _i, _j, _len, _len1, _ref;
-      slides = this.presentation.chapters[this.currentChapterIndex].slides;
-      for (_i = 0, _len = slides.length; _i < _len; _i++) {
-        slide = slides[_i];
-        if (slide.time <= currentTime) {
-          candidateSlide = slide;
-        }
-      }
-      if ((candidateSlide != null) && slides.indexOf(candidateSlide) !== slides.indexOf(this.currentSlide)) {
-        this.changeSlide(candidateSlide, this.currentChapterIndex, slides.indexOf(candidateSlide));
-      }
-      _ref = this.listeners.timechange;
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        listener = _ref[_j];
-        listener(currentTime);
-      }
-    };
-
-    Presentz.prototype.changeSlide = function(slide, chapterIndex, slideIndex) {
-      var listener, next4Slides, nextSlide, previousSlideIndex, _i, _j, _len, _len1, _ref;
-      this.currentSlide = slide;
+    Presentz.prototype.changeSlide = function(chapterIndex, slideIndex) {
+      var listener, next4Slides, nextSlide, previousSlideIndex, slide, _i, _j, _len, _len1, _ref;
+      slide = this.presentation.chapters[chapterIndex].slides[slideIndex];
       slide._plugin.changeSlide(slide);
       previousSlideIndex = this.currentSlideIndex;
       this.currentSlideIndex = slideIndex;
@@ -991,6 +980,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
         listener = _ref[_j];
         listener(this.currentChapterIndex, previousSlideIndex, chapterIndex, slideIndex);
+      }
+    };
+
+    Presentz.prototype.checkSlideChange = function(currentTime) {
+      var candidateSlide, listener, slide, slides, _i, _j, _len, _len1, _ref;
+      slides = this.presentation.chapters[this.currentChapterIndex].slides;
+      for (_i = 0, _len = slides.length; _i < _len; _i++) {
+        slide = slides[_i];
+        if (slide.time <= currentTime) {
+          candidateSlide = slide;
+        }
+      }
+      if ((candidateSlide != null) && slides.indexOf(candidateSlide) !== this.currentSlideIndex) {
+        this.changeSlide(this.currentChapterIndex, slides.indexOf(candidateSlide));
+      }
+      _ref = this.listeners.timechange;
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        listener = _ref[_j];
+        listener(currentTime);
       }
     };
 
@@ -1070,8 +1078,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Presentz.prototype.checkState = function() {
-      if (this.currentChapter != null) {
-        this.checkSlideChange(this.currentChapter.video._plugin.currentTime());
+      if (this.currentChapterIndex !== -1) {
+        this.checkSlideChange(this.presentation.chapters[this.currentChapterIndex].video._plugin.currentTime());
       }
     };
 
@@ -1084,20 +1092,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     Presentz.prototype.pause = function() {
-      if (this.currentChapter != null) {
-        return this.currentChapter.video._plugin.pause();
+      if (this.currentChapterIndex !== -1) {
+        return this.presentation.chapters[this.currentChapterIndex].video._plugin.pause();
       }
     };
 
     Presentz.prototype.isPaused = function() {
-      if (this.currentChapter != null) {
-        return this.currentChapter.video._plugin.isPaused();
+      if (this.currentChapterIndex !== -1) {
+        return this.presentation.chapters[this.currentChapterIndex].video._plugin.isPaused();
       }
     };
 
     Presentz.prototype.play = function() {
-      if (this.currentChapter != null) {
-        return this.currentChapter.video._plugin.play();
+      if (this.currentChapterIndex !== -1) {
+        return this.presentation.chapters[this.currentChapterIndex].video._plugin.play();
       }
     };
 
