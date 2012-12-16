@@ -29,10 +29,17 @@ class SpeakerDeck
       script.setAttribute("class", "speakerdeck-embed")
       script.setAttribute("data-id", slideId)
       $slideContainer[0].appendChild(script)
+      @pingInterval = setInterval(() =>
+        $speakerDeckIframe = jQuery("#{@slideContainer} iframe.speakerdeck-iframe")
+        if $speakerDeckIframe.length > 0 and $speakerDeckIframe[0].contentWindow
+          $speakerDeckIframe[0].contentWindow.postMessage(JSON.stringify(["ping"]), "*")
+      , 500)
     else
       if @speakerdeck?
         nextSlide = @slideNumber(slide)
         @speakerdeck.postMessage(JSON.stringify(["goToSlide", nextSlide]), @speakerdeckOrigin)
+      else
+        console.log "no speakerdeck"
     return
 
   slideNumber: (slide) ->

@@ -786,10 +786,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         script.setAttribute("class", "speakerdeck-embed");
         script.setAttribute("data-id", slideId);
         $slideContainer[0].appendChild(script);
+        this.pingInterval = setInterval(function() {
+          var $speakerDeckIframe;
+          $speakerDeckIframe = jQuery("" + _this.slideContainer + " iframe.speakerdeck-iframe");
+          if ($speakerDeckIframe.length > 0 && $speakerDeckIframe[0].contentWindow) {
+            return $speakerDeckIframe[0].contentWindow.postMessage(JSON.stringify(["ping"]), "*");
+          }
+        }, 500);
       } else {
         if (this.speakerdeck != null) {
           nextSlide = this.slideNumber(slide);
           this.speakerdeck.postMessage(JSON.stringify(["goToSlide", nextSlide]), this.speakerdeckOrigin);
+        } else {
+          console.log("no speakerdeck");
         }
       }
     };
