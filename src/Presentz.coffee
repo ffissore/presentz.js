@@ -1,7 +1,7 @@
 class Presentz
 
   EMPTY_FUNCTION = () ->
-  
+
   toWidthHeight = (str) ->
     parts = str.split("x")
     widthHeight =
@@ -64,6 +64,8 @@ class Presentz
       chapter.video._plugin = @findVideoPlugin(chapter.video)
       for slide in chapter.slides
         slide._plugin = @findSlidePlugin(slide)
+      if !chapter.video.duration and chapter.slides and chapter.slides.length > 0
+        chapter.video.duration = chapter.slides[chapter.slides.length - 1].time + 5
 
     return
 
