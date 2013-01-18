@@ -936,8 +936,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           slide = _ref1[_j];
           slide._plugin = this.findSlidePlugin(slide);
         }
-        if (!chapter.video.duration && chapter.slides && chapter.slides.length > 0) {
-          chapter.video.duration = chapter.slides[chapter.slides.length - 1].time + 5;
+        if (!(chapter.duration != null) && (chapter.slides != null) && chapter.slides.length > 0) {
+          chapter.duration = chapter.slides[chapter.slides.length - 1].time + 5;
         }
       }
     };
