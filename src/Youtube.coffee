@@ -12,7 +12,14 @@ class Youtube
       script.type = "text/javascript"
       script.async = true
       script.src = IFRAME_API
-      jQuery(@videoContainer)[0].appendChild(script)
+      $scripts = jQuery("script")
+      if $scripts.length is 0
+        # old behaviour
+        jQuery(@videoContainer)[0].appendChild(script)
+      else
+        # code suggested by https://developers.google.com/youtube/iframe_api_reference
+        firstScriptTag = $scripts[0]
+        firstScriptTag.parentNode.insertBefore(script, firstScriptTag)
       window.onYouTubeIframeAPIReady = () ->
         callback()
     else

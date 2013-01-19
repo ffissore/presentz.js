@@ -296,13 +296,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     Youtube.prototype.ensureYoutubeIframeAPILoaded = function(callback) {
-      var script;
+      var $scripts, firstScriptTag, script;
       if (jQuery("script[src=\"" + IFRAME_API + "\"]").length === 0) {
         script = document.createElement("script");
         script.type = "text/javascript";
         script.async = true;
         script.src = IFRAME_API;
-        jQuery(this.videoContainer)[0].appendChild(script);
+        $scripts = jQuery("script");
+        if ($scripts.length === 0) {
+          jQuery(this.videoContainer)[0].appendChild(script);
+        } else {
+          firstScriptTag = $scripts[0];
+          firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
+        }
         window.onYouTubeIframeAPIReady = function() {
           return callback();
         };
