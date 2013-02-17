@@ -5,6 +5,7 @@ class SpeakerDeck
     @elementId = @presentz.newElementName()
 
   handle: (slide) ->
+    return false if !slide.url?
     slide.url.toLowerCase().indexOf("speakerdeck.com") isnt -1
 
   changeSlide: (slide) ->

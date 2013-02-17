@@ -3,7 +3,8 @@ class ImgSlide
   constructor: (@presentz, @slideContainer) ->
     @preloadedSlides = []
 
-  handle: (slide) -> true
+  handle: (slide) -> 
+    return slide.url?
 
   changeSlide: (slide) ->
     $img = jQuery("#{@slideContainer} img")

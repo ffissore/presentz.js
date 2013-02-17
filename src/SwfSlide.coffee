@@ -8,6 +8,7 @@ class SwfSlide
     @preloadSlideId = @presentz.newElementName()
 
   handle: (slide) ->
+    return false if !slide.url?
     slide.url.toLowerCase().indexOf(".swf") isnt -1
 
   changeSlide: (slide) ->

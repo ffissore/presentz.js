@@ -3,7 +3,8 @@ class IFrameSlide
   constructor: (@presentz, @slideContainer) ->
     @iframeSelector = "#{@slideContainer} iframe.iframe-slide-container"
 
-  handle: () -> true
+  handle: (slide) ->
+    return slide.url?
 
   changeSlide: (slide) ->
     $iframe = jQuery(@iframeSelector)

@@ -26,9 +26,10 @@ class Presentz
       image: new ImgSlide(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
       iframe: new IFrameSlide(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
       rvlio: new RvlIO(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
+      none: new NoSlide()
 
     @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.bliptv]
-    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.slideshareoembed, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck, @availableSlidePlugins.rvlio]
+    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.slideshareoembed, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck, @availableSlidePlugins.rvlio, @availableSlidePlugins.none]
     @defaultVideoPlugin = @availableVideoPlugins.html5
     @defaultSlidePlugin = @availableSlidePlugins.image
 

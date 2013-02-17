@@ -6,6 +6,7 @@ class SlideShareOEmbed
     @slideInfo = {}
 
   handle: (slide) ->
+    return false if !slide.url?
     slide.url.toLowerCase().indexOf("slideshare.net") isnt -1 and slide.public_url?
 
   slideNumber: (slide) ->

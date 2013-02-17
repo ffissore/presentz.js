@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (function() {
   "use strict";
 
-  var BlipTv, Html5Video, IFrameSlide, ImgSlide, Presentz, RvlIO, SlideShare, SlideShareOEmbed, SpeakerDeck, SwfSlide, Video, Vimeo, Youtube, root,
+  var BlipTv, Html5Video, IFrameSlide, ImgSlide, NoSlide, Presentz, RvlIO, SlideShare, SlideShareOEmbed, SpeakerDeck, SwfSlide, Video, Vimeo, Youtube, root,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
@@ -488,7 +488,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     ImgSlide.prototype.handle = function(slide) {
-      return true;
+      return slide.url != null;
     };
 
     ImgSlide.prototype.changeSlide = function(slide) {
@@ -530,6 +530,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     SlideShare.prototype.handle = function(slide) {
+      if (!(slide.url != null)) {
+        return false;
+      }
       return slide.url.toLowerCase().indexOf("slideshare.net") !== -1;
     };
 
@@ -600,6 +603,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     SlideShareOEmbed.prototype.handle = function(slide) {
+      if (!(slide.url != null)) {
+        return false;
+      }
       return slide.url.toLowerCase().indexOf("slideshare.net") !== -1 && (slide.public_url != null);
     };
 
@@ -699,6 +705,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     SwfSlide.prototype.handle = function(slide) {
+      if (!(slide.url != null)) {
+        return false;
+      }
       return slide.url.toLowerCase().indexOf(".swf") !== -1;
     };
 
@@ -762,6 +771,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     SpeakerDeck.prototype.handle = function(slide) {
+      if (!(slide.url != null)) {
+        return false;
+      }
       return slide.url.toLowerCase().indexOf("speakerdeck.com") !== -1;
     };
 
@@ -829,8 +841,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.iframeSelector = "" + this.slideContainer + " iframe.iframe-slide-container";
     }
 
-    IFrameSlide.prototype.handle = function() {
-      return true;
+    IFrameSlide.prototype.handle = function(slide) {
+      return slide.url != null;
     };
 
     IFrameSlide.prototype.changeSlide = function(slide) {
@@ -858,12 +870,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     RvlIO.prototype.handle = function(slide) {
+      if (!(slide.url != null)) {
+        return false;
+      }
       return slide.url.toLowerCase().indexOf("rvl.io") !== -1;
     };
 
     return RvlIO;
 
   })(IFrameSlide);
+
+  NoSlide = (function() {
+
+    function NoSlide() {}
+
+    NoSlide.prototype.handle = function(slide) {
+      return !(slide.url != null);
+    };
+
+    NoSlide.prototype.changeSlide = function() {};
+
+    return NoSlide;
+
+  })();
 
   Presentz = (function() {
     var EMPTY_FUNCTION, toWidthHeight;
@@ -896,10 +925,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         speakerdeck: new SpeakerDeck(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
         image: new ImgSlide(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
         iframe: new IFrameSlide(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
-        rvlio: new RvlIO(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
+        rvlio: new RvlIO(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
+        none: new NoSlide()
       };
       this.videoPlugins = [this.availableVideoPlugins.vimeo, this.availableVideoPlugins.youtube, this.availableVideoPlugins.bliptv];
-      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.slideshareoembed, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck, this.availableSlidePlugins.rvlio];
+      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.slideshareoembed, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck, this.availableSlidePlugins.rvlio, this.availableSlidePlugins.none];
       this.defaultVideoPlugin = this.availableVideoPlugins.html5;
       this.defaultSlidePlugin = this.availableSlidePlugins.image;
       this.currentChapterIndex = -1;
