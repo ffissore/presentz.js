@@ -1,17 +1,22 @@
+# SlideShareOEmbed is an experimental alternative to the SlideShare plugin. It doesn't use flash. Experimentation proved that SlideShare images naming is still not stable (or the documentation is incomplete): correct urls bring to 404 responses. Too bad.
 class SlideShareOEmbed
 
+  # Creates a new instance of the SlideShareOEmbed slide plugin
   constructor: (@presentz, @slideContainer) ->
     @elementId = @presentz.newElementName()
     @preloadedSlides = []
     @slideInfo = {}
 
+  # Called by presentz when looking up a proper slide plugin
   handle: (slide) ->
     return false if !slide.url?
     slide.url.toLowerCase().indexOf("slideshare.net") isnt -1 and slide.public_url?
 
+  # Parsers SlideShare url to extract the index of the slide
   slideNumber: (slide) ->
     parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1))
-    
+
+  # Ensures slideshow info is already available
   ensureSlideInfoFetched: (slidePublicUrl, callback) ->
     return callback() if @slideInfo[slidePublicUrl]?
     
@@ -27,6 +32,7 @@ class SlideShareOEmbed
     
     return
 
+  # Builds the URL of the image from the given slide
   urlOfSlide: (slide) ->
     slideInfo = @slideInfo[slide.public_url]
     if slideInfo.conversion_version is 2
@@ -34,6 +40,7 @@ class SlideShareOEmbed
     else
       "#{slideInfo.slide_image_baseurl}-slide-#{@slideNumber(slide)}#{slideInfo.slide_image_baseurl_suffix}"
 
+  # Changes slide, creating a &lt;img&gt; tag or changing its src attribute
   changeSlide: (slide) ->
     if jQuery("##{@elementId}").length is 0
       $slideContainer = jQuery(@slideContainer)
@@ -49,7 +56,7 @@ class SlideShareOEmbed
 
     return
 
-
+  # Preloads the given slide
   preload: (slide) ->
     return unless slide.public_url?
     @ensureSlideInfoFetched slide.public_url, () =>
