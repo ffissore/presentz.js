@@ -71,11 +71,11 @@ class Youtube
     lowerCaseUrl.indexOf("//youtu.be/") isnt -1 or lowerCaseUrl.indexOf("//youtube.com/") isnt -1 or lowerCaseUrl.indexOf("//www.youtube.com/") isnt -1
 
   currentTime: () ->
-    return @player.getCurrentTime() if @player.getCurrentTime?
+    return @player.getCurrentTime() if @player?.getCurrentTime?
     return 0
 
   skipTo: (time, wouldPlay = false) ->
-    if @player and @player.seekTo
+    if @player?.seekTo?
       @player.seekTo(time, true) if wouldPlay or @isPaused()
       @play() if wouldPlay
       true
