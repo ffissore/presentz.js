@@ -5,3 +5,7 @@ class NoSlide
 
   changeSlide: () ->
     return
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.NoSlide = NoSlide

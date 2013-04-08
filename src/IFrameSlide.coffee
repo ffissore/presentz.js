@@ -15,3 +15,7 @@ class IFrameSlide
     else
       $iframe.attr("src", slide.url)
     return
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.IFrameSlide = IFrameSlide

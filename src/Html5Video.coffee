@@ -51,3 +51,7 @@ class Html5Video
 
   isPaused: () ->
     @video.isInPauseState
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.Html5Video = Html5Video

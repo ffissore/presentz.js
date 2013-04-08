@@ -22,3 +22,7 @@ class ImgSlide
     image.src = slide.url
     @preloadedSlides.push(slide.url)
     return
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.ImgSlide = ImgSlide

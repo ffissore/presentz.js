@@ -158,7 +158,7 @@ class Presentz
     @stopTimeChecker() if @intervalSet and !@isSynchronized
     @startTimeChecker() if !@intervalSet and @isSynchronized and !@isPaused()
 
-  # Starts polling the current time to check if a slide/chapter change has to occur
+  # Starts polling the current time to check if a slide change has to occur
   startTimeChecker: () ->
     return unless @isSynchronized
 

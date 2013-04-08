@@ -35,3 +35,7 @@ class BlipTv
 
   pause: () ->
     @video.pause()
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.BlipTv = BlipTv

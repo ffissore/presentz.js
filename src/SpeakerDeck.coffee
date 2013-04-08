@@ -48,3 +48,7 @@ class SpeakerDeck
 
   slideId: (slide) ->
     slide.url.substr(slide.url.lastIndexOf("/") + 1, slide.url.lastIndexOf("#") - 1 - slide.url.lastIndexOf("/"))
+
+root = exports ? window
+root.presentz = {} if !root.presentz?
+root.presentz.SpeakerDeck = SpeakerDeck
