@@ -1,6 +1,6 @@
 # Video is the common backend of all video plugins.
 # It needs to be initialized with play/pause/finish states specific to the actual video plugin.
-# The plugin *must* call handleEvent function whenever appropriate
+# The plugin **must** call handleEvent function whenever appropriate
 class Video
 
   # Creates a new Video instance: play/pause/finish states must be arrays, even if they contain only one value

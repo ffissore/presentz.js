@@ -1,5 +1,7 @@
+# Vimeo video plugin handle Vimeo integration
 class Vimeo
 
+  # Creates a new instance of the Vimeo video plugin
   constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video ["play"], ["pause"], ["finish"], @presentz
     @wouldPlay = false
@@ -8,6 +10,7 @@ class Vimeo
     window[@vimeoCallbackFunctionName] = @receiveVideoInfo if window? #we don't have a window when testing
     @elementId = @presentz.newElementName()
 
+  # Changes video, by calling Vimeo API and then calling receiveVideoInfo upon completion
   changeVideo: (@videoData, @wouldPlay) ->
     ajaxCall =
       url: "http://vimeo.com/api/v2/video/#{@videoId(@videoData)}.json"
@@ -17,12 +20,14 @@ class Vimeo
     jQuery.ajax ajaxCall
     return
 
+  # Parsers Vimeo url to extract the ID of the video
   videoId: (videoData) ->
     id = videoData.url
     id = id.substr(id.lastIndexOf("/") + 1)
     id = id.substr(0, id.indexOf("?")) if id.indexOf("?") isnt -1
     id
 
+  # Called upon Vimeo API call completion. It's where Vimeo player is actually created (if absent) or modified
   receiveVideoInfo: (data) =>
     movieUrl = "http://player.vimeo.com/video/#{@videoId(@videoData)}?api=1&player_id=#{@elementId}"
 
@@ -41,9 +46,11 @@ class Vimeo
 
     return
 
+  # Called by presentz when looking up a proper video plugin
   handle: (video) ->
     video.url.toLowerCase().indexOf("//vimeo.com/") isnt -1
 
+  # Called by Vimeo API (aka "Froogaloop") when video is ready
   onReady: (id) ->
     @player = $f(id)
     @player.addEvent "play", () =>
@@ -72,9 +79,11 @@ class Vimeo
 
     return
 
+  # Gets the current time of the played video
   currentTime: () ->
     @currentTimeInSeconds
 
+  # Skips the video to the given time
   skipTo: (time, wouldPlay = false) ->
     if time <= @loadedTimeInSeconds
       @player.api("seekTo", time + 2)
@@ -82,12 +91,15 @@ class Vimeo
       true
     false
 
+  # Starts playing the video
   play: () ->
     @player.api("play")
 
+  # Pauses the video
   pause: () ->
     @player.api("pause")
 
+  # Returns the pause state of the video
   isPaused: () ->
     @video.isInPauseState
 

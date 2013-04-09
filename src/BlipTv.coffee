@@ -1,3 +1,4 @@
+# Although still here, BlipTV is no longer supported
 class BlipTv
 
   constructor: (@presentz, videoContainer, width, height) ->

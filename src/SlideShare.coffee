@@ -21,7 +21,7 @@ class SlideShare
   slideNumber: (slide) ->
     parseInt(slide.url.substr(slide.url.lastIndexOf("#") + 1))
 
-  # Changes slide, embedding a SlideShare flash player if none was present or setting a new slide index otherwise
+  # Changes slide, embedding a SlideShare flash player if none was present, setting a new slide index otherwise
   changeSlide: (slide) ->
     $swf = jQuery("##{@swfId}")
     if $swf.length is 0

@@ -1,11 +1,15 @@
+# Html5Video video plugin handles urls directly pointing to video files
 class Html5Video
 
+  # Creates a new instance of the Html5Video video plugin
   constructor: (@presentz, @videoContainer, @width, @height) ->
     @video = new Video ["play"], ["pause"], ["ended"], @presentz
     @elementId = @presentz.newElementName()
 
+  # Called by presentz when looking up a proper video plugin
   handle: (video) -> true
 
+  # Changes video, creating a new &lt;video&gt; tag and decorating it with MediaElementPlayer
   changeVideo: (videoData, @wouldPlay) ->
     $videoContainer = jQuery(@videoContainer)
     $videoContainer.empty()
@@ -20,6 +24,7 @@ class Html5Video
     new MediaElementPlayer("##{@elementId}", playerOptions)
     return
 
+  # Called by MediaElementPlayer when ready
   onPlayerLoaded: (@player) ->
     eventHandler = (event) =>
       @video.handleEvent(event.type)
@@ -33,9 +38,11 @@ class Html5Video
 
     return
 
+  # Gets the current time of the played video
   currentTime: () ->
     @player.currentTime
 
+  # Skips the video to the given time
   skipTo: (time, wouldPlay = false) ->
     if @player? and @player.currentTime > 0
       @player.setCurrentTime(time)
@@ -43,12 +50,15 @@ class Html5Video
       true
     false
 
+  # Starts playing the video
   play: () ->
     @player.play()
 
+  # Pauses the video
   pause: () ->
     @player.pause()
 
+  # Returns the pause state of the video
   isPaused: () ->
     @video.isInPauseState
 

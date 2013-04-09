@@ -29,7 +29,7 @@ class Youtube
       callback()
     return
 
-  # Creates a new Youtube player (if none was present) with the given video, queues it otherwise
+  # Changes video, creating a new Youtube player (if none was present) with the given video, queueing it otherwise
   changeVideo: (videoData, @wouldPlay) ->
     @ensureYoutubeIframeAPILoaded () =>
       if jQuery("##{@elementId}").length is 0
