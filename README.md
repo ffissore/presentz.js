@@ -4,6 +4,8 @@ Presentz.js is a javascript library for synchronizing videos and slides.
 
 It's at the heart of http://presentz.org/, a website for freely publishing conference talks, pitches, lessons and the like. Presentz.org is free software as well, hosted on [github](https://github.com/ffissore/presentz.org).
 
+There is also an [API reference](http://ffissore.github.io/presentz.js).
+
 ## Dependencies quick reference
 
 (skip if you are still not using presentz.js but just reading this README)
