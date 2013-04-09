@@ -248,6 +248,10 @@ By calling methods `Presentz.registerVideoPlugin(id, plugin)` and `Presentz.regi
 
 If you think you plugin can be of benefit to presentz.js users, consider making a pull request and have included in the official distribution.
 
+### Reference
+
+You can browse the reference documentation at http://ffissore.github.io/presentz.js
+
 License
 -----------
 Copyright (C) 2012 Federico Fissore
