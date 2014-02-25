@@ -1,0 +1,34 @@
+{
+  "title": "Wistia player, SlideShare player",
+  "chapters": [
+    {
+      "duration": 3.904,
+      "video": {
+        "url": "http://www.wistia.com/g3q48tbnyg",
+        "_plugin_id": "wistia_plugin"
+      },
+      "slides": [
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#1",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 0
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#2",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 1
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#3",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 2
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#4",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 3
+        }
+      ]
+    }
+  ]
+}
