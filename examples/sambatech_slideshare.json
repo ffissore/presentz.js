@@ -1,0 +1,34 @@
+{
+  "title": "Sambatech player, SlideShare player",
+  "chapters": [
+    {
+      "duration": 241.0,
+      "video": {
+        "url": "http://player.sambatech.com.br/current/samba-player.js?ph=1848c0c4b30b5d2d886ef99546152c23&m=449ead8b6768bb8ec73a8ef579d175f3",
+        "_plugin_id": "sambatech_plugin"
+      },
+      "slides": [
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#1",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 0
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#2",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 1
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#3",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 2
+        },
+        {
+          "url": "http://www.slideshare.net/slides-110818145820-phpapp02#4",
+          "public_url": "http://www.slideshare.net/federicofissore/presentz-demo-slides",
+          "time": 3
+        }
+      ]
+    }
+  ]
+}
