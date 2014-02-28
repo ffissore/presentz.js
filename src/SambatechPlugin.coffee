@@ -11,7 +11,7 @@ class SambatechPlugin
     @elementId = @presentz.newElementName()
     @videoData = null
     @time = 0
-  # Ensure the Sambatech IFrame API is loaded: if not, it will add a &lt;script&gt; tag to the DOM and wait for the API to call onYouTubeIframeAPIReady function
+  # Ensure the Sambatech IFrame API is loaded
   ensureSambatechIframeAPILoaded: (callback) ->
 #    <script ="player" name="samba-player-api" type="text/javascript" src=""></script>
     if jQuery("script[src=\"#{IFRAME_API}\"]").length is 0
@@ -86,7 +86,7 @@ class SambatechPlugin
   # Called by presentz when looking up a proper video plugin
   handle: (video) ->
     lowerCaseUrl = video.url.toLowerCase()
-    lowerCaseUrl.indexOf("//youtu.be/") isnt -1 or lowerCaseUrl.indexOf("//youtube.com/") isnt -1 or lowerCaseUrl.indexOf("//www.youtube.com/") isnt -1
+    lowerCaseUrl.indexOf("http://player.sambatech.com.br/current/samba-player.js") isnt -1
 
   # Gets the current time of the played video
   currentTime: () ->

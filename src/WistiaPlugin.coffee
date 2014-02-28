@@ -8,7 +8,7 @@ class WistiaPlugin
     @video = new Video ["play"], ["pause"], ["end"], @presentz
     @elementId = @presentz.newElementName()
 
-  # Ensure the Wistia IFrame API is loaded: if not, it will add a &lt;script&gt; tag to the DOM and wait for the API to call onYouTubeIframeAPIReady function
+  # Ensure the Wistia IFrame API is loaded
   ensureWistiaIframeAPILoaded: (callback) ->
     if jQuery("script[src=\"#{IFRAME_API}\"]").length is 0
       script = document.createElement("script")
@@ -49,7 +49,7 @@ class WistiaPlugin
 
       return
 
-  # Parsers Youtube url to extract the ID of the video
+  # Parsers Wistia url to extract the ID of the video
   videoId: (videoData) ->
     lowercaseUrl = videoData.url.toLowerCase()
     id = videoData.url
@@ -69,7 +69,7 @@ class WistiaPlugin
   # Called by presentz when looking up a proper video plugin
   handle: (video) ->
     lowerCaseUrl = video.url.toLowerCase()
-    lowerCaseUrl.indexOf("//youtu.be/") isnt -1 or lowerCaseUrl.indexOf("//youtube.com/") isnt -1 or lowerCaseUrl.indexOf("//www.youtube.com/") isnt -1
+    lowerCaseUrl.indexOf("//www.wistia.com/") isnt -1
 
   # Gets the current time of the played video
   currentTime: () ->
