@@ -20,6 +20,7 @@ class Presentz
       vimeo: new Vimeo(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
       youtube: new Youtube(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
       wistia_plugin: new WistiaPlugin(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
+      sambatech_plugin: new SambatechPlugin(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
       html5: new Html5Video(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
 
     @availableSlidePlugins =
@@ -33,7 +34,7 @@ class Presentz
       none: new NoSlide()
 
     # When looking for a plugin able to handle a video/slide url, presentz consults the videoPlugins and slidePlugins instance variables: you can avoid such lookup by specifying the plugin to use
-    @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.wistia_plugin]
+    @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.wistia_plugin, @availableVideoPlugins.sambatech_plugin]
     @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.slideshareoembed, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck, @availableSlidePlugins.rvlio, @availableSlidePlugins.none]
     # When no plugin seems able to handle given video/slide, default ones are used
     @defaultVideoPlugin = @availableVideoPlugins.html5
@@ -165,7 +166,13 @@ class Presentz
     clearInterval(@interval)
     @intervalSet = true
     timeChecker = () =>
-      @checkSlideChange(@presentation.chapters[@currentChapterIndex].video._plugin.currentTime()) if @currentChapterIndex isnt -1
+      plugin = @presentation.chapters[@currentChapterIndex].video._plugin
+      if plugin instanceof SambatechPlugin
+        clazz = @
+        plugin.player.getStatus (p) ->
+          clazz.checkSlideChange(p.status.time) if clazz.currentChapterIndex isnt -1
+      else
+        @checkSlideChange(@presentation.chapters[@currentChapterIndex].video._plugin.currentTime()) if @currentChapterIndex isnt -1
       return
     @interval = setInterval(timeChecker, 500)
     return
