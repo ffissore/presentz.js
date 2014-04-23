@@ -65,7 +65,7 @@ Presentz.js starts with a presentation, a json object whose structure is
 In essence:
 
 - each presentation has a `title` and a list of `chapters`
-- each chapter has 
+- each chapter has
   - a `duration` (expressed in seconds)
   - a `video` with a `url`
   - a list of `slides`
@@ -112,6 +112,31 @@ Use the vimeo url in the `video.url` property
 },
 ```
 
+### Samba Tech
+
+Use the samba tech url in the `video.url` property and set the plugin ID.
+```json
+"video": {
+  "url": "http://player.sambatech.com.br/current/samba-player.js?ph=1848c0c4b30b5d2d886ef99546152c23&m=449ead8b6768bb8ec73a8ef579d175f3",
+  "_plugin_id": "sambatech_plugin",
+  "thumb": "/assets/demo/vimeo-img.png"
+},
+```
+[Samba Tech](http://sambatech.com) is a online video platform pioneer in Latin America used by media groups, enterprises and universities.
+
+### Wistia
+
+Use the wistia url in the `video.url` property and set the plugin ID.
+```json
+"video": {
+  "url": "http://www.wistia.com/g3q48tbnyg",
+  "_plugin_id": "wistia_plugin",
+  "thumb": "/assets/demo/vimeo-img.png"
+},
+```
+[Wistia](http://www.wistia.com) provides a video hosting application that makes it easy to manage, share, and track video at work.
+
+
 ### Raw video files
 
 Use the url to the video file in the `video.url` property
@@ -154,13 +179,13 @@ Use that ID to compose a fake slideshare URL, like
 },
 ```
 
-where: 
+where:
 - `http://www.slideshare.net` is used to activate the slideshare plugin
 - `slides-110818145820-phpapp02` is the ID (or doc, or PPTLocation)
 - `#1` is the slide number (one based)
 - `http://www.slideshare.net/federicofissore/presentz-demo-slides` is the url to access the slide show on slideshare
 
-If the `public_url` is present, presentz.js will NOT use the flash player (hurrah!) instead will pick the JPGs provided by SlideShare's [oEmbed API](http://www.slideshare.net/developers/oembed). It's therefore highly recommended to provide a `public_url` 
+If the `public_url` is present, presentz.js will NOT use the flash player (hurrah!) instead will pick the JPGs provided by SlideShare's [oEmbed API](http://www.slideshare.net/developers/oembed). It's therefore highly recommended to provide a `public_url`
 
 ### Speakerdeck
 
@@ -175,12 +200,12 @@ Use that ID to compose a fake speakerdeck URL, like
 },
 ```
 
-where: 
+where:
 - `https://speakerdeck.com` is used to activate the speakerdeck plugin
 - `4ffbeed2df7b3f00010233bf` is the ID
 - `#1` is the slide number (one based)
 
-### Rvl.io, Reveal.js, DZSlides and other hash/javascript/brower based slide systems that can fit into an IFrame 
+### Rvl.io, Reveal.js, DZSlides and other hash/javascript/brower based slide systems that can fit into an IFrame
 
 [Reveal.js](http://lab.hakim.se/reveal-js/), [Rvl.io](http://www.rvl.io/) and [DZSlides](http://paulrouget.com/dzslides/) are some popular frameworks for creating very good looking HTML + CSS based slideshows.
 
