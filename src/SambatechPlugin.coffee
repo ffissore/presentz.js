@@ -36,8 +36,8 @@ class SambatechPlugin
 
     @ensureSambatechIframeAPILoaded () =>
 
-      video = @video
-      wouldPlay = @wouldPlay
+      root.videoSamba = @video
+      root.wouldPlaySamba = @wouldPlay
       @player = new SambaPlayer("player_video", #player é o ID do elemento html que ele vai inserir o iframe
         height: @height
         width: @width
@@ -46,16 +46,11 @@ class SambatechPlugin
 
 
         events: #Funcoes que escutam os eventos do player
-          onLoad: ->
-            video.play() if wouldPlay
-          onStart: ->
-            video.handleEvent("play")
-          onPause: ->
-            video.handleEvent("pause")
-          onFinished: ->
-            video.handleEvent("end")
-          onResume: ->
-            video.handleEvent("play")
+          onLoad: "onLoadSamba",
+          onStart: "onStartSamba",
+          onPause: "onPauseSamba",
+          onFinish: "onFinishedSamba",
+          onResume: "onStartSamba"
       )
 
       return
@@ -68,7 +63,7 @@ class SambatechPlugin
       id = id.substr(id.indexOf("m=") + 2)
       id = id.substr(0, id.indexOf("&")) if id.indexOf("&") isnt -1
     id
-  
+
   # Parsers Sambatech url to extract the ID of the video
   playerKey: (videoData) ->
     lowercaseUrl = videoData.url.toLowerCase()
@@ -108,6 +103,25 @@ class SambatechPlugin
   isPaused: () ->
     @video.isInPauseState
 
+  onStartSamba: () ->
+    videoSamba.handleEvent("play");
+
+  onPauseSamba: () ->
+    videoSamba.handleEvent("pause");
+
+  onFinishedSamba: () ->
+    videoSamba.handleEvent("end");
+
+  onLoadSamba: () ->
+    if wouldPlaySamba
+      videoSamba.play();
+
 root = exports ? window
 root.presentz = {} if !root.presentz?
 root.presentz.SambatechPlugin = SambatechPlugin
+root.onStartSamba = SambatechPlugin.prototype.onStartSamba
+root.onPauseSamba = SambatechPlugin.prototype.onPauseSamba
+root.onFinishedSamba = SambatechPlugin.prototype.onFinishedSamba
+root.onLoadSamba = SambatechPlugin.prototype.onLoadSamba
+root.videoSamba = null;
+root.wouldPlaySamba = null;
