@@ -37,7 +37,8 @@ class SpeakerDeck
       @pingInterval = setInterval(() =>
         $speakerDeckIframe = jQuery("#{@slideContainer} iframe.speakerdeck-iframe")
         if $speakerDeckIframe.length > 0 and $speakerDeckIframe[0].contentWindow
-          $speakerDeckIframe[0].contentWindow.postMessage(JSON.stringify(["ping"]), "*")
+          @speakerdeck = $speakerDeckIframe[0].contentWindow
+          @speakerdeck.postMessage(JSON.stringify(["ping"]), "*")
       , 500)
     else
       if @speakerdeck?
