@@ -13,7 +13,8 @@ class SpeakerDeck
 
   # Changes slide creating a new iframe (if absent) and establishing "postMessage" driven communication with speakerdeck, calling its API with the new slide index otherwise
   changeSlide: (slide) ->
-    if jQuery("#{@slideContainer} iframe.speakerdeck-iframe").length is 0
+    iframeSelector = "#{@slideContainer} iframe.speakerdeck-iframe"
+    if jQuery(iframeSelector).length is 0
       $slideContainer = jQuery(@slideContainer)
       $slideContainer.empty()
       slideId = @slideId(slide)
@@ -35,7 +36,7 @@ class SpeakerDeck
       script.setAttribute("data-id", slideId)
       $slideContainer[0].appendChild(script)
       @pingInterval = setInterval(() =>
-        $speakerDeckIframe = jQuery("#{@slideContainer} iframe.speakerdeck-iframe")
+        $speakerDeckIframe = jQuery(iframeSelector)
         if $speakerDeckIframe.length > 0 and $speakerDeckIframe[0].contentWindow
           @speakerdeck = $speakerDeckIframe[0].contentWindow
           @speakerdeck.postMessage(JSON.stringify(["ping"]), "*")
