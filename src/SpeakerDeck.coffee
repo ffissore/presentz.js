@@ -5,6 +5,7 @@ class SpeakerDeck
   constructor: (@presentz, @slideContainer, @width, @height) ->
     @currentSlide = 0
     @elementId = @presentz.newElementName()
+    @speakerdeckOrigin = "*"
 
   # Called by presentz when looking up a proper slide plugin
   handle: (slide) ->
@@ -37,7 +38,7 @@ class SpeakerDeck
       @pingInterval = setInterval(() =>
         $speakerDeckIframe = jQuery("#{@slideContainer} iframe.speakerdeck-iframe")
         if $speakerDeckIframe.length > 0 and $speakerDeckIframe[0].contentWindow
-          $speakerDeckIframe[0].contentWindow.postMessage(JSON.stringify(["ping"]), "*")
+          @speakerdeck = $speakerDeckIframe[0].contentWindow
       , 500)
     else
       if @speakerdeck?
