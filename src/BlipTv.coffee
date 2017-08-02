@@ -23,7 +23,7 @@ class BlipTv
     return
 
   handle: (video) ->
-    video.url.toLowerCase().indexOf("http://blip.tv") isnt -1
+    video.url.toLowerCase().indexOf("//blip.tv") isnt -1
 
   currentTime: () ->
     @video.currentTime()

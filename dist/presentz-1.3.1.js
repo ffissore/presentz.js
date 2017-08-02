@@ -497,7 +497,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       this.videoData = videoData1;
       this.wouldPlay = wouldPlay1;
       ajaxCall = {
-        url: "http://vimeo.com/api/v2/video/" + (this.videoId(this.videoData)) + ".json",
+        url: "//vimeo.com/api/v2/video/" + (this.videoId(this.videoData)) + ".json",
         dataType: "jsonp",
         jsonpCallback: this.vimeoCallbackFunctionName
       };
@@ -516,7 +516,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     Vimeo.prototype.receiveVideoInfo = function(data) {
       var iframe, movieUrl, onReady, videoHtml;
-      movieUrl = "http://player.vimeo.com/video/" + (this.videoId(this.videoData)) + "?api=1&player_id=" + this.elementId;
+      movieUrl = "//player.vimeo.com/video/" + (this.videoId(this.videoData)) + "?api=1&player_id=" + this.elementId;
       if (jQuery("#" + this.elementId).length === 0) {
         videoHtml = "<iframe id=\"" + this.elementId + "\" src=\"" + movieUrl + "\" width=\"" + this.width + "\" height=\"" + this.height + "\" frameborder=\"0\"></iframe>";
         jQuery(this.videoContainer).append(videoHtml);
@@ -788,7 +788,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     };
 
     BlipTv.prototype.handle = function(video) {
-      return video.url.toLowerCase().indexOf("http://blip.tv") !== -1;
+      return video.url.toLowerCase().indexOf("//blip.tv") !== -1;
     };
 
     BlipTv.prototype.currentTime = function() {
@@ -966,7 +966,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         return callback();
       }
       jQuery.ajax({
-        url: "http://www.slideshare.net/api/oembed/2",
+        url: "//www.slideshare.net/api/oembed/2",
         data: {
           url: slidePublicUrl,
           format: "json"
@@ -1152,7 +1152,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         script = document.createElement("script");
         script.type = "text/javascript";
         script.async = true;
-        script.src = "http://speakerdeck.com/assets/embed.js";
+        script.src = "//speakerdeck.com/assets/embed.js";
         script.setAttribute("class", "speakerdeck-embed");
         script.setAttribute("data-id", slideId);
         $slideContainer[0].appendChild(script);

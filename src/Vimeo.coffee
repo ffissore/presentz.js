@@ -13,7 +13,7 @@ class Vimeo
   # Changes video, by calling Vimeo API and then calling receiveVideoInfo upon completion
   changeVideo: (@videoData, @wouldPlay) ->
     ajaxCall =
-      url: "http://vimeo.com/api/v2/video/#{@videoId(@videoData)}.json"
+      url: "//vimeo.com/api/v2/video/#{@videoId(@videoData)}.json"
       dataType: "jsonp"
       jsonpCallback: @vimeoCallbackFunctionName
 
@@ -29,7 +29,7 @@ class Vimeo
 
   # Called upon Vimeo API call completion. It's where Vimeo player is actually created (if absent) or modified
   receiveVideoInfo: (data) =>
-    movieUrl = "http://player.vimeo.com/video/#{@videoId(@videoData)}?api=1&player_id=#{@elementId}"
+    movieUrl = "//player.vimeo.com/video/#{@videoId(@videoData)}?api=1&player_id=#{@elementId}"
 
     if jQuery("##{@elementId}").length is 0
       videoHtml = "<iframe id=\"#{@elementId}\" src=\"#{movieUrl}\" width=\"#{@width}\" height=\"#{@height}\" frameborder=\"0\"></iframe>"

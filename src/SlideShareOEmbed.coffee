@@ -21,7 +21,7 @@ class SlideShareOEmbed
     return callback() if @slideInfo[slidePublicUrl]?
     
     jQuery.ajax
-      url: "http://www.slideshare.net/api/oembed/2"
+      url: "//www.slideshare.net/api/oembed/2"
       data:
         url: slidePublicUrl
         format: "json"

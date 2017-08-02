@@ -31,7 +31,7 @@ class SpeakerDeck
       script = document.createElement("script")
       script.type = "text/javascript"
       script.async = true
-      script.src = "http://speakerdeck.com/assets/embed.js"
+      script.src = "//speakerdeck.com/assets/embed.js"
       script.setAttribute("class", "speakerdeck-embed")
       script.setAttribute("data-id", slideId)
       $slideContainer[0].appendChild(script)
