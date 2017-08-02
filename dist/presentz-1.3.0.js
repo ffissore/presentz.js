@@ -1303,7 +1303,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         html5: new Html5Video(this, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
       };
       this.availableSlidePlugins = {
-        slideshare: new SlideShare(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
         slideshareoembed: new SlideShareOEmbed(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
         swf: new SwfSlide(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
         speakerdeck: new SpeakerDeck(this, slideContainer, sizeOfSlide.width, sizeOfSlide.height),
@@ -1313,7 +1312,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         none: new NoSlide()
       };
       this.videoPlugins = [this.availableVideoPlugins.vimeo, this.availableVideoPlugins.youtube, this.availableVideoPlugins.wistia_plugin, this.availableVideoPlugins.sambatech_plugin];
-      this.slidePlugins = [this.availableSlidePlugins.slideshare, this.availableSlidePlugins.slideshareoembed, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck, this.availableSlidePlugins.rvlio, this.availableSlidePlugins.none];
+      this.slidePlugins = [this.availableSlidePlugins.slideshareoembed, this.availableSlidePlugins.swf, this.availableSlidePlugins.speakerdeck, this.availableSlidePlugins.rvlio, this.availableSlidePlugins.none];
       this.defaultVideoPlugin = this.availableVideoPlugins.html5;
       this.defaultSlidePlugin = this.availableSlidePlugins.image;
       this.currentChapterIndex = -1;
