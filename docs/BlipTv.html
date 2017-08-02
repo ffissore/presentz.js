@@ -1,0 +1,43 @@
+<!DOCTYPE html>  <html> <head>   <title>BlipTv.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="BlipTv.html">                 BlipTv.coffee               </a>                                           <a class="source" href="Html5Video.html">                 Html5Video.coffee               </a>                                           <a class="source" href="IFrameSlide.html">                 IFrameSlide.coffee               </a>                                           <a class="source" href="ImgSlide.html">                 ImgSlide.coffee               </a>                                           <a class="source" href="NoSlide.html">                 NoSlide.coffee               </a>                                           <a class="source" href="Presentz.html">                 Presentz.coffee               </a>                                           <a class="source" href="RvlIO.html">                 RvlIO.coffee               </a>                                           <a class="source" href="SlideShare.html">                 SlideShare.coffee               </a>                                           <a class="source" href="SlideShareOEmbed.html">                 SlideShareOEmbed.coffee               </a>                                           <a class="source" href="SpeakerDeck.html">                 SpeakerDeck.coffee               </a>                                           <a class="source" href="SwfSlide.html">                 SwfSlide.coffee               </a>                                           <a class="source" href="Video.html">                 Video.coffee               </a>                                           <a class="source" href="Vimeo.html">                 Vimeo.coffee               </a>                                           <a class="source" href="Youtube.html">                 Youtube.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               BlipTv.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>Although still here, BlipTV is no longer supported</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">BlipTv</span>
+
+  <span class="nv">constructor: </span><span class="nf">(@presentz, videoContainer, width, height) -&gt;</span>
+    <span class="vi">@video = </span><span class="k">new</span> <span class="nx">Html5Video</span> <span class="nx">@presentz</span><span class="p">,</span> <span class="nx">videoContainer</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span>
+
+  <span class="nv">changeVideo: </span><span class="nf">(videoData, @wouldPlay) -&gt;</span>
+    <span class="nv">ajaxCall =</span>
+      <span class="nv">url: </span><span class="nx">videoData</span><span class="p">.</span><span class="nx">url</span>
+      <span class="nv">dataType: </span><span class="s2">&quot;jsonp&quot;</span>
+      <span class="nv">data: </span><span class="s2">&quot;skin=json&quot;</span>
+      <span class="nv">jsonpCallback: </span><span class="s2">&quot;presentz.videoPlugin.receiveVideoInfo&quot;</span>
+
+    <span class="nx">jQuery</span><span class="p">.</span><span class="nx">ajax</span> <span class="nx">ajaxCall</span>
+    <span class="k">return</span>
+
+  <span class="nv">receiveVideoInfo: </span><span class="nf">(data) -&gt;</span>
+    <span class="nv">fakeVideoData =</span>
+      <span class="nv">url: </span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Post</span><span class="p">.</span><span class="nx">media</span><span class="p">.</span><span class="nx">url</span>
+    <span class="nx">@video</span><span class="p">.</span><span class="nx">changeVideo</span><span class="p">(</span><span class="nx">fakeVideoData</span><span class="p">,</span> <span class="nx">@wouldPlay</span><span class="p">)</span>
+    <span class="vi">@player = </span><span class="nx">@video</span><span class="p">.</span><span class="nx">player</span>
+    <span class="vi">@skipTo = </span><span class="nx">@video</span><span class="p">.</span><span class="nx">skipTo</span>
+    <span class="k">return</span>
+
+  <span class="nv">handle: </span><span class="nf">(video) -&gt;</span>
+    <span class="nx">video</span><span class="p">.</span><span class="nx">url</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;http://blip.tv&quot;</span><span class="p">)</span> <span class="o">isnt</span> <span class="o">-</span><span class="mi">1</span>
+
+  <span class="nv">currentTime: </span><span class="nf">() -&gt;</span>
+    <span class="nx">@video</span><span class="p">.</span><span class="nx">currentTime</span><span class="p">()</span>
+
+  <span class="nv">skipTo: </span><span class="nf">(time, wouldPlay = false) -&gt;</span>
+    <span class="nx">@video</span><span class="p">.</span><span class="nx">skipTo</span><span class="p">(</span><span class="nx">time</span><span class="p">,</span> <span class="nx">wouldPlay</span><span class="p">)</span>
+
+  <span class="nv">play: </span><span class="nf">() -&gt;</span>
+    <span class="nx">@video</span><span class="p">.</span><span class="nx">play</span><span class="p">()</span>
+
+  <span class="nv">pause: </span><span class="nf">() -&gt;</span>
+    <span class="nx">@video</span><span class="p">.</span><span class="nx">pause</span><span class="p">()</span>
+
+<span class="nv">root = </span><span class="nx">exports</span> <span class="o">?</span> <span class="nb">window</span>
+<span class="nv">root.presentz = </span><span class="p">{}</span> <span class="k">if</span> <span class="o">!</span><span class="nx">root</span><span class="p">.</span><span class="nx">presentz</span><span class="o">?</span>
+<span class="nv">root.presentz.BlipTv = </span><span class="nx">BlipTv</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
