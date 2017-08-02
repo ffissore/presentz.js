@@ -1,4 +1,5 @@
 # SlideShare slide plugin handles SlideShare integration
+# DEPRECATED: SlideShare dropped the Player API. Use SlideShareOEmbed
 class SlideShare
 
   # Creates a new instance of a SlideShare slide plugin

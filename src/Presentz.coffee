@@ -24,7 +24,6 @@ class Presentz
       html5: new Html5Video(@, videoContainer, sizeOfVideo.width, sizeOfVideo.height)
 
     @availableSlidePlugins =
-      slideshare: new SlideShare(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
       slideshareoembed: new SlideShareOEmbed(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
       swf: new SwfSlide(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
       speakerdeck: new SpeakerDeck(@, slideContainer, sizeOfSlide.width, sizeOfSlide.height)
@@ -35,7 +34,7 @@ class Presentz
 
     # When looking for a plugin able to handle a video/slide url, presentz consults the videoPlugins and slidePlugins instance variables: you can avoid such lookup by specifying the plugin to use
     @videoPlugins = [@availableVideoPlugins.vimeo, @availableVideoPlugins.youtube, @availableVideoPlugins.wistia_plugin, @availableVideoPlugins.sambatech_plugin]
-    @slidePlugins = [@availableSlidePlugins.slideshare, @availableSlidePlugins.slideshareoembed, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck, @availableSlidePlugins.rvlio, @availableSlidePlugins.none]
+    @slidePlugins = [@availableSlidePlugins.slideshareoembed, @availableSlidePlugins.swf, @availableSlidePlugins.speakerdeck, @availableSlidePlugins.rvlio, @availableSlidePlugins.none]
     # When no plugin seems able to handle given video/slide, default ones are used
     @defaultVideoPlugin = @availableVideoPlugins.html5
     @defaultSlidePlugin = @availableSlidePlugins.image
