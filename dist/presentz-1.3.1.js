@@ -413,7 +413,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           };
         })(this)
       };
-      new MediaElementPlayer("#" + this.elementId, playerOptions);
+      new MediaElementPlayer(this.elementId, playerOptions);
     };
 
     Html5Video.prototype.onPlayerLoaded = function(player1) {
