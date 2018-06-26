@@ -356,7 +356,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         listeners = this.presentz.listeners.play;
       } else if (this.isInPauseState || this.isInFinishState) {
         this.presentz.stopTimeChecker();
-        if (this.isInPauseState) {
+        if (this.isInPauseState && !this.isInFinishState) {
           listeners = this.presentz.listeners.pause;
         } else if (this.isInFinishState) {
           listeners = this.presentz.listeners.finish;
